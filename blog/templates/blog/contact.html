@@ -1,0 +1,27 @@
+{% extends 'blog/main.html' %}
+
+{% block content %}
+<h1 class="title">Contact</h1>
+<form class="" action="" method="post">
+  {% csrf_token %}
+  <div class="field">
+    <label class="label" for="scriptsrcubject">Titre</label>
+    <div class="control">
+      <input type="text" name="subject">
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="message" class="label" >Message</label>
+    <div class="control">
+      <textarea name="message"></textarea>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="control">
+      <button class="button is-link" type="submit" name="Submit">Soumettre</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

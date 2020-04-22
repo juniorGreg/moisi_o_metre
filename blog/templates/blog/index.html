@@ -1,48 +1,30 @@
-<!DOCTYPE html>
-<html lang="fr" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Moisi O Mêtre</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+{% extends 'blog/main.html' %}
 
-  </head>
-  <body>
-    <section class="hero is-dark is-bold">
-      <div class="hero-head">
-          <nav class="navbar" role="navigation" aria-label="main navigation">
-            <div class="container">
-              <div class="navbar-brand">
-                  <a class="navbar-item" href="#">
-                    <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-                  </a>
-              </div>
-            </div>
-          </nav>
-      </div>
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">Moisi O Mètre</h1>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="container">
+{% block content %}
         {% for post in posts %}
           <div class="box">
             <h1 class="title">{{post.title}}</h1>
+            <a href="{{post.source}}">{{post.source}}</a>
             <p>{{post.content}}</p>
             <br>
-            <p class="is-size-7">Créer le {{post.date_created}}</p>
-            {% if post.date_created < post.date_modified %}
-              <p class="is-size-7">Modifier le {{post.date_modified}}</p>
+            {% if post.rottenpoint_set.count > 0 %}
+                <h2>Les Points Moisis</h2>
+                {% for point in post.rottenpoint_set.all %}
+                  <h3>{{point.title}}</h3>
+                  <p>{{point.source}}</p>
+                  <p>{{point.description}}</p>
+                  <br>
+                {% endfor %}
+                <br>
+                <progress class="progress is-small" value="{{post.rottenpoint_set.count}}" max="2">100000%</progress>
+                <p class="is-size-7">Créer le {{post.date_created}}</p>
+                {% if post.date_created < post.date_modified %}
+                  <p class="is-size-7">Modifier le {{post.date_modified}}</p>
+                {% endif %}
             {% endif %}
           </div>
 
           <br>
         {% endfor %}
-      </div>
 
-    </section>
-
-  </body>
-</html>
+{% endblock %}
