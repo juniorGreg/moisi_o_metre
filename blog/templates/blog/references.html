@@ -4,4 +4,9 @@
 
 <h1 class="title">Références</h1>
 
+{% for reference in references %}
+  <h2 class="title">{{reference.title}}</h2>
+  <p>{{reference.description}}</p>
+  <a href="{{reference.source}}">{{reference.source}}</a>
+{% endfor %}
 {% endblock %}

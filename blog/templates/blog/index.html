@@ -4,23 +4,46 @@
         {% for post in posts %}
           <div class="box">
             <h1 class="title">{{post.title}}</h1>
-            <a href="{{post.source}}">{{post.source}}</a>
-            <p>{{post.content}}</p>
+
+            {% if post.image %}
+              <div class="media">
+                <figure class="media-left">
+                  <p class="image">
+                    <img src="{{post.image.url}}" alt="imâge">
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <p>{{post.content}}</p>
+                </div>
+              </div>
+
+            {% else %}
+              <p>{{post.content}}</p>
+            {% endif %}
+
             <br>
             {% if post.rottenpoint_set.count > 0 %}
-                <h2>Les Points Moisis</h2>
+                <h2 class="subtitle">Les Points Moisis</h2>
                 {% for point in post.rottenpoint_set.all %}
-                  <h3>{{point.title}}</h3>
-                  <p>{{point.source}}</p>
+                  <h3 class="has-text-weight-bold">{{point.title}}</h3>
                   <p>{{point.description}}</p>
                   <br>
+                  {% if 'http' in point.source %}
+                    <a href="{{point.source}}">{{point.source}}</a>
+                  {% else %}
+                    <p>Source: {{point.source}}</p>
+                  {% endif %}
+                  <br>
                 {% endfor %}
+
                 <br>
                 <progress class="progress is-small" value="{{post.rottenpoint_set.count}}" max="2">100000%</progress>
-                <p class="is-size-7">Créer le {{post.date_created}}</p>
-                {% if post.date_created < post.date_modified %}
-                  <p class="is-size-7">Modifier le {{post.date_modified}}</p>
-                {% endif %}
+
+            {% endif %}
+            <p>Lien: <a href="{{post.source}}">{{post.source}}</a></p>
+            <p class="is-size-7">Créer le {{post.date_created}}</p>
+            {% if post.date_created < post.date_modified %}
+              <p class="is-size-7">Modifier le {{post.date_modified}}</p>
             {% endif %}
           </div>
 

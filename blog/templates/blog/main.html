@@ -9,16 +9,17 @@
     <link rel="shortcut icon" type="image/png" href="{% static '/images/moisiometre.png' %}">
   </head>
   <body>
+  <div id="app">
     <section class="hero is-dark is-bold">
       <div class="hero-head">
           <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="container">
               <div class="navbar-brand">
                   <a class="navbar-item" href="{% url 'index' %}">
-                    <img src="{% static '/images/moisiometre.png' %}" width="30" height="30">
+                    <img src="{% static '/images/moisibanner.png' %}" width="255" height="60">
                   </a>
 
-                  <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
+                  <a role="button" :class="{'is-active': isActive}" @click="toggleMenu()" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
                    <span aria-hidden="true"></span>
                    <span aria-hidden="true"></span>
                    <span aria-hidden="true"></span>
@@ -26,11 +27,14 @@
 
               </div>
 
-              <div id="navbarBasic" class="navbar-menu">
-                <div class="navbar-end">
+              <div :class="{'is-active': isActive}" id="navbarBasic" class="navbar-menu">
+                <div  class="navbar-end">
+
                   <a class="navbar-item" href="{% url 'references' %}">Références</a>
                   <a class="navbar-item" href="{% url 'about' %}">À propos</a>
                   <a class="navbar-item" href="{% url 'contact' %}">Contact</a>
+                  <a class="navbar-item" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4V49WYNVPPCY2&source=url">Donner des sous</a>
+
                 </div>
               </div>
             </div>
@@ -38,7 +42,18 @@
       </div>
       <div class="hero-body">
         <div class="container">
-          <h1 class="title">Moisi O Mètre</h1>
+          <div class="columns">
+            <div class="column is-narrow">
+                <img src="{% static '/images/moisiometre.png' %}" alt="moisimetre" height="100" width="100">
+            </div>
+            <div class="column">
+              <br>
+              <h1 class="title">Moisi O Mètre</h1>
+              <h2 class="subtitle">Le baromètre des arguments moisis</h2>
+            </div>
+          </div>
+
+
         </div>
       </div>
     </section>
@@ -49,6 +64,8 @@
       </div>
 
     </section>
-
+  </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
   </body>
 </html>
