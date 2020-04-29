@@ -1,8 +1,33 @@
 @charset "utf-8";
-@import url('fonts/MouseMemoirs-Regular.tt');
 
-$progress-value-background-color: green;
-$family-sans-serif: "Roboto", sans-serif;
+
+@font-face {
+  font-family: 'MouseMemoirs Regular';
+  src: url('./fonts/MouseMemoirs-Regular.ttf') format('truetype');
+}
+
+$progress-bar-background-image : linear-gradient(to right, lightgreen 40%, yellow, red);
+$navbar-item-color: lightgrey;
+
+$navbar-background-color: black;
+
+.progress{
+  &::-webkit-progress-bar{
+    background-image: $progress-bar-background-image;
+  }
+  &::-webkit-progress-value{
+    background-image: $progress-bar-background-image;
+  }
+  &::-moz-progress-bar{
+    background-image: $progress-bar-background-image;
+  }
+  &::-ms-fill{
+    background-image: $progress-bar-background-image;
+    border: none;
+  }
+
+  width: 20%;
+}
+//$family-sans-serif: "MouseMemoirs Regular", sans-serif;
 
 @import "bulma-0.8.2/bulma.sass";
-  

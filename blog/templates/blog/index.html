@@ -37,7 +37,7 @@
                 {% endfor %}
 
                 <br>
-                <progress class="progress is-small" value="{{post.rottenpoint_set.count}}" max="2">100000%</progress>
+              <custom-progress count={{post.rottenpoint_set.count}}></custom-progress>
 
             {% endif %}
             <p>Lien: <a href="{{post.source}}">{{post.source}}</a></p>

@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="fr" dir="ltr">
+<html lang="fr" dir="ltr" class="has-navbar-fixed-top">
   <head>
     <meta charset="utf-8">
     <title>Moisi O Mètre</title>
@@ -10,35 +10,36 @@
   </head>
   <body>
   <div id="app">
+    <nav class="navbar is-fixed-top is-transparent" role="navigation" aria-label="main navigation">
+      <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{% url 'index' %}">
+              <img src="{% static '/images/moisibanner.png' %}" width="255" height="60">
+            </a>
+
+            <a role="button" :class="{'is-active': isActive}" @click="toggleMenu()" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
+             <span aria-hidden="true"></span>
+             <span aria-hidden="true"></span>
+             <span aria-hidden="true"></span>
+           </a>
+
+        </div>
+
+        <div :class="{'is-active': isActive}" id="navbarBasic" class="navbar-menu">
+          <div  class="navbar-end">
+
+            <a class="navbar-item" href="{% url 'references' %}">Références</a>
+            <a class="navbar-item" href="{% url 'about' %}">À propos</a>
+            <a class="navbar-item" href="{% url 'contact' %}">Contact</a>
+            <a class="navbar-item" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4V49WYNVPPCY2&source=url">Donner des sous</a>
+
+          </div>
+        </div>
+      </div>
+    </nav>
     <section class="hero is-dark is-bold">
       <div class="hero-head">
-          <nav class="navbar" role="navigation" aria-label="main navigation">
-            <div class="container">
-              <div class="navbar-brand">
-                  <a class="navbar-item" href="{% url 'index' %}">
-                    <img src="{% static '/images/moisibanner.png' %}" width="255" height="60">
-                  </a>
 
-                  <a role="button" :class="{'is-active': isActive}" @click="toggleMenu()" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
-                   <span aria-hidden="true"></span>
-                   <span aria-hidden="true"></span>
-                   <span aria-hidden="true"></span>
-                 </a>
-
-              </div>
-
-              <div :class="{'is-active': isActive}" id="navbarBasic" class="navbar-menu">
-                <div  class="navbar-end">
-
-                  <a class="navbar-item" href="{% url 'references' %}">Références</a>
-                  <a class="navbar-item" href="{% url 'about' %}">À propos</a>
-                  <a class="navbar-item" href="{% url 'contact' %}">Contact</a>
-                  <a class="navbar-item" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4V49WYNVPPCY2&source=url">Donner des sous</a>
-
-                </div>
-              </div>
-            </div>
-          </nav>
       </div>
       <div class="hero-body">
         <div class="container">
