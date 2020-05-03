@@ -12,7 +12,9 @@ def index(request):
     return render(request, "blog/index.html", context)
 
 def about(request):
-    return render(request, "blog/about.html")
+    about = About.objects.all()[0]
+    context = {'about': about}
+    return render(request, "blog/about.html", context)
 
 def references(request):
     references = Reference.objects.all()

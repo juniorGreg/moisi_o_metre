@@ -6,23 +6,26 @@
   src: url('./fonts/MouseMemoirs-Regular.ttf') format('truetype');
 }
 
-$progress-bar-background-image : linear-gradient(to right, lightgreen 40%, yellow, red);
 $navbar-item-color: lightgrey;
+
+:root {
+  --progress-bar-background: linear-gradient(to right, lightgreen, green);
+}
 
 $navbar-background-color: black;
 
 .progress{
   &::-webkit-progress-bar{
-    background-image: $progress-bar-background-image;
+    background-image: var(--progress-bar-background);
   }
   &::-webkit-progress-value{
-    background-image: $progress-bar-background-image;
+    background-image:  var(--progress-bar-background);
   }
   &::-moz-progress-bar{
-    background-image: $progress-bar-background-image;
+    background-image:  var(--progress-bar-background);
   }
   &::-ms-fill{
-    background-image: $progress-bar-background-image;
+    background-image:  var(--progress-bar-background);
     border: none;
   }
 

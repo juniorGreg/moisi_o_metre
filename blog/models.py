@@ -30,3 +30,9 @@ class Reference(models.Model):
 
     def __str__(self):
         return self.title
+
+class About(models.Model):
+    text = models.TextField(max_length=2000)
+
+    def __str__(self):
+        return "about"
