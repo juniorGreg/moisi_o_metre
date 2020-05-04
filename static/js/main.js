@@ -8,7 +8,7 @@ var customProgress = ("custom-progress", {
       observer: null,
       animated: false,
       cursor: null,
-      maxCount: 2
+      maxCount: 7
     }
   },
 
