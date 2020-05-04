@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'm^#aztoi=d8qa+5ke^g!10ub)v2!!uj0)j-wdw@nwsju1(*wo('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -131,14 +131,13 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
 MEDIA_ROOT= os.path.join(BASE_DIR, 'static/images')
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 #Email settings
 DEFAULT_FROM_EMAIL = "*******"
-EMAIL_HOST = "**********"
-EMAIL_HOST_PASSWORD = "******"
-EMAIL_HOST_USER = "*****@****.***"
+EMAIL_HOST = "*******"
+EMAIL_HOST_PASSWORD = "*******"
+EMAIL_HOST_USER = "***********"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
