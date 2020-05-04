@@ -135,9 +135,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 #Email settings
-DEFAULT_FROM_EMAIL = "*******"
-EMAIL_HOST = "*******"
-EMAIL_HOST_PASSWORD = "*******"
+DEFAULT_FROM_EMAIL = "*********"
+EMAIL_HOST = "*********"
+EMAIL_HOST_PASSWORD = "***********"
 EMAIL_HOST_USER = "***********"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
