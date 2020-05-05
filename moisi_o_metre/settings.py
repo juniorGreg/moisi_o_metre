@@ -86,7 +86,7 @@ DATABASES = {
     }
 }
 
-import dj_database_url
+#import dj_database_url
 DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 
@@ -129,9 +129,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT= os.path.join(BASE_DIR, 'static/images')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 
 #Email settings
