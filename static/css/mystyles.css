@@ -2918,6 +2918,10 @@ a.box:active {
   height: 128px;
   width: 128px;
 }
+.image.is-256x256 {
+  height: 256px;
+  width: 256px;
+}
 
 .notification {
   background-color: whitesmoke;

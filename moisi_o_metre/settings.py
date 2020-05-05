@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import django_heroku
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,13 +27,12 @@ SECRET_KEY = 'm^#aztoi=d8qa+5ke^g!10ub)v2!!uj0)j-wdw@nwsju1(*wo('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', 'moisi-o-metre.herokuapp.com']
+ALLOWED_HOSTS = ["localhost", "moisi-o-metre.herokuapp.com"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     "api.apps.ApiConfig",
-    "blog.apps.BlogConfig"
+    "blog.apps.BlogConfig",
+    "storages"
 ]
 
 MIDDLEWARE = [
@@ -51,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'moisi_o_metre.urls'
@@ -86,8 +87,8 @@ DATABASES = {
     }
 }
 
-#import dj_database_url
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+import dj_database_url
+DATABASES['default'] = dj_database_url.config(default="postgres://novae:Bonsai21@database-1.cgmp26ih5i1v.us-east-2.rds.amazonaws.com:5432/moisi_db", conn_max_age=600)
 
 
 
@@ -127,22 +128,40 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+
+
 MEDIA_URL = '/images/'
-
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT= os.path.join(BASE_DIR, 'static/images')
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-
 #Email settings
-DEFAULT_FROM_EMAIL = "*********"
-EMAIL_HOST = "*********"
-EMAIL_HOST_PASSWORD = "***********"
-EMAIL_HOST_USER = "***********"
+DEFAULT_FROM_EMAIL = "***********"
+EMAIL_HOST = "************"
+EMAIL_HOST_PASSWORD = "*********"
+EMAIL_HOST_USER = "*********"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+#config aws bucket
+
+
+AWS_ACCESS_KEY_ID = "**********"
+AWS_SECRET_ACCESS_KEY = "**************"
+AWS_STORAGE_BUCKET_NAME = "***********"
+AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_FILE_OVERWRITE = True
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_REGION_NAME = "us-east-2"
+# Tell django-storages the domain to use to refer to static files.
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+
+# Activate Django-Heroku.
+django_heroku.settings(locals(), staticfiles=False)
