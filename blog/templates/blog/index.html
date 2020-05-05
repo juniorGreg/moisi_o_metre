@@ -8,7 +8,7 @@
             {% if post.image %}
               <div class="media">
                 <figure class="media-left">
-                  <p class="image">
+                  <p class="image is-256x256">
                     <img src="{{post.image.url}}" alt="imâge">
                   </p>
                 </figure>
@@ -36,7 +36,7 @@
                   <br>
                 {% endfor %}
 
-                
+
               <custom-progress count={{post.rottenpoint_set.count}}></custom-progress>
 
             {% endif %}
