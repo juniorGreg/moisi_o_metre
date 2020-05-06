@@ -13,7 +13,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import django_heroku
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -88,7 +91,11 @@ DATABASES = {
 }
 
 import dj_database_url
+<<<<<<< HEAD
 DATABASES['default'] = dj_database_url.config(default="postgres://novae:Bonsai21@database-1.cgmp26ih5i1v.us-east-2.rds.amazonaws.com:5432/moisi_db", conn_max_age=600)
+=======
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+>>>>>>> master
 
 
 
@@ -139,19 +146,32 @@ STATICFILES_DIRS = [
 ]
 
 #Email settings
+<<<<<<< HEAD
 DEFAULT_FROM_EMAIL = "***********"
 EMAIL_HOST = "************"
 EMAIL_HOST_PASSWORD = "*********"
 EMAIL_HOST_USER = "*********"
+=======
+DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+>>>>>>> master
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 #config aws bucket
 
 
+<<<<<<< HEAD
 AWS_ACCESS_KEY_ID = "**********"
 AWS_SECRET_ACCESS_KEY = "**************"
 AWS_STORAGE_BUCKET_NAME = "***********"
+=======
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+>>>>>>> master
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_FILE_OVERWRITE = True
 AWS_S3_SIGNATURE_VERSION = 's3v4'
@@ -163,5 +183,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 
+<<<<<<< HEAD
 # Activate Django-Heroku.
+=======
+>>>>>>> master
 django_heroku.settings(locals(), staticfiles=False)

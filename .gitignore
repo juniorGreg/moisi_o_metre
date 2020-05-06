@@ -1,7 +1,7 @@
 # Byte-compiled / optimized / DLL files
 static/
 mybulma/bulma-0.8.2
-moisi_o_metre/settings.py
+
 **/migrations/
 __pycache__/
 *.py[cod]
