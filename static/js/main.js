@@ -12,13 +12,13 @@ var customProgress = ("custom-progress", {
     }
   },
 
-  template: '<div><img src="/static/images/moisiometre.png" class="image is-24x24"><progress class="progress is-small" :value="currentCount" :max="maxCount"></progress></div>',
+  template: '<div><img src="https://moisi-bucket.s3.amazonaws.com/images/moisiometre.png" class="image is-24x24"><progress class="progress is-small" :value="currentCount" :max="maxCount"></progress></div>',
 
   methods: {
     animateValue: function(){
       console.debug("ok")
       if(this.currentCount < this.count && this.currentCount < this.maxCount){
-        this.currentCount += 0.005
+        this.currentCount += 0.01
         this.setCursorPosition()
       }
       else{
