@@ -20,16 +20,17 @@
             {% else %}
               <p>{{post.content}}</p>
             {% endif %}
-
+            <br>
+            <p>Source moisi: <a href="{{post.source}}">{{post.source}}</a></p>
             <br>
             {% if post.rottenpoint_set.count > 0 %}
                 <h2 class="subtitle">Les Points Moisis</h2>
-                {% for point in post.rottenpoint_set.all %}
+                {% for point in post.rottenpoint_set.all reversed %}
                   <h3 class="has-text-weight-bold">{{point.title}}</h3>
                   <p>{{point.description}}</p>
                   <br>
                   {% if 'http' in point.source %}
-                    <a href="{{point.source}}">{{point.source}}</a>
+                    <p>Source: <a href="{{point.source}}">{{point.source}}</a></p>
                   {% else %}
                     <p>Source: {{point.source}}</p>
                   {% endif %}
@@ -38,9 +39,9 @@
 
 
               <custom-progress count={{post.rottenpoint_set.count}}></custom-progress>
-
+              <br>
             {% endif %}
-            <p>Lien: <a href="{{post.source}}">{{post.source}}</a></p>
+
             <p class="is-size-7">Créer le {{post.date_created}}</p>
             {% if post.date_created < post.date_modified %}
               <p class="is-size-7">Modifier le {{post.date_modified}}</p>
