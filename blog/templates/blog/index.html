@@ -1,4 +1,7 @@
+
 {% extends 'blog/main.html' %}
+{% load blog_filters %}
+
 
 {% block content %}
         {% for post in posts %}
@@ -46,6 +49,7 @@
             {% if post.date_created < post.date_modified %}
               <p class="is-size-7">Modifier le {{post.date_modified}}</p>
             {% endif %}
+            <p><a href="https://www.facebook.com/sharer.php?u={{request.build_absolute_uri|post_urlencode:post.id}}"><button class="button is-link">Partagez sur face de livre</button></a></p>
           </div>
 
           <br>

@@ -6,9 +6,13 @@ from .models import *
 from .forms import CommentForm
 
 # Create your views here.
-def index(request):
-    posts = Post.objects.all()
-    print(posts)
+def index(request, id=-1):
+
+    if id == -1:
+        posts = Post.objects.all()
+    else:
+        posts = [Post.objects.get(id=id)]
+
     context = {"posts": posts}
     return render(request, "blog/index.html", context)
 
