@@ -15,10 +15,9 @@ $navbar-background-color: black;
 
 $dimensions: 16 24 32 48 64 96 128 256;
 
+
 .progress{
-  &::-webkit-progress-bar{
-    background-image: var(--progress-bar-background);
-  }
+
   &::-webkit-progress-value{
     background-image:  var(--progress-bar-background);
   }

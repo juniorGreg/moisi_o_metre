@@ -9,9 +9,6 @@
 .progress {
   width: 20%;
 }
-.progress::-webkit-progress-bar {
-  background-image: var(--progress-bar-background);
-}
 .progress::-webkit-progress-value {
   background-image: var(--progress-bar-background);
 }
