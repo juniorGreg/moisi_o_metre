@@ -8,15 +8,12 @@ register = template.Library()
 def post_urlencode(value, arg):
     complete_url = value + str(arg)
     encode_url = urllib.parse.quote(complete_url)
-    print(complete_url)
-    print(encode_url)
     return encode_url
 
 @register.simple_tag(name="post_share_url_twitter")
 def post_share_url_twitter(url, post_id, text):
     complete_url = url + str(post_id)
     encode_url = urllib.parse.quote(complete_url)
-    encode_text = urllib.parse.quote(text)
-    print(encode_text)
+    encode_text = urllib.parse.quote(text)    
     share_url = "https://twitter.com/intent/tweet?url={}&text={}&hashtags=espritcritique,zététique,humour".format(encode_url, encode_text)
     return share_url
