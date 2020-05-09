@@ -9,7 +9,7 @@ from .forms import CommentForm
 def index(request, id=-1):
 
     if id == -1:
-        posts = Post.objects.all()
+        posts = Post.objects.order_by('-date_created')
     else:
         posts = [Post.objects.get(id=id)]
 
