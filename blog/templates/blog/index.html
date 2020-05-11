@@ -30,12 +30,12 @@
             <br>
             {% if post.rottenpoint_set.count > 0 %}
                 <h2 class="subtitle">Les Points Moisis</h2>
-                {% for point in post.rottenpoint_set.all reversed %}
+                {% for point in post.rottenpoint_set.all|dictsort:"order" %}
                   <h3 class="has-text-weight-bold">{{point.title}}</h3>
                   <p>{{point.description}}</p>
                   <br>
                   {% include 'blog/source.html' with source_title="Source moisi" source=point.rotten_source %}
-                  {% include 'blog/source.html' with source_title="Source" source=point.source %}                  
+                  {% include 'blog/source.html' with source_title="Source" source=point.source %}
                   <br>
                 {% endfor %}
 

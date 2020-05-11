@@ -22,9 +22,9 @@ class RottenPoint(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=2000)
-    source = models.CharField(max_length=200, null=True)
-    rotten_source = models.CharField(max_length=200, null=True)
-    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    source = models.CharField(max_length=200, null=True, blank=True)
+    rotten_source = models.CharField(max_length=200, null=True, blank=True)    
+    order = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.title
