@@ -24,13 +24,9 @@
               <p>{{post.content}}</p>
             {% endif %}
             <br>
-            <p>Source moisi:
-            {% if 'http' in post.source %}
-               <a href="{{post.source}}">{{post.source}}</a>
-            {% else %}
-              {{post.source}}
-            {% endif %}
-            </p>
+
+            {% include 'blog/source.html' with source_title="Source moisi" source=post.source %}
+
             <br>
             {% if post.rottenpoint_set.count > 0 %}
                 <h2 class="subtitle">Les Points Moisis</h2>
@@ -38,18 +34,14 @@
                   <h3 class="has-text-weight-bold">{{point.title}}</h3>
                   <p>{{point.description}}</p>
                   <br>
-                  <p>Source:
-                  {% if 'http' in point.source %}
-                     <a href="{{point.source}}">{{point.source}}</a>
-                  {% else %}
-                    {{point.source}}
-                  {% endif %}
-                  </p>
+                  {% include 'blog/source.html' with source_title="Source moisi" source=point.rotten_source %}
+                  {% include 'blog/source.html' with source_title="Source" source=point.source %}                  
                   <br>
                 {% endfor %}
 
-
-              <custom-progress count={{post.rottenpoint_set.count}}></custom-progress>
+              {% if post.post_type == 'CRITIC' %}
+                <custom-progress count={{post.rottenpoint_set.count}}></custom-progress>
+              {% endif %}
               <br>
             {% endif %}
 

@@ -2,7 +2,11 @@ from django.db import models
 
 # Create your models here.
 class Post(models.Model):
-
+    POST_TYPE = (
+        ('CRITIC', 'Critic'),
+        ('ARTICLE', 'Article')
+    )
+    post_type = models.CharField(max_length=10, choices=POST_TYPE, default='CRITIC')
     title = models.CharField(max_length=200)
     content = models.TextField(max_length=2000)
     date_modified = models.DateTimeField(auto_now=True)
@@ -18,7 +22,8 @@ class RottenPoint(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=2000)
-    source = models.CharField(max_length=200)
+    source = models.CharField(max_length=200, null=True)
+    rotten_source = models.CharField(max_length=200, null=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
