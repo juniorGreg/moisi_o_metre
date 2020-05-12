@@ -4,7 +4,8 @@ from django.db import models
 class Post(models.Model):
     POST_TYPE = (
         ('CRITIC', 'Critic'),
-        ('ARTICLE', 'Article')
+        ('ARTICLE', 'Article'),
+        ('BD', 'BD')
     )
     post_type = models.CharField(max_length=10, choices=POST_TYPE, default='CRITIC')
     title = models.CharField(max_length=200)
@@ -23,7 +24,7 @@ class RottenPoint(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=2000)
     source = models.CharField(max_length=200, null=True, blank=True)
-    rotten_source = models.CharField(max_length=200, null=True, blank=True)    
+    rotten_source = models.CharField(max_length=200, null=True, blank=True)
     order = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):

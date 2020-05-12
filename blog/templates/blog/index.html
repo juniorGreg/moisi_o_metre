@@ -8,41 +8,10 @@
           <div class="box">
             <h1 class="title">{{post.title}}</h1>
 
-            {% if post.image %}
-              <div class="media">
-                <figure class="media-left">
-                  <p class="image is-256x256">
-                    <img src="{{post.image.url}}" alt="imâge">
-                  </p>
-                </figure>
-                <div class="media-content">
-                  <p>{{post.content}}</p>
-                </div>
-              </div>
-
+            {% if post.post_type == 'BD' %}
+              {% include 'blog/bd.html' with post=post %}
             {% else %}
-              <p>{{post.content}}</p>
-            {% endif %}
-            <br>
-
-            {% include 'blog/source.html' with source_title="Source moisi" source=post.source %}
-
-            <br>
-            {% if post.rottenpoint_set.count > 0 %}
-                <h2 class="subtitle">Les Points Moisis</h2>
-                {% for point in post.rottenpoint_set.all|dictsort:"order" %}
-                  <h3 class="has-text-weight-bold">{{point.title}}</h3>
-                  <p>{{point.description}}</p>
-                  <br>
-                  {% include 'blog/source.html' with source_title="Source moisi" source=point.rotten_source %}
-                  {% include 'blog/source.html' with source_title="Source" source=point.source %}
-                  <br>
-                {% endfor %}
-
-              {% if post.post_type == 'CRITIC' %}
-                <custom-progress count={{post.rottenpoint_set.count}}></custom-progress>
-              {% endif %}
-              <br>
+              {% include 'blog/post.html' with post=post %}
             {% endif %}
 
             <p class="is-size-7">Créer le {{post.date_created}}</p>
