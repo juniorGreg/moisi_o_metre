@@ -6,6 +6,12 @@
   --progress-bar-background: linear-gradient(to right, lightgreen, green);
 }
 
+.image-post {
+  float: left;
+  margin: 5px;
+  border-radius: 8px;
+}
+
 .progress {
   width: 20%;
 }

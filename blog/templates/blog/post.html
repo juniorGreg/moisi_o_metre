@@ -1,18 +1,8 @@
 {% if post.image %}
-  <div class="media">
-    <figure class="media-left">
-      <p class="image is-256x256">
-        <img src="{{post.image.url}}" alt="imâge">
-      </p>
-    </figure>
-    <div class="media-content">
-      <p>{{post.content}}</p>
-    </div>
-  </div>
-
-{% else %}
-  <p>{{post.content}}</p>
+  <img class="image-post" src="{{post.image.url}}" alt="imâge">
 {% endif %}
+
+  <p class="has-text-justified">{{post.content}}</p>
 <br>
 
 {% include 'blog/source.html' with source_title="Source moisi" source=post.source %}
@@ -22,7 +12,8 @@
     <h2 class="subtitle">Les Points Moisis</h2>
     {% for point in post.rottenpoint_set.all|dictsort:"order" %}
       <h3 class="has-text-weight-bold">{{point.title}}</h3>
-      <p>{{point.description}}</p>
+      <br>
+      <p class="has-text-justified">{{point.description}}</p>
       <br>
       {% include 'blog/source.html' with source_title="Source moisi" source=point.rotten_source %}
       {% include 'blog/source.html' with source_title="Source" source=point.source %}
