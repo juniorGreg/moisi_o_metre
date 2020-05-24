@@ -1,7 +1,7 @@
 {% if source is not None %}
   <p>{{ source_title }}:
   {% if 'http' in source %}
-     <a href="{{ source }}">{{ source }}</a>
+     <a target='_blank' href="{{ source }}">{{ source }}</a>
   {% else %}
     {{ source }}
   {% endif %}

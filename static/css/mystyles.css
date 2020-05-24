@@ -9388,4 +9388,17 @@ label.panel-block:hover {
   padding: 3rem 1.5rem 6rem;
 }
 
+.button.is-text {
+  margin: 0;
+  padding: 0;
+}
+
+.is-shared {
+  margin-right: 0.5em;
+}
+
+.cursor {
+  top: 35px;
+}
+
 /*# sourceMappingURL=mystyles.css.map */

@@ -21,6 +21,8 @@ $dimensions: 16 24 32 48 64 96 128 256;
   border-radius: 8px;
 }
 
+
+
 $body-size: 22px;
 
 .progress{
@@ -41,3 +43,16 @@ $body-size: 22px;
 //$family-sans-serif: "MouseMemoirs Regular", sans-serif;
 
 @import "bulma-0.8.2/bulma.sass";
+
+.button.is-text{
+  margin:0;
+  padding:0;
+}
+
+.is-shared{
+  margin-right: 0.5em;
+}
+
+.cursor {
+  top: 35px;
+}

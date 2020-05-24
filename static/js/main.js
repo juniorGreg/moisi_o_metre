@@ -4,41 +4,42 @@ var customProgress = ("custom-progress", {
   data: function() {
     return  {
       currentCount: 0,
-      interval: null,
-      observer: null,
       animated: false,
       cursor: null,
       maxCount: 7
     }
   },
 
-  template: '<div><img src="https://moisi-bucket.s3.amazonaws.com/images/moisiometre.png" class="image is-24x24"><progress class="progress is-small" :value="currentCount" :max="maxCount"></progress></div>',
+  template: '<div><img src="https://moisi-bucket.s3.amazonaws.com/images/moisiometre.svg" class="cursor image is-48x48"><progress class="progress is-small" :value="currentCount" :max="maxCount"></progress></div>',
 
   methods: {
-    animateValue: function(){
-      console.debug("ok")
-      if(this.currentCount < this.count && this.currentCount < this.maxCount){
-        this.currentCount += 0.01
-        this.setCursorPosition()
-      }
-      else{
-        clearInterval(this.interval)
-        //console.debug("clear interval")
-      }
-
-    },
 
     startAnimation: function(){
       var element = this.$el;
       var position = element.getBoundingClientRect();
 
+
+
       // checking whether fully visible
       if(position.top >= 0 && position.bottom <= window.innerHeight) {
-        //console.log('Element is fully visible in screen');
-        //console.debug("ooki")
-        if(!this.animated){
 
-          this.interval = setInterval(this.animateValue, 5);
+        if(!this.animated){
+          var rect = this.$el.getBoundingClientRect();
+          var cursor_position = this.count/this.maxCount * rect.width - 12;
+
+            anime({
+              targets: this.cursor,
+              translateX: cursor_position,
+              duration: 5000
+            });
+
+            anime({
+              targets: this,
+              currentCount: this.count,
+              duration: 5000,
+              update: this.setCursorPosition
+            })
+          //this.interval = setInterval(this.animateValue, 5);
 
         }
         this.animated = true
@@ -47,17 +48,10 @@ var customProgress = ("custom-progress", {
     },
 
     setCursorPosition: function(){
-      var rect = this.$el.getBoundingClientRect();
 
-      var position = this.currentCount/this.maxCount * rect.width - 12;
       var positionPercent = this.currentCount/this.maxCount * 100;
 
-      this.cursor.style.left = `${position}px`;
-
-
-
       var gradient = `linear-gradient(to right, lightgreen ${100 - positionPercent}%, yellow)`;
-
 
       if(positionPercent > 33.3333)
         gradient = `linear-gradient(to right, lightgreen ${66.6666 - 16.6666 * ((positionPercent-33.3333)/33.3333)}%, yellow)`;
@@ -70,16 +64,10 @@ var customProgress = ("custom-progress", {
 
   created: function(){
     window.addEventListener('scroll', this.startAnimation);
-    window.addEventListener('resize', this.setCursorPosition);
-
   },
 
   mounted: function(){
     this.cursor = this.$el.getElementsByTagName("img")[0];
-    var rect = this.$el.getBoundingClientRect();
-    console.debug(rect)
-    this.cursor.style.top = `${this.cursor.style.top + 20}px`;
-
   }
 
 
