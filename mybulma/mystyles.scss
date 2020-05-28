@@ -1,9 +1,10 @@
 @charset "utf-8";
 
 
-/*@font-face {
-  src: url('./fonts/MouseMemoirs-Regular.ttf') format('truetype');
-}*/
+@font-face {
+  font-family: "Josefin";
+  src: url('./fonts/JosefinSans-VariableFont_wght.ttf') format('truetype');
+}
 
 $navbar-item-color: lightgrey;
 
@@ -40,7 +41,8 @@ $body-size: 22px;
 
   width: 20%;
 }
-//$family-sans-serif: "MouseMemoirs Regular", sans-serif;
+
+$body-family: "Josefin";
 
 @import "bulma-0.8.2/bulma.sass";
 
