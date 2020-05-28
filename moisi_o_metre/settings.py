@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'rest_framework',
     "api.apps.ApiConfig",
     "blog.apps.BlogConfig",
-    "storages"
+    "storages",
+    'django.contrib.sites',
+    'django.contrib.sitemaps'
 ]
 
 MIDDLEWARE = [
@@ -55,6 +57,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'moisi_o_metre.urls'
+
+SITE_ID = 1
 
 TEMPLATES = [
     {
