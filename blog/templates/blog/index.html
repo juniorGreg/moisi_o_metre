@@ -5,8 +5,8 @@
 
 {% block content %}
         {% for post in posts %}
-          <div class="box">
-            <h1 class="title">{{post.title}}</h1>
+          <div class="box is-size-3-touch">
+            <h1 class="title is-size-1-touch">{{post.title}}</h1>
 
             {% if post.post_type == 'BD' %}
               {% include 'blog/bd.html' with post=post %}
@@ -14,16 +14,26 @@
               {% include 'blog/post.html' with post=post %}
             {% endif %}
 
-            <p class="is-size-7">Créer le {{post.date_created}}</p>
+            <p class="is-size-7 is-size-4-touch">Créer le {{post.date_created}}</p>
             {% if post.date_created < post.date_modified %}
-              <p class="is-size-7">Modifier le {{post.date_modified}}</p>
+              <p class="is-size-7 is-size-4-touch">Modifier le {{post.date_modified}}</p>
             {% endif %}
             <div class="buttons has-addons">
-              <div class="is-shared is-size-6">
+              <div class="is-shared is-size-6 is-size-3-touch">
                 Partagez:
               </div>
-              <a target='_blank' href="https://www.facebook.com/sharer.php?u={{request.build_absolute_uri|post_urlencode:post.id}}"><button class="button is-text"><img class="image is-24x24" src="{% static 'images/facebook_share_button.png' %}" alt="share button facebook"></button></a>
-              <a target='_blank' href="{% post_share_url_twitter request.build_absolute_uri post.id post.title %}"><button class="button is-text"><img class="image is-24x24" src="{% static 'images/twitter_share_button.png' %}" alt="share button twitter"></button></a>
+              <a target='_blank' href="https://www.facebook.com/sharer.php?u={{request.build_absolute_uri|post_urlencode:post.id}}">
+                <button class="button is-text">
+                  <img class="is-hidden-touch image is-24x24" src="{% static 'images/facebook_share_button.png' %}" alt="share button facebook">
+                  <img class="is-hidden-desktop image is-64x64" src="{% static 'images/facebook_share_button.png' %}" alt="share button facebook">
+                </button>
+              </a>
+              <a target='_blank' href="{% post_share_url_twitter request.build_absolute_uri post.id post.title %}">
+                <button class="button is-text">
+                  <img class="is-hidden-touch image is-24x24" src="{% static 'images/twitter_share_button.png' %}" alt="share button twitter">
+                  <img class="is-hidden-desktop image is-64x64" src="{% static 'images/twitter_share_button.png' %}" alt="share button twitter">
+                </button>
+              </a>
             </div>
           </div>
 

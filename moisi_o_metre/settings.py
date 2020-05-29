@@ -26,7 +26,7 @@ SECRET_KEY = 'm^#aztoi=d8qa+5ke^g!10ub)v2!!uj0)j-wdw@nwsju1(*wo('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DEBUG'] == 'TRUE'
 
-ALLOWED_HOSTS = ["localhost", "moisi-o-metre.herokuapp.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "moisi-o-metre.herokuapp.com"]
 
 
 # Application definition

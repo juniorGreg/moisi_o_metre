@@ -1,5 +1,6 @@
 {% if post.image %}
-  <img class="image-post" src="{{post.image.url}}" alt="imâge">
+  <img class="image-post is-hidden-touch" src="{{post.image.url}}" alt="imâge">
+  <img class="image-post-mobile is-hidden-desktop" style="" src="{{post.image.url}}" alt="imâge">
 {% endif %}
 
   <p class="has-text-justified">{{post.content}}</p>
@@ -9,7 +10,7 @@
 
 <br>
 {% if post.rottenpoint_set.count > 0 %}
-    <h2 class="subtitle">Les Points Moisis</h2>
+    <h2 class="subtitle is-size-2-touch">Les Points Moisis</h2>
     {% for point in post.rottenpoint_set.all|dictsort:"order" %}
       <h3 class="has-text-weight-bold">{{point.title}}</h3>
       <br>

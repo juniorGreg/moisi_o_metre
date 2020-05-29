@@ -22,9 +22,17 @@ $dimensions: 16 24 32 48 64 96 128 256;
   border-radius: 8px;
 }
 
+.image-post-mobile{
+  margin-bottom: 5px;
+  display: block;
+  border-radius: 8px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 
 $body-size: 22px;
+
 
 .progress{
 
@@ -57,4 +65,28 @@ $body-family: "Josefin";
 
 .cursor {
   top: 35px;
+}
+
+@media screen and (max-width: 1024px){
+  .navbar .navbar-brand{
+    height:5em;
+  }
+
+  .navbar-burger {
+    height: auto;
+  }
+
+  .navbar-burger span{
+    width: 50px;
+    height: 3px;
+    left: calc(50% - 50px);
+
+  }
+
+
+
+  #app{
+    padding-top: 1.76em;
+  }
+
 }
