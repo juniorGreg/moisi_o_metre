@@ -27,7 +27,7 @@
         </div>
 
         <div :class="{'is-active': isActive}" id="navbarBasic" class="navbar-menu">
-          <div  class="navbar-end is-size-7 is-size-4-touch">
+          <div class="navbar-end is-size-7 is-size-4-touch">
 
             <a class="navbar-item" href="{% url 'references' %}">Références</a>
             <a class="navbar-item" href="{% url 'about' %}">À propos</a>
@@ -58,7 +58,7 @@
       </div>
     </section>
     <section class="section">
-      <div class="container">
+      <div class="container is-size-3-touch">
           {% block content %}
           {% endblock %}
       </div>

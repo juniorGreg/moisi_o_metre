@@ -1,6 +1,21 @@
 {% extends 'blog/main.html' %}
 
+{% load static %}
+
 {% block content %}
-<h1 class="title">À propos</h1>
-<p>{{about.text}}</p>
+<h1 class="title is-size-1-touch">À propos</h1>
+<p class="has-text-justified">{{about.text}}</p>
+<br>
+<div class="buttons has-addons has-text-centered" style="display:block">
+  <a target='_blank' href="https://www.facebook.com/moisiometre">
+    <button class="button is-text">
+        <img class="image is-96x96" src="{% static 'images/facebook_share_button.png' %}" alt="share button facebook">
+    </button>
+  </a>
+  <a target='_blank' href="https://twitter.com/JuniorGregoire4">
+    <button class="button is-text">
+      <img class="image is-96x96" src="{% static 'images/twitter_share_button.png' %}" alt="share button twitter">
+    </button>
+  </a>
+
 {% endblock %}
