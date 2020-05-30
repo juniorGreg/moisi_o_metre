@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static '/css/mystyles.css' %}">
     <link rel="shortcut icon" type="image/svg" href="{% static '/images/moisiometre.svg' %}">
     <meta name="google-site-verification" content="vIfZ0oM4GE2y8HTW-Y8kfoDRYOQ3j7h7oksrGKMDxU8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
   <div id="app">
@@ -27,7 +28,7 @@
         </div>
 
         <div :class="{'is-active': isActive}" id="navbarBasic" class="navbar-menu">
-          <div class="navbar-end is-size-7 is-size-4-touch">
+          <div class="navbar-end is-size-7">
 
             <a class="navbar-item" href="{% url 'references' %}">Références</a>
             <a class="navbar-item" href="{% url 'about' %}">À propos</a>
@@ -42,23 +43,22 @@
     <section class="hero is-dark is-bold">
       <div class="hero-body">
         <div class="container">
-          <div class="columns">
-            <div class="column is-narrow">
-                <img src="{% static '/images/moisiometre.svg' %}" alt="moisimetre" height="150" width="150">
+            <img src="{% static '/images/moisiometre.svg' %}" alt="moisimetre">
+            <div class="supertitle">
+              <h1 class="title is-size-6-mobile">Moisi O Mètre</h1>
+              <h2 class="subtitle is-size-7-mobile">Le baromètre des arguments moisis</h2>
             </div>
-            <div class="column">
-              <br>
-              <h1 class="title">Moisi O Mètre</h1>
-              <h2 class="subtitle">Le baromètre des arguments moisis</h2>
-            </div>
+
+
+
           </div>
 
 
         </div>
       </div>
     </section>
-    <section class="section">
-      <div class="container is-size-3-touch">
+    <section class="section is-size-7-mobile">
+      <div class="container">
           {% block content %}
           {% endblock %}
       </div>

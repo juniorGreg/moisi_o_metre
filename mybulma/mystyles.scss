@@ -16,6 +16,12 @@ $navbar-background-color: black;
 
 $dimensions: 16 24 32 48 64 96 128 256;
 
+$size-8: 0.5rem;
+$size: $size-8;
+
+$section-padding: 3rem 1rem;
+$box-padding: 1rem;
+
 .image-post {
   float: left;
   margin: 5px;
@@ -32,6 +38,10 @@ $dimensions: 16 24 32 48 64 96 128 256;
 
 
 $body-size: 22px;
+
+a {
+  word-break: break-all;
+}
 
 
 .progress{
@@ -53,6 +63,9 @@ $body-size: 22px;
 $body-family: "Josefin";
 
 @import "bulma-0.8.2/bulma.sass";
+//@use "sass:list";
+
+//append($sizes, $size-8);
 
 .button.is-text{
   margin:0;
@@ -67,26 +80,29 @@ $body-family: "Josefin";
   top: 35px;
 }
 
-@media screen and (max-width: 1024px){
-  .navbar .navbar-brand{
-    height:5em;
+.hero-body img{
+  float:left;
+  margin-right:2rem;
+  width: 8rem;
+  height:8rem;
+}
+
+.supertitle{
+  padding-top:2rem;
+}
+
+@media screen and (max-width:768px){
+  .navbar-item img {
+    max-height: 1rem;
   }
 
-  .navbar-burger {
-    height: auto;
+  .hero-body img{
+    height: 3rem;
+    width:3rem;
+    margin-right:1rem;
   }
 
-  .navbar-burger span{
-    width: 50px;
-    height: 3px;
-    left: calc(50% - 50px);
-
+  .supertitle{
+    padding-top:0.2rem;
   }
-
-
-
-  #app{
-    padding-top: 1.76em;
-  }
-
 }
