@@ -18,7 +18,7 @@ var customProgress = ("custom-progress", {
       var element = this.$el;
       var position = element.getBoundingClientRect();
 
-
+      console.log("oki");
 
       // checking whether fully visible
       if(position.top >= 0 && position.bottom <= window.innerHeight) {
@@ -67,6 +67,7 @@ var customProgress = ("custom-progress", {
   },
 
   mounted: function(){
+      console.log("oki");
     this.cursor = this.$el.getElementsByTagName("img")[0];
   }
 
@@ -89,6 +90,7 @@ var app = new Vue({
 
   methods: {
       toggleMenu: function(){
+
         this.isActive = !this.isActive
       }
   },

@@ -10,7 +10,7 @@
 
 <br>
 {% if post.rottenpoint_set.count > 0 %}
-    <h2 class="subtitle is-size-7-mobile">Les Points Moisis</h2>
+    <h2 class="subtitle is-size-6-mobile">Les Points Moisis</h2>
     {% for point in post.rottenpoint_set.all|dictsort:"order" %}
       <h3 class="has-text-weight-bold">{{point.title}}</h3>
       <br>
@@ -22,7 +22,7 @@
     {% endfor %}
 
   {% if post.post_type == 'CRITIC' %}
-    <custom-progress count={{post.rottenpoint_set.count}}></custom-progress>
+    <custom-progress count="{{post.rottenpoint_set.count}}"></custom-progress>
   {% endif %}
   <br>
 {% endif %}
