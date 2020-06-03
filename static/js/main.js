@@ -18,7 +18,6 @@ Vue.component("custom-progress", {
       var element = this.$el;
       var position = element.getBoundingClientRect();
 
-      console.log("oki");
 
       // checking whether fully visible
       if(position.top >= 0 && position.bottom <= window.innerHeight) {
@@ -67,7 +66,7 @@ Vue.component("custom-progress", {
   },
 
   mounted: function(){
-      console.log("oki");
+
     this.cursor = this.$el.getElementsByTagName("img")[0];
   }
 });
@@ -91,10 +90,6 @@ Vue.component("shared-button", {
 })
 
 
-
-
-
-
 var app = new Vue({
   el: '#app',
 
@@ -103,6 +98,10 @@ var app = new Vue({
   data: {
     isActive: false,
     posts: [],
+
+    post_ids: [],
+    post_index: 0,
+    query_active: false
   },
 
   methods: {
@@ -114,13 +113,48 @@ var app = new Vue({
       addPost: function(post){
         post.rottenpoint_set = post.rottenpoint_set.sort((a,b) => (a.order > b.order) ? 1 : -1);
         this.posts.push(post)
+      },
+
+      getPost: function(){
+        if(this.query_active)
+          return;
+
+        console.log("query");
+
+        this.query_active = true;
+
+
+
+        if(this.post_index < this.post_ids.length){
+          axios.get("/posts/"+this.post_ids[this.post_index]).then(
+            response => {this.addPost(response.data); this.post_index+=1;this.query_active=false;}
+            //this.post_index += 1;
+          )
+        }
+
+      },
+
+      checkEndPost: function(ev){
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+          this.getPost()
+
+
+          }
+
       }
   },
 
+  created: function(){
+    window.addEventListener('scroll', this.checkEndPost);
+  },
+
   mounted: function(){
-    axios.get("/posts").then(
-      response => (this.addPost(response.data))
-    )
+    try{
+      this.post_ids = JSON.parse(document.getElementById("post-ids").innerHTML);
+      this.getPost();
+    } catch(error){
+      this.post_ids = []
+    }
   }
 
 

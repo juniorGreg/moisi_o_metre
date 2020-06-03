@@ -21,12 +21,17 @@ if settings.DEBUG:
 # Create your views here.
 def index(request, id=-1):
 
-    if id == -1:
-        posts = Post.objects.order_by('-date_created')
-    else:
-        posts = [Post.objects.get(id=id)]
+    post_ids = list(Post.objects.order_by('-date_created').values_list('id', flat=True))
+    if id in post_ids:
 
-    context = {"posts": posts, 'vuejs' : vuejs}
+        index = post_ids.index(id)
+        if index > 0 :
+            del post_ids[index]
+            post_ids.insert(0, id)
+
+    print(post_ids)
+
+    context = {"post_ids": post_ids, 'vuejs' : vuejs}
     return render(request, "blog/index.html", context)
 
 def about(request):

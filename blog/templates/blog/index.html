@@ -1,10 +1,10 @@
 
 {% extends 'blog/main.html' %}
-{% load blog_filters %}
+
 {% load static %}
 
 {% block content %}
-
+        {{ post_ids|json_script:"post-ids" }}
         <div class="posts" v-for="post in posts">
           <div class="box">
             <h1 class="title is-size-6-mobile">${post.title}</h1>
