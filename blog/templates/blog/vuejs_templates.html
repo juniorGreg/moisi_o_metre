@@ -1,0 +1,29 @@
+<script type="text/x-template" id="shared-button">
+
+  <a target='_blank' :href="url">
+    <button class="button is-text">
+      <img class="image is-24x24" :src="button_img" :alt="alt_text">
+    </button>
+  </a>
+</script>
+
+<script type="text/x-template" id="source-url">
+  <div v-if="source">
+    <p>${ title }:
+      <span v-if="source.includes('http')">
+          <a target='_blank' :href="source">${ source }</a>
+      </span>
+      <span v-else>
+        ${ source }
+      </span>
+    </p>
+  </div>
+</script>
+
+
+<script type="text/x-template" id="custom-progress">
+  <div>
+    <img src="https://moisi-bucket.s3.amazonaws.com/images/moisiometre.svg" class="cursor image is-48x48">
+    <progress class="progress is-small" :value="currentCount" :max="maxCount"></progress>
+  </div>
+</script>

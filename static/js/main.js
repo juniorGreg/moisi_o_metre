@@ -135,7 +135,7 @@ var app = new Vue({
       },
 
       checkEndPost: function(ev){
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        if ((window.innerHeight + window.scrollY + 50) >= document.body.offsetHeight) {
           this.getPost()
 
 
