@@ -5,6 +5,19 @@ from django.conf import settings
 from .models import *
 from .forms import CommentForm
 
+from django.conf import settings
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import PostSerializer
+
+vuejs = "https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"
+
+if settings.DEBUG:
+    vuejs = "https://cdn.jsdelivr.net/npm/vue/dist/vue.js"
+
+
+
 # Create your views here.
 def index(request, id=-1):
 
@@ -13,17 +26,17 @@ def index(request, id=-1):
     else:
         posts = [Post.objects.get(id=id)]
 
-    context = {"posts": posts}
+    context = {"posts": posts, 'vuejs' : vuejs}
     return render(request, "blog/index.html", context)
 
 def about(request):
     about = About.objects.all()[0]
-    context = {'about': about}
+    context = {'about': about, 'vuejs': vuejs}
     return render(request, "blog/about.html", context)
 
 def references(request):
     references = Reference.objects.all()
-    context = {'references': references}
+    context = {'references': references, "vuejs": vuejs}
     return render(request,"blog/references.html", context)
 
 def contact(request):
@@ -39,4 +52,18 @@ def contact(request):
             )
             return redirect('index')
 
-    return render(request, "blog/contact.html")
+    context = {'vuejs': vuejs}
+
+    return render(request, "blog/contact.html", context)
+
+
+#API
+@api_view(['GET'])
+def posts(request, id=-1):
+    if id == -1:
+        post = Post.objects.order_by('-date_created')[0]
+    else:
+        post = Post.objects.get(id=id)
+
+    serializer = PostSerializer(post)
+    return Response(serializer.data)

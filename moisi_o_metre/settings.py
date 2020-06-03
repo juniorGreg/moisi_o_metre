@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    "api.apps.ApiConfig",
     "blog.apps.BlogConfig",
     "storages",
     'django.contrib.sites',
@@ -54,7 +53,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware'
 ]
+
+
+
 
 ROOT_URLCONF = 'moisi_o_metre.urls'
 
@@ -126,6 +129,11 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT': '%d %B %Y %H:%M'
+
+}
 
 
 # Static files (CSS, JavaScript, Images)

@@ -1,5 +1,7 @@
-var customProgress = ("custom-progress", {
+Vue.component("custom-progress", {
   props: ['count'],
+
+  template: "#custom-progress",
 
   data: function() {
     return  {
@@ -9,8 +11,6 @@ var customProgress = ("custom-progress", {
       maxCount: 7
     }
   },
-
-  template: '<div><img src="https://moisi-bucket.s3.amazonaws.com/images/moisiometre.svg" class="cursor image is-48x48"><progress class="progress is-small" :value="currentCount" :max="maxCount"></progress></div>',
 
   methods: {
 
@@ -70,30 +70,58 @@ var customProgress = ("custom-progress", {
       console.log("oki");
     this.cursor = this.$el.getElementsByTagName("img")[0];
   }
+});
 
+Vue.component("source-url", {
+  props: ["source", "title"],
+  template: "#source-url",
+  delimiters: ['${', '}']
+});
 
+Vue.component("shared-button", {
+  props : ['shared_url', "post_id", "local_url", "button_img", "alt_text", "text"],
+  template: "#shared-button",
+  delimiters: ['${', '}'],
 
+  computed: {
+    url: function(){
+        return this.shared_url.replace("(link)", encodeURI(this.local_url+this.post_id)).replace("(text)", encodeURI(this.text));
+    }
+  }
 })
+
+
+
 
 
 
 var app = new Vue({
   el: '#app',
 
-  data: {
-    isActive: false
-  },
+  delimiters: ['${', '}'],
 
-  components: {
-    'custom-progress': customProgress
+  data: {
+    isActive: false,
+    posts: [],
   },
 
   methods: {
       toggleMenu: function(){
 
         this.isActive = !this.isActive
+      },
+
+      addPost: function(post){
+        post.rottenpoint_set = post.rottenpoint_set.sort((a,b) => (a.order > b.order) ? 1 : -1);
+        this.posts.push(post)
       }
   },
+
+  mounted: function(){
+    axios.get("/posts").then(
+      response => (this.addPost(response.data))
+    )
+  }
 
 
 })
