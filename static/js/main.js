@@ -110,9 +110,47 @@ var app = new Vue({
         this.isActive = !this.isActive
       },
 
+      formatDate: function(date){
+        months = ["Janvier", "Février", "Mars", "Avril", "Mai", 'Juin', "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+        date_element = date.split(" ")
+        month_string = date_element[1];
+        month_index = parseInt(month_string);
+
+        new_date = date.replace(month_string, months[month_index - 1]);
+
+        return new_date;
+      },
+
+      showModifiedDate: function(dateCreated, dateModified){
+        date_created_element = dateCreated.split(" ")
+        date_modified_element = dateModified.split(" ")
+        if(date_created_element[0] < date_modified_element[0])
+          return true;
+
+        if(date_created_element[1] < date_modified_element[1])
+          return true;
+
+        if(date_created_element[2] < date_modified_element[2])
+          return true;
+
+        time_created = date_created_element[3].split(":")
+        time_modified = date_modified_element[3].split(":")
+
+        if(time_created[0] < time_modified[0])
+          return true;
+
+        if(time_created[1] < time_modified[1])
+          return true;
+
+        return false;
+      },
+
       addPost: function(post){
         post.rottenpoint_set = post.rottenpoint_set.sort((a,b) => (a.order > b.order) ? 1 : -1);
-        this.posts.push(post)
+        post["show_modified_date"] = this.showModifiedDate(post.date_created, post.date_modified);
+        post.date_created = this.formatDate(post.date_created);
+        post.date_modified = this.formatDate(post.date_modified);
+        this.posts.push(post);
       },
 
       getPost: function(){

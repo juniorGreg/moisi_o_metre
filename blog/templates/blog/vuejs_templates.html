@@ -1,3 +1,5 @@
+{% load static %}
+
 <script type="text/x-template" id="shared-button">
 
   <a target='_blank' :href="url">
@@ -23,7 +25,7 @@
 
 <script type="text/x-template" id="custom-progress">
   <div>
-    <img src="https://moisi-bucket.s3.amazonaws.com/images/moisiometre.svg" class="cursor image is-48x48">
+    <img src="{% static '/images/moisiometre.svg' %}" class="cursor image is-48x48">
     <progress class="progress is-small" :value="currentCount" :max="maxCount"></progress>
   </div>
 </script>

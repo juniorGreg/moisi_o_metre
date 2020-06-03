@@ -17,7 +17,7 @@
             </div>
 
             <p class="is-size-7 is-size-7-mobile">Créer le ${post.date_created}</p>
-            <div v-if="post.date_created < post.date_modified">
+            <div v-if="post.show_modified_date">
               <p class="is-size-7 is-size-7-mobile">Modifier le ${post.date_modified}</p>
             </div>
 

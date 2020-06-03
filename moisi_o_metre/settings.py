@@ -57,8 +57,6 @@ MIDDLEWARE = [
 ]
 
 
-
-
 ROOT_URLCONF = 'moisi_o_metre.urls'
 
 SITE_ID = 1
@@ -131,7 +129,7 @@ USE_L10N = True
 USE_TZ = True
 
 REST_FRAMEWORK = {
-    'DATETIME_FORMAT': '%d %B %Y %H:%M'
+    'DATETIME_FORMAT': '%d %m %Y %H:%M'
 
 }
 
