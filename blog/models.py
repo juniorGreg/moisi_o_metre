@@ -9,7 +9,7 @@ class Post(models.Model):
     )
     post_type = models.CharField(max_length=10, choices=POST_TYPE, default='CRITIC')
     title = models.CharField(max_length=200)
-    content = models.TextField(max_length=2000)
+    content = models.TextField(max_length=4000)
     date_modified = models.DateTimeField(auto_now=True)
     date_created = models.DateTimeField(auto_now_add=True)
     source = models.CharField(max_length=200, null=True)
@@ -22,7 +22,7 @@ class Post(models.Model):
 class RottenPoint(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    description = models.TextField(max_length=2000)
+    description = models.TextField(max_length=4000)
     source = models.CharField(max_length=200, null=True, blank=True)
     rotten_source = models.CharField(max_length=200, null=True, blank=True)
     order = models.PositiveSmallIntegerField(default=0)
@@ -39,7 +39,7 @@ class Reference(models.Model):
         return self.title
 
 class About(models.Model):
-    text = models.TextField(max_length=2000)
+    text = models.TextField(max_length=4000)
 
     def __str__(self):
         return "about"
