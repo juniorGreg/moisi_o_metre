@@ -1,6 +1,16 @@
 from django.db import models
 
 # Create your models here.
+class Reference(models.Model):
+    title = models.CharField(max_length=200, null=True)
+    description = models.TextField(max_length=400, null=True)
+    source = models.CharField(max_length=200)
+    is_global = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
+
 class Post(models.Model):
     POST_TYPE = (
         ('CRITIC', 'Critic'),
@@ -14,6 +24,7 @@ class Post(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     source = models.CharField(max_length=200, null=True)
     image = models.ImageField(null=True, blank=True)
+    sources = models.ManyToManyField(Reference)
 
     def __str__(self):
         return self.title
@@ -30,13 +41,7 @@ class RottenPoint(models.Model):
     def __str__(self):
         return self.title
 
-class Reference(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField(max_length=400)
-    source = models.CharField(max_length=200)
 
-    def __str__(self):
-        return self.title
 
 class About(models.Model):
     text = models.TextField(max_length=4000)
