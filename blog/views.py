@@ -40,7 +40,7 @@ def about(request):
     return render(request, "blog/about.html", context)
 
 def references(request):
-    references = Reference.objects.all()
+    references = Reference.objects.filter(is_global=True)
     context = {'references': references, "vuejs": vuejs}
     return render(request,"blog/references.html", context)
 
