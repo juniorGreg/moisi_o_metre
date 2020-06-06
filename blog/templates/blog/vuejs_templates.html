@@ -1,7 +1,6 @@
 {% load static %}
 
 <script type="text/x-template" id="shared-button">
-
   <a target='_blank' :href="url">
     <button class="button is-text">
       <img class="image is-24x24" :src="button_img" :alt="alt_text">
@@ -11,14 +10,14 @@
 
 <script type="text/x-template" id="source-url">
   <div v-if="source">
-    <p>${ title }:
-      <span v-if="source.includes('http')">
+    <p>${ title }</p>
+      <div v-if="source.includes('http')">
           <a target='_blank' :href="source">${ source }</a>
-      </span>
-      <span v-else>
+      </div>
+      <div v-else>
         ${ source }
-      </span>
-    </p>
+      </div>
+      <br>
   </div>
 </script>
 

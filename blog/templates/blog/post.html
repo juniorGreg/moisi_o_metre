@@ -2,14 +2,7 @@
   <img class="image-post is-hidden-mobile" :src="post.image" alt="imâge">
   <img class="image-post-mobile is-hidden-tablet" style="" :src="post.image" alt="imâge">
 </div>
-
-
-
   <p class="has-text-justified">${post.content}</p>
-<br>
-
-<source-url title="Source moisi" :source="post.source"></source-url>
-
 <br>
 <div v-if="post.rottenpoint_set.length > 0 ">
   <h2 class="subtitle is-size-6-mobile">Les Points Moisis</h2>
@@ -18,13 +11,27 @@
     <br>
     <p class="has-text-justified">${point.description}</p>
     <br>
-    
-    <source-url title="Source moisi" :source="point.rotten_source"></source-url>
-    <source-url title="Source" :source="point.source"></source-url>
-
-    <br>
   </div>
 </div>
-  <custom-progress v-if="post.post_type == 'CRITIC'" :count="post.rottenpoint_set.length"></custom-progress>
 
+  <div v-if="post.sources.length > 0">
+      <transition
+        @enter="showSources"
+        @leave="hideSources">
+        <div class="sources" v-show="post.show_sources">
+          <h2 class="subtitle is-size-6-mobile">Les Sources</h2>
+          <div v-for="source in post.sources" >
+            <source-url :title="source.title" :source="source.source">
+
+          </div>
+        </div>
+      </transition>
+
+      <button @click="post.show_sources = !post.show_sources" class="button is-small">
+        <span v-if="post.show_sources">Cacher&nbsp</span>
+        <span v-else>Afficher&nbsp</span>les sources
+      </button>
+  </div>
+
+  <custom-progress v-if="post.post_type == 'CRITIC'" :count="post.rottenpoint_set.length"></custom-progress>
   <br>

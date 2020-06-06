@@ -27,9 +27,7 @@ def index(request, id=-1):
         index = post_ids.index(id)
         if index > 0 :
             del post_ids[index]
-            post_ids.insert(0, id)
-
-    print(post_ids)
+            post_ids.insert(0, id)    
 
     context = {"post_ids": post_ids, 'vuejs' : vuejs}
     return render(request, "blog/index.html", context)

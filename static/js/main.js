@@ -150,6 +150,7 @@ var app = new Vue({
         post["show_modified_date"] = this.showModifiedDate(post.date_created, post.date_modified);
         post.date_created = this.formatDate(post.date_created);
         post.date_modified = this.formatDate(post.date_modified);
+        post["show_sources"] = false;
         this.posts.push(post);
       },
 
@@ -179,6 +180,17 @@ var app = new Vue({
 
           }
 
+      },
+
+
+      showSources: function(el){
+        console.log("showSources");
+        el.style.maxHeight = el.scrollHeight + "px";
+        console.log(el.style.maxHeight);
+      },
+      hideSources: function (el){
+        console.log("leave");
+        el.style.maxHeight = 0;
       }
   },
 
