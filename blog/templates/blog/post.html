@@ -33,5 +33,5 @@
       </button>
   </div>
 
-  <custom-progress v-if="post.post_type == 'CRITIC'" :count="post.rottenpoint_set.length"></custom-progress>
+  <custom-progress v-if="post.post_type == 'CRITIC'" :count="post.rotten_score"></custom-progress>
   <br>

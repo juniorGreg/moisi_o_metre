@@ -25,6 +25,7 @@ class Post(models.Model):
     source = models.CharField(max_length=200, null=True)
     image = models.ImageField(null=True, blank=True)
     sources = models.ManyToManyField(Reference)
+    rotten_score = models.PositiveSmallIntegerField(default=4)
 
     def __str__(self):
         return self.title
