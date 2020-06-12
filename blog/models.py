@@ -2,9 +2,9 @@ from django.db import models
 
 # Create your models here.
 class Reference(models.Model):
-    title = models.CharField(max_length=200, null=True)
-    description = models.TextField(max_length=400, null=True)
-    source = models.CharField(max_length=200)
+    title = models.CharField(max_length=400, null=True)
+    description = models.TextField(max_length=800, null=True)
+    source = models.CharField(max_length=400)
     is_global = models.BooleanField(default=True)
 
     def __str__(self):
@@ -18,11 +18,10 @@ class Post(models.Model):
         ('BD', 'BD')
     )
     post_type = models.CharField(max_length=10, choices=POST_TYPE, default='CRITIC')
-    title = models.CharField(max_length=200)
-    content = models.TextField(max_length=4000)
+    title = models.CharField(max_length=400)
+    content = models.TextField(max_length=8000)
     date_modified = models.DateTimeField(auto_now=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    source = models.CharField(max_length=200, null=True)
     image = models.ImageField(null=True, blank=True)
     sources = models.ManyToManyField(Reference)
     rotten_score = models.PositiveSmallIntegerField(default=4)
@@ -33,10 +32,8 @@ class Post(models.Model):
 
 class RottenPoint(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    description = models.TextField(max_length=4000)
-    source = models.CharField(max_length=200, null=True, blank=True)
-    rotten_source = models.CharField(max_length=200, null=True, blank=True)
+    title = models.CharField(max_length=400)
+    description = models.TextField(max_length=8000)
     order = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
