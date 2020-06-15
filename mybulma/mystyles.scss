@@ -64,9 +64,10 @@ a {
 $body-family: "Josefin";
 
 @import "bulma-0.8.2/bulma.sass";
-//@use "sass:list";
 
-//append($sizes, $size-8);
+p {
+  margin-bottom: 1.5rem;
+}
 
 .button.is-text{
   margin:0;

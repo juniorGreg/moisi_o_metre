@@ -2,15 +2,20 @@
   <img class="image-post is-hidden-mobile" :src="post.image" alt="imâge">
   <img class="image-post-mobile is-hidden-tablet" style="" :src="post.image" alt="imâge">
 </div>
-  <p class="has-text-justified">${post.content}</p>
-<br>
+
+<div class="">
+  <vue-showdown :markdown="post.content">
+</div>
+
+
 <div v-if="post.rottenpoint_set.length > 0 ">
   <h2 class="subtitle is-size-6-mobile">Les Points Moisis</h2>
   <div v-for="point in post.rottenpoint_set">
     <h3 class="has-text-weight-bold">${point.title}</h3>
     <br>
-    <p class="has-text-justified">${point.description}</p>
-    <br>
+    <div class="">
+      <vue-showdown :markdown="point.description">
+    </div>
   </div>
 </div>
 
@@ -22,7 +27,6 @@
           <h2 class="subtitle is-size-6-mobile">Les Sources</h2>
           <div v-for="source in post.sources" >
             <source-url :title="source.title" :source="source.source">
-
           </div>
         </div>
       </transition>

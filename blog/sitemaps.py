@@ -13,6 +13,3 @@ class PostSitmap(Sitemap):
 
     def lastmod(self, obj):
         return obj.date_modified
-
-    def location(self, obj):
-        return reverse("post", kwargs={"id": str(obj.id)})
