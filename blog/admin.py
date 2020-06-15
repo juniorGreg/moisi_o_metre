@@ -3,7 +3,15 @@ from .models import *
 
 
 # Register your models here.
-admin.site.register(Post)
-admin.site.register(RottenPoint)
+#admin.site.register(Post)
+#admin.site.register(RottenPoint)
 admin.site.register(Reference)
 admin.site.register(About)
+
+class InLineRottentPoint(admin.StackedInline):
+    model = RottenPoint
+    extra = 1
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    inlines = [InLineRottentPoint]
