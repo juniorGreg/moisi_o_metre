@@ -15,12 +15,14 @@ from .serializers import PostSerializer
 
 
 
-def get_main_context(tag_title, tag_desc, tag_url, tag_image="moisiometre.png"):
+def get_main_context(tag_title, tag_desc, tag_url, tag_image="/images/moisiometre.png"):
+    if "http" not in tag_image:
+        tag_image = static(tag_image)
 
     tag = {
         'title': tag_title,
         'description': tag_desc,
-        'image': static(tag_image),
+        'image': tag_image,
         'url': 'https://%s%s' % (Site.objects.get_current().domain, tag_url)
     }
 
