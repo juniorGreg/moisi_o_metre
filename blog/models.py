@@ -24,6 +24,7 @@ class Post(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     date_created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(null=True, blank=True)
+    hidden_image = models.ImageField(null=True, blank=True)
     sources = models.ManyToManyField(Reference)
     rotten_score = models.PositiveSmallIntegerField(default=4)
 
