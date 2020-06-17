@@ -6,7 +6,7 @@ class Reference(models.Model):
     title = models.CharField(max_length=400, null=True)
     description = models.TextField(max_length=800, null=True)
     source = models.CharField(max_length=400)
-    is_global = models.BooleanField(default=True)
+    is_global = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
