@@ -1,0 +1,26 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "javacscript front-end from blog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.1.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^4.43.0",
+    "webpack-bundle-tracker": "^1.0.0-alpha.1",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "animejs": "^3.2.0",
+    "axios": "^0.19.2",
+    "vue": "^2.6.11",
+    "vue-showdown": "^2.4.1"
+  }
+}

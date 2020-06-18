@@ -1,3 +1,18 @@
+import Vue from 'vue'
+import VueShowdown from 'vue-showdown'
+import anime from 'animejs/lib/anime.es.js'
+import axios from 'axios'
+
+// the second parameter of Vue.use() is optional
+Vue.use(VueShowdown, {
+  // set default flavor of showdown
+  flavor: 'github',
+  // set default options of showdown (will override the flavor options)
+  options: {
+    emoji: false,
+  },
+})
+
 Vue.component("custom-progress", {
   props: ['count'],
 
@@ -111,19 +126,19 @@ var app = new Vue({
       },
 
       formatDate: function(date){
-        months = ["Janvier", "Février", "Mars", "Avril", "Mai", 'Juin', "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
-        date_element = date.split(" ")
-        month_string = date_element[1];
-        month_index = parseInt(month_string);
+        var months = ["Janvier", "Février", "Mars", "Avril", "Mai", 'Juin', "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+        var date_element = date.split(" ")
+        var month_string = date_element[1];
+        var month_index = parseInt(month_string);
 
-        new_date = date.replace(month_string, months[month_index - 1]);
+        var new_date = date.replace(month_string, months[month_index - 1]);
 
         return new_date;
       },
 
       showModifiedDate: function(dateCreated, dateModified){
-        date_created_element = dateCreated.split(" ")
-        date_modified_element = dateModified.split(" ")
+        var date_created_element = dateCreated.split(" ")
+        var date_modified_element = dateModified.split(" ")
         if(date_created_element[0] < date_modified_element[0])
           return true;
 
@@ -133,8 +148,8 @@ var app = new Vue({
         if(date_created_element[2] < date_modified_element[2])
           return true;
 
-        time_created = date_created_element[3].split(":")
-        time_modified = date_modified_element[3].split(":")
+        var time_created = date_created_element[3].split(":")
+        var time_modified = date_modified_element[3].split(":")
 
         if(time_created[0] < time_modified[0])
           return true;
