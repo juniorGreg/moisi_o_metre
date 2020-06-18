@@ -173,11 +173,7 @@ var app = new Vue({
         if(this.query_active)
           return;
 
-        console.log("query");
-
         this.query_active = true;
-
-
 
         if(this.post_index < this.post_ids.length){
           axios.get("/posts/"+this.post_ids[this.post_index]).then(

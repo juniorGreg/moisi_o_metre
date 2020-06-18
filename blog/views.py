@@ -58,7 +58,6 @@ def index(request, id=-1):
 
     context["post_ids"] = post_ids
 
-    print(context)
     return render(request, "blog/index.html", context)
 
 def about(request):
