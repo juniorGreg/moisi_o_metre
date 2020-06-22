@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.conf import settings
 from django.templatetags.static import static
+from django.http import Http404
 
 from .models import *
 from django.contrib.sites.models import Site
@@ -27,11 +28,6 @@ def get_main_context(tag_title, tag_desc, tag_url, tag_image="/images/moisiometr
     }
 
     context = {'tag': tag}
-
-    if settings.DEBUG:
-        context['vuejs'] = "https://cdn.jsdelivr.net/npm/vue/dist/vue.js"
-    else:
-        context['vuejs'] = "https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"
 
     return context
 
@@ -59,6 +55,13 @@ def index(request, id=-1):
     context["post_ids"] = post_ids
 
     return render(request, "blog/index.html", context)
+
+def tests(request):
+    if not settings.DEBUG:
+        raise Http404
+
+    context = get_main_context("test", "test", "/test")
+    return render(request, "blog/tests.html", context)
 
 def about(request):
     about = About.objects.all()[0]

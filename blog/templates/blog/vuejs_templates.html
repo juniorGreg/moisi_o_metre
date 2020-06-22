@@ -1,5 +1,15 @@
 {% load static %}
 
+<script type="text/x-template" id="hidden-image">
+  <div>
+    <img v-show="!hidden" class="image-post is-hidden-mobile" @mouseover="hidden=!hidden" :src="image_src" alt="image source" >
+    <img v-show="!hidden" class="image-post-mobile is-hidden-tablet" @touchstart="hidden=!hidden" :src="image_src" alt="image source" >
+
+    <img v-show="hidden" class="image-post is-hidden-mobile" @mouseout="hidden=!hidden" :src="hidden_image_src" alt="image source" >
+    <img v-show="hidden" class="image-post-mobile is-hidden-tablet" @touchend="hidden=!hidden" :src="hidden_image_src" alt="image source" >
+  </div>
+</script>
+
 <script type="text/x-template" id="shared-button">
   <a target='_blank' :href="url">
     <button class="button is-text">
@@ -20,6 +30,8 @@
       <br>
   </div>
 </script>
+
+
 
 
 <script type="text/x-template" id="custom-progress">

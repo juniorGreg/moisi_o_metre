@@ -102,7 +102,29 @@ Vue.component("shared-button", {
         return this.shared_url.replace("(link)", encodeURI(this.local_url+this.post_id)).replace("(text)", encodeURI(this.text));
     }
   }
-})
+});
+
+Vue.component("hidden-image", {
+  props : ["image_src", "hidden_image_src"],
+  template: "#hidden-image",
+  delimiters: ['${', '}'],
+
+  data: function() {
+    return {
+      hidden: false,
+    }
+  },
+
+  methods: {
+    showHiddenImage: function(){
+
+    },
+
+    showImage: function(){
+
+    }
+  }
+});
 
 
 var app = new Vue({
@@ -113,7 +135,6 @@ var app = new Vue({
   data: {
     isActive: false,
     posts: [],
-
     post_ids: [],
     post_index: 0,
     query_active: false
@@ -178,7 +199,6 @@ var app = new Vue({
         if(this.post_index < this.post_ids.length){
           axios.get("/posts/"+this.post_ids[this.post_index]).then(
             response => {this.addPost(response.data); this.post_index+=1;this.query_active=false;}
-            //this.post_index += 1;
           )
         }
 
@@ -187,18 +207,14 @@ var app = new Vue({
       checkEndPost: function(ev){
         if ((window.innerHeight + window.scrollY + 50) >= document.body.offsetHeight) {
           this.getPost()
-
-
           }
-
       },
 
-
       showSources: function(el){
-        console.log("showSources");
         el.style.maxHeight = el.scrollHeight + "px";
         console.log(el.style.maxHeight);
       },
+
       hideSources: function (el){
         console.log("leave");
         el.style.maxHeight = 0;
