@@ -21,6 +21,7 @@
     "animejs": "^3.2.0",
     "axios": "^0.19.2",
     "vue": "^2.6.11",
-    "vue-showdown": "^2.4.1"
+    "vue-showdown": "^2.4.1",
+    "vue2-touch-events": "^2.2.1"
   }
 }

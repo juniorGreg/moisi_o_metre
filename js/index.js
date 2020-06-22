@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import VueShowdown from 'vue-showdown'
+import Vue2TouchEvents from 'vue2-touch-events'
 import anime from 'animejs/lib/anime.es.js'
 import axios from 'axios'
+
+Vue.use(Vue2TouchEvents)
 
 // the second parameter of Vue.use() is optional
 Vue.use(VueShowdown, {
@@ -117,10 +120,16 @@ Vue.component("hidden-image", {
 
   methods: {
     showHiddenImage: function(){
-
+        this.hidden=true;
     },
 
     showImage: function(){
+      this.hidden = false;
+    },
+    preventDefault: function(e){
+
+      alert("allo");
+      e.preventDefault();
 
     }
   }

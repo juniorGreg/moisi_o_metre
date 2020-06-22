@@ -2,11 +2,11 @@
 
 <script type="text/x-template" id="hidden-image">
   <div>
-    <img v-show="!hidden" class="image-post is-hidden-mobile" @mouseover="hidden=!hidden" :src="image_src" alt="image source" >
-    <img v-show="!hidden" class="image-post-mobile is-hidden-tablet" @touchstart="hidden=!hidden" :src="image_src" alt="image source" >
+    <img v-show="!hidden" class="image-post is-hidden-mobile" @touchstart="showHiddenImage" @mouseover="showHiddenImage()" :src="image_src" alt="image source" >
+    <img v-show="!hidden" class="image-post-mobile is-hidden-tablet"  v-touch:start="showHiddenImage" :src="image_src" alt="image source" >
 
-    <img v-show="hidden" class="image-post is-hidden-mobile" @mouseout="hidden=!hidden" :src="hidden_image_src" alt="image source" >
-    <img v-show="hidden" class="image-post-mobile is-hidden-tablet" @touchend="hidden=!hidden" :src="hidden_image_src" alt="image source" >
+    <img v-show="hidden" class="image-post is-hidden-mobile" @mouseout="showImage" :src="hidden_image_src" alt="image source" >
+    <img v-show="hidden" class="image-post-mobile is-hidden-tablet" v-touch:longtap="preventDefault" v-touch:end="showImage" :src="hidden_image_src" alt="image source" >
   </div>
 </script>
 
