@@ -120,18 +120,36 @@ Vue.component("hidden-image", {
 
   methods: {
     showHiddenImage: function(){
+        if(typeof window.ontouchstart !== 'undefined'){
+            return;
+        }
+
         this.hidden=true;
     },
 
     showImage: function(){
+      if(typeof window.ontouchstart !== 'undefined'){
+          return;
+      }
       this.hidden = false;
     },
-    preventDefault: function(e){
 
-      alert("allo");
-      e.preventDefault();
+    showHiddenImageMobile: function(){
+        this.hidden=true;
+    },
 
+    showImageMobile: function(){
+      this.hidden = false;
     }
+  },
+
+  mounted: function(){
+    this.$el.addEventListener('contextmenu', e=> {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      return false;
+    })
   }
 });
 
