@@ -4,7 +4,10 @@ import Vue2TouchEvents from 'vue2-touch-events'
 import anime from 'animejs/lib/anime.es.js'
 import axios from 'axios'
 
-Vue.use(Vue2TouchEvents)
+Vue.use(Vue2TouchEvents, {
+  touchHoldTolerance: 10000,
+  longTapTimeInterval: 10000
+})
 
 // the second parameter of Vue.use() is optional
 Vue.use(VueShowdown, {
