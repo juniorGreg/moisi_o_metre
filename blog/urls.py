@@ -16,5 +16,6 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},name='django.contrib.sitemaps.views.sitemap'),
     path('posts/<int:id>', views.posts, name="posts_with_id"),
     path('posts', views.posts, name="posts"),
-    path('tests', views.tests, name="tests")
+    path('tests', views.tests, name="tests"),
+    path('support', views.support, name="support")
 ]

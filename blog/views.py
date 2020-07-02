@@ -56,6 +56,11 @@ def index(request, id=-1):
 
     return render(request, "blog/index.html", context)
 
+def support(request):
+    context = get_main_context("Supportez le blog", "C'est la page pour suppportez le blob MoisiOMètre.", "/support")
+
+    return render(request, "blog/support.html", context)
+
 def tests(request):
     if not settings.DEBUG:
         raise Http404
