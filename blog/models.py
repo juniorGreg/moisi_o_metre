@@ -34,6 +34,14 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("post", kwargs={"id": str(self.id)})
 
+class PostStatistics(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    word_count = models.PositiveIntegerField(default=0)
+    avg_reading_time = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return post.title + " stats"
+
 
 class RottenPoint(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
