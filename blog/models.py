@@ -11,6 +11,13 @@ class Reference(models.Model):
     def __str__(self):
         return self.title
 
+class PostStatistics(models.Model):
+    word_count = models.PositiveIntegerField(default=0)
+    avg_reading_time = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return str(self.word_count) + " " + str(self.avg_reading_time)
+
 
 class Post(models.Model):
     POST_TYPE = (
@@ -18,6 +25,7 @@ class Post(models.Model):
         ('ARTICLE', 'Article'),
         ('BD', 'BD')
     )
+
     post_type = models.CharField(max_length=10, choices=POST_TYPE, default='CRITIC')
     title = models.CharField(max_length=400)
     content = models.TextField(max_length=8000)
@@ -28,19 +36,40 @@ class Post(models.Model):
     sources = models.ManyToManyField(Reference)
     rotten_score = models.PositiveSmallIntegerField(default=4)
 
+    statistics = models.OneToOneField(PostStatistics, null=True, blank=True, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse("post", kwargs={"id": str(self.id)})
 
-class PostStatistics(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    word_count = models.PositiveIntegerField(default=0)
-    avg_reading_time = models.PositiveIntegerField(default=0)
+    def calculate_statistics(self):
+        text = self.content
 
-    def __str__(self):
-        return post.title + " stats"
+        for rotten_point in self.rottenpoint_set.all():
+            text += " "
+            text += rotten_point.description
+
+        text = text.replace("?", "").replace("!", "")
+        words = text.split()
+        word_count = len(words)
+        avg_reading_time = int(round(float(word_count)/184.0))
+
+        if self.statistics is None:
+            statistics = PostStatistics(word_count=word_count, avg_reading_time=avg_reading_time)
+            statistics.save()
+            self.statistics = statistics
+            self.save()
+        else:
+            self.statistics.word_count = word_count
+            self.statistics.avg_reading_time = avg_reading_time
+            self.statistics.save()
+
+
+
+
+
 
 
 class RottenPoint(models.Model):
