@@ -8,7 +8,7 @@
         <div class="posts" v-for="post in posts">
           <div class="box">
             <h1 class="title is-size-6-mobile">${post.title}</h1>
-            <h2 class="subtitle is-size-7 is-size-8-mobile is-italic">Temps de lecture: environ ${post.statistics.avg_reading_time} minutes</h2>
+            <h2 class="subtitle is-size-7 is-italic">Temps de lecture: environ ${post.statistics.avg_reading_time} minutes</h2>
             <div v-if="post.post_type == 'BD'">
               {% include 'blog/bd.html' %}
             </div>
@@ -16,9 +16,9 @@
               {% include 'blog/post.html' %}
             </div>
 
-            <div class="is-size-7 is-size-7-mobile">Créer le ${post.date_created}</div>
+            <div class="is-size-7">Créer le ${post.date_created}</div>
             <div v-if="post.show_modified_date">
-              <div class="is-size-7 is-size-7-mobile">Modifier le ${post.date_modified}</div>
+              <div class="is-size-7">Modifier le ${post.date_modified}</div>
             </div>
 
             <div class="buttons has-addons">
