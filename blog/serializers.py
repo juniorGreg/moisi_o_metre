@@ -11,11 +11,17 @@ class RottenPointSerializer(serializers.ModelSerializer):
         model = RottenPoint
         fields = "__all__"
 
+class PostStatisticsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostStatistics
+        fields = ["avg_reading_time"]
+
 
 class PostSerializer(serializers.ModelSerializer):
 
     rottenpoint_set = RottenPointSerializer(many=True, read_only=True)
     sources = ReferenceSerializer(many=True)
+    statistics = PostStatisticsSerializer()
 
     class Meta:
         model = Post
