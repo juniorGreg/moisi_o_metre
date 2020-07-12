@@ -6,7 +6,7 @@ class TaintedLemma(models.Model):
         ('NEG', 'Negative'),
         ('NEU', 'Neutral'),
         ('POS', 'Positive'),
-        ('SUP' 'Superlative')
+        ('SUP', 'Superlative')
     )
 
     LANG = (
