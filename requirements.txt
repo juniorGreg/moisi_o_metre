@@ -9,3 +9,6 @@ dj-database-url==0.5.0
 psycopg2==2.8.4
 psycopg2-binary==2.8.5
 boto3==1.12.39
+beautifulsoup4 == 4.9.1
+spacy==2.2.4
+requests-html == 0.10.0
