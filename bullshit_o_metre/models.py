@@ -23,6 +23,8 @@ class RecordedWebSite(models.Model):
     title = models.CharField(max_length=400)
     url = models.URLField(max_length=400)
     meaningful_lemmas = models.ManyToManyField(TaintedLemma)
-    lemmas_count = models.PositiveIntegerField()
+    lemmas_count = models.PositiveIntegerField(default=0)
 
-    score = models.FloatField()
+    score = models.FloatField(default=0)
+    date_evaluated = models.DateTimeField(auto_now=True)
+    date_added = models.DateTimeField(auto_now_add=True)

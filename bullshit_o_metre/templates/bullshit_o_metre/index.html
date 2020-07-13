@@ -17,5 +17,34 @@
       </div>
 
     </section>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Postulez un site</h1>
+        <form action="/bullshit_o_metre/" method="post">
+          {% csrf_token %}
+          <div class="field">
+            <label for="website_url">Url: </label>
+            <div class="control">
+              <input type="url" name="website_url">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <button class="button is-link is-small" type="submit" name="button">Postulez</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </section>
+    <section class="section">
+
+      <div class="container">
+          <h1 class="title">Lemmas à évaluer</h1>
+      </div>
+
+    </section>
   </body>
 </html>
