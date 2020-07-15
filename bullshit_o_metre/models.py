@@ -19,6 +19,9 @@ class TaintedLemma(models.Model):
     name = models.CharField(max_length=400)
     is_evaluated = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+
 class RecordedWebSite(models.Model):
     title = models.CharField(max_length=400)
     url = models.URLField(max_length=400)

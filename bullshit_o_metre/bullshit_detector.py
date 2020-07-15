@@ -5,11 +5,13 @@ import spacy
 from collections import Counter
 from langdetect import detect
 from .models import *
+import asyncio
 
+from multiprocessing import Process, Queue
 
+def retrieve_text_from_website(q, url):
+    asyncio.set_event_loop(asyncio.new_event_loop())
 
-
-def evaluate_website(url):
     websites = RecordedWebSite.objects.filter(url=url)
     if websites:
         return websites[0]
@@ -17,7 +19,24 @@ def evaluate_website(url):
     session = HTMLSession()
     r = session.get(url)
     r.html.render()
-    soup = BeautifulSoup(r.html.html, 'lxml')
+
+    q.put(r.html.html)
+
+
+
+
+
+def evaluate_website(url):
+    queue = Queue()
+    p = Process(target= retrieve_text_from_website, args=(queue, url))
+    p.daemon = True
+    p.start()
+    p.join()
+    result = queue.get()
+
+    #print(result)
+
+    soup = BeautifulSoup(result, 'lxml')
     #print(soup.find_all('p')[0].text)
 
     text = ""
@@ -32,13 +51,16 @@ def evaluate_website(url):
 
     text = text.translate(trans)
     text = " ".join(text.split())
-    print(text)
+    #print(text)
     if len(text) < 100:
         print("text to short")
         return
 
     lang = detect(text[:100])
     print(lang)
+
+    if lang != 'fr':
+        return
 
     title = soup.title.text
 
@@ -62,11 +84,19 @@ def evaluate_website(url):
         if tainted_lemma:
             meaningful_lemmas.append(tainted_lemma[0])
         else:
-            new_tainted_lemma = TaintedLemma.objects.create(name=name)
+            new_tainted_lemma = TaintedLemma.objects.create(name=lemma)
             meaningful_lemmas.append(new_tainted_lemma)
 
-    website = RecordedWebSite.objects.create(title=title, url=url, meaningful_lemmas=meaningful_lemmas, lemmas_count=len(lemmas))
+    lemmas_count=len(lemmas)
+    score = score_website(meaningful_lemmas, lemmas_count)
+    website = RecordedWebSite.objects.create(title=title, url=url, meaningful_lemmas=meaningful_lemmas, lemmas_count=lemmas_count)
     return website
 
-def score_website(website):
-    pass
+def score_website(meaningful_lemmas, lemmas_count):
+    if lemmas_count == 0:
+        return 0
+    evaluate_meaningful_lemmas = [lemma for lemma in meaningful_lemmas if lemma.is_evaluated]
+    evaluate_meaningful_lemmas_neutral = [lemma for lemma in evaluate_meaningful_lemmas if lemma.type == 'NEU']
+    tainted_meaningful_lemma_count = len(evaluate_meaningful_lemmas) - len(evaluate_meaningful_lemmas_neutral)
+
+    return tainted_meaningful_lemma_count/lemmas_count

@@ -1,18 +1,22 @@
 from django.shortcuts import render
 from .models import *
-from .forms import TaintedLemmaForm
-from django.forms import formset_factory
 
-TaintedLemmaFormSet = formset_factory(TaintedLemmaForm)
+from django.forms import modelformset_factory
+from .bullshit_detector import evaluate_website
+
+
+TaintedLemmaFormSet = modelformset_factory(TaintedLemma, fields='__all__')
 
 # Create your views here.
 def index(request):
     if request.POST:
         url = request.POST.get('website_url')
         if url:
-            print(url)
-    lemmas_to_evaluate = TaintedLemma.objects.filter(is_evaluated=False)
-    formset = TaintedLemmaFormSet(lemmas_to_evaluate)
+            evaluate_website(url)
+
+    lemmas_to_evaluate = TaintedLemma.objects.filter(is_evaluated=False)[:20].update(read=True)
+
+    formset = TaintedLemmaFormSet(queryset=lemmas_to_evaluate)
     context = {"formset": formset}
 
     return render(request, "bullshit_o_metre/index.html", context)

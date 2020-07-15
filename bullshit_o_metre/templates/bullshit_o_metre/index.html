@@ -43,6 +43,17 @@
 
       <div class="container">
           <h1 class="title">Lemmas à évaluer</h1>
+          <form action="/bullshit_o_metre/evaluate_tainted_lemmas" method="post">
+            {% csrf_token %}
+
+              {{ formset.as_p }}
+
+              <div class="field">
+                <div class="control">
+                  <button class="button is-link is-small" type="submit" name="button">Postulez</button>
+                </div>
+              </div>
+          </form>
       </div>
 
     </section>
