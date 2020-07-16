@@ -62,7 +62,8 @@ def evaluate_website(url):
     if lang != 'fr':
         return
 
-    title = soup.title.text
+    title = soup.h1.text
+    print(title)
 
     # download french model --> python3 -m spacy download fr_core_news_md
     nlp = spacy.load("fr_core_news_sm")
@@ -70,14 +71,16 @@ def evaluate_website(url):
     #print(self.text)
     doc = nlp(text)
 
-    print(doc)
+    #print(doc)
     lemmas = [token.lemma_ for token in doc if not token.lemma_.isdigit()]
-    print(lemmas)
+    #print(lemmas)
 
     counter = Counter(lemmas)
 
     filtered_lemmas = [key for key, value in counter.items() if value == 1]
     meaningful_lemmas = []
+    lemmas_count=len(lemmas)
+    website = RecordedWebSite.objects.create(title=title, url=url, lemmas_count=lemmas_count)
 
     for lemma in filtered_lemmas:
         tainted_lemma = TaintedLemma.objects.filter(name=lemma)
@@ -87,9 +90,11 @@ def evaluate_website(url):
             new_tainted_lemma = TaintedLemma.objects.create(name=lemma)
             meaningful_lemmas.append(new_tainted_lemma)
 
-    lemmas_count=len(lemmas)
+    website.meaningful_lemmas.set(meaningful_lemmas)
+
     score = score_website(meaningful_lemmas, lemmas_count)
-    website = RecordedWebSite.objects.create(title=title, url=url, meaningful_lemmas=meaningful_lemmas, lemmas_count=lemmas_count)
+    website.score = score
+    website.save()
     return website
 
 def score_website(meaningful_lemmas, lemmas_count):

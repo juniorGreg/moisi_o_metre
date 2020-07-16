@@ -31,3 +31,6 @@ class RecordedWebSite(models.Model):
     score = models.FloatField(default=0)
     date_evaluated = models.DateTimeField(auto_now=True)
     date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
