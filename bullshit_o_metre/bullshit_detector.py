@@ -80,6 +80,7 @@ def evaluate_website(url):
     filtered_lemmas = [key for key, value in counter.items() if value == 1]
     meaningful_lemmas = []
     lemmas_count=len(lemmas)
+    print(lemmas_count)
     website = RecordedWebSite.objects.create(title=title, url=url, lemmas_count=lemmas_count)
 
     for lemma in filtered_lemmas:
