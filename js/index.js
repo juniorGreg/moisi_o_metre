@@ -263,6 +263,30 @@ var app = new Vue({
       this.post_ids = []
     }
   }
+})
 
+var app_bull = new Vue({
+  el: '#app_bull',
 
+  delimiters: ['${', '}'],
+
+  data: {
+    website: null,
+    url: "",
+    recalculate: false
+  },
+
+  methods: {
+    get_website: function(){
+        let url_escaped = encodeURIComponent(this.url);
+        console.log(url_escaped);
+        axios.get("/bullshit_o_metre/website/?url="+url_escaped+"&recalculate="+this.recalculate).then(response => {
+          this.website = response.data
+        });
+    },
+    is_evaluated: function(name){
+      document.forms["lemmas_form"][name].checked=true;
+      console.log(name);
+    }
+  }
 })

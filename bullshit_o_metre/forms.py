@@ -10,5 +10,7 @@ class TaintedLemmaForm(ModelForm):
         super(TaintedLemmaForm, self).__init__(*args, **kwargs)
         self.fields['type'].widget.attrs['class'] = 'select'
         self.fields['lang'].widget.attrs['class'] = 'select'
+        self.fields['lang'].disabled = True
         self.fields['name'].widget.attrs['class'] = 'input'
+        self.fields['name'].disabled = True
         self.fields['is_evaluated'].widget.attrs['class'] = 'checkbox'

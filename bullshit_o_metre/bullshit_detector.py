@@ -12,10 +12,6 @@ from multiprocessing import Process, Queue
 def retrieve_text_from_website(q, url):
     asyncio.set_event_loop(asyncio.new_event_loop())
 
-    websites = RecordedWebSite.objects.filter(url=url)
-    if websites:
-        return websites[0]
-
     session = HTMLSession()
     r = session.get(url)
     r.html.render()
@@ -26,7 +22,15 @@ def retrieve_text_from_website(q, url):
 
 
 
-def evaluate_website(url):
+def evaluate_website(url, recalculate=False):
+    website = RecordedWebSite.objects.filter(url=url).first()
+    if website:
+        if recalculate:
+            print("recalcul")
+            website.score = score_website(website.meaningful_lemmas.all(), website.lemmas_count)
+            website.save()
+        return website
+
     queue = Queue()
     p = Process(target= retrieve_text_from_website, args=(queue, url))
     p.daemon = True
@@ -54,13 +58,13 @@ def evaluate_website(url):
     #print(text)
     if len(text) < 100:
         print("text to short")
-        return
+        return None
 
     lang = detect(text[:100])
     print(lang)
 
     if lang != 'fr':
-        return
+        return None
 
     title = soup.h1.text
     print(title)

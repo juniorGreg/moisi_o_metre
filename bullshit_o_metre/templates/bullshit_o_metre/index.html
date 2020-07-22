@@ -8,7 +8,7 @@
     <title>Bullshit-O-Mètre</title>
   </head>
   <body>
-
+  <div id="app_bull">
     <section class='hero is-link'>
       <div class="hero-body">
         <div class="container">
@@ -20,34 +20,55 @@
     <section class="section">
       <div class="container">
         <h1 class="title">Postulez un site</h1>
-        <form action="/bullshit_o_metre/" method="post">
-          {% csrf_token %}
+        <form name="website_form" action="/bullshit_o_metre/" method="post">
+
           <div class="field">
             <label for="website_url">Url: </label>
             <div class="control">
-              <input type="url" name="website_url">
+              <input type="url" name="website_url" v-model="url">
             </div>
+          </div>
+          <div class="field">
+            <label for="recalcutate">Recalculer le score</label>
+            <div class="control">
+              <input type="checkbox" name="recalculate" v-model="recalculate">
+            </div>
+
           </div>
 
           <div class="field">
             <div class="control">
-              <button class="button is-link is-small" type="submit" name="button">Postulez</button>
+              <button class="button is-link is-small" @click="get_website" type="button" name="button">Postulez</button>
             </div>
           </div>
 
         </form>
       </div>
 
+
     </section>
+    <div v-if="website">
+      <section class="section">
+          <div class="container">
+            <h1 class="title">${website.title}</h1>
+            <p>Nombre de lemmas: ${website.lemmas_count}</p>
+            <p>score: ${website.score}</p>
+          </div>
+      </section>
+    </div>
+
     <section class="section">
+
+
 
       <div class="container">
           <h1 class="title">Lemmas à évaluer</h1>
           <p>Ils restent {{ not_evaluated_lemmas_count }} lemmas à évaluer.</p>
-          <form action="/bullshit_o_metre/evaluate_tainted_lemmas" method="post">
+          <form name="lemmas_form" action="/bullshit_o_metre/evaluate_tainted_lemmas" method="post">
             {% csrf_token %}
             {{ formset.management_form }}
             {% for form in formset %}
+                <div @click="is_evaluated('{{form.prefix}}-is_evaluated')">
                 {% for field in form %}
                     {% if field.is_hidden %}
                         {{ field }}
@@ -59,7 +80,9 @@
                             </div>
                         </div>
                     {% endif %}
+
               {% endfor %}
+              </div>
               <hr>
             {% endfor %}
 
@@ -72,5 +95,7 @@
       </div>
 
     </section>
+  </div>
+    <script type="text/javascript" src="{% static 'js/bundle.js' %}"></script>
   </body>
 </html>
