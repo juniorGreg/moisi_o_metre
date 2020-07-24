@@ -4,6 +4,9 @@ import Vue2TouchEvents from 'vue2-touch-events'
 import anime from 'animejs/lib/anime.es.js'
 import axios from 'axios'
 
+axios.defaults.xsrfHeaderName = "X-CSRFToken"
+axios.defaults.xsrfCookieName = 'csrftoken'
+
 Vue.use(Vue2TouchEvents, {
   touchHoldTolerance: 10000,
   longTapTimeInterval: 10000
@@ -280,7 +283,7 @@ var app_bull = new Vue({
     get_website: function(){
         let url_escaped = encodeURIComponent(this.url);
         console.log(url_escaped);
-        axios.get("/bullshit_o_metre/website/?url="+url_escaped+"&recalculate="+this.recalculate).then(response => {
+        axios.post("/bullshit_o_metre/website/?url="+url_escaped+"&recalculate="+this.recalculate).then(response => {
           this.website = response.data
         });
     },

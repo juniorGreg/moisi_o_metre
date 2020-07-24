@@ -20,7 +20,7 @@ def index(request):
         if url:
             evaluate_website(url)
 
-    lemmas_to_evaluate_query = TaintedLemma.objects.filter(is_evaluated=False)[:20]
+    lemmas_to_evaluate_query = TaintedLemma.objects.filter(is_evaluated=False)[:50]
 
 
     not_evaluated_lemmas_count = TaintedLemma.objects.filter(is_evaluated=False).count()
@@ -48,10 +48,11 @@ def evaluate_tainted_lemmas(request):
 
     return redirect('bullshit_index')
 
-@api_view(['GET'])
+@api_view(['POST'])
 def website(request):
     url = request.GET.get('url')
-    recalculate = request.GET.get('recalculate')
+    recalculate = request.GET.get('recalculate') == 'true'
+    print(recalculate)
 
     if "http" not in url:
         return Response({'error': 'url not valid', 'error_no': '1'})

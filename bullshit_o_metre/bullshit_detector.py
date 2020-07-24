@@ -9,6 +9,11 @@ import asyncio
 
 from multiprocessing import Process, Queue
 
+from pytube import YouTube
+from pytube import exceptions
+
+import html
+
 def retrieve_text_from_website(q, url):
     asyncio.set_event_loop(asyncio.new_event_loop())
 
@@ -18,19 +23,36 @@ def retrieve_text_from_website(q, url):
 
     q.put(r.html.html)
 
+def get_captions_text_from_youtube(url, lang_code='fr'):
+
+    try:
+
+        yt = YouTube(url)
+
+        if lang_code in yt.captions:
+
+            caption = yt.captions[lang_code]
+
+            bs = BeautifulSoup(caption.xml_captions, 'lxml')
+            texts = ""
+            for text in bs.find_all('text'):
+                if '[' in text.text:
+                    continue
+                texts += text.text
+                texts += " "
+            #print(texts)
+            texts = html.unescape(texts)
+            print(texts)
+            return yt.title, texts, True, False
+        else:
+            return None, 'no captions', True, True
+    except exceptions.RegexMatchError as e:
+        return None, "it's not a youtube url", False, True
+    except:
+        return None, 'no caption', True, True
 
 
-
-
-def evaluate_website(url, recalculate=False):
-    website = RecordedWebSite.objects.filter(url=url).first()
-    if website:
-        if recalculate:
-            print("recalcul")
-            website.score = score_website(website.meaningful_lemmas.all(), website.lemmas_count)
-            website.save()
-        return website
-
+def get_text_from_website(url):
     queue = Queue()
     p = Process(target= retrieve_text_from_website, args=(queue, url))
     p.daemon = True
@@ -48,13 +70,41 @@ def evaluate_website(url, recalculate=False):
         text += " "
         text += tag.text
 
+    text = " ".join(text.split())
+    title = soup.h1.text
+    return title, text
+
+
+
+
+
+
+
+def evaluate_website(url, recalculate=False):
+    print("eval")
+    website = RecordedWebSite.objects.filter(url=url).first()
+    if website:
+        if recalculate:
+            print("recalcul")
+            website.score = score_website(website.meaningful_lemmas.all(), website.lemmas_count)
+            website.save()
+        return website
+
+    title, text, is_youtube_url, errors = get_captions_text_from_youtube(url)
+
+    if is_youtube_url and errors:
+        return None
+
+    if not is_youtube_url:
+        title, text = get_text_from_website(url)
+
     intab = "0123456789?!:"
     outtab = "          .. "
 
     trans = str.maketrans(intab, outtab)
 
     text = text.translate(trans)
-    text = " ".join(text.split())
+
     #print(text)
     if len(text) < 100:
         print("text to short")
@@ -66,7 +116,7 @@ def evaluate_website(url, recalculate=False):
     if lang != 'fr':
         return None
 
-    title = soup.h1.text
+
     print(title)
 
     # download french model --> python3 -m spacy download fr_core_news_md
@@ -75,8 +125,14 @@ def evaluate_website(url, recalculate=False):
     #print(self.text)
     doc = nlp(text)
 
+    def is_valid_lemma(token):
+        pos = token.pos_
+        if pos == 'PROPN' or pos == 'SYM' or pos == 'NUM' or pos == 'PUNCT':
+            return False
+        return True
+
     #print(doc)
-    lemmas = [token.lemma_ for token in doc if not token.lemma_.isdigit()]
+    lemmas = [token.lemma_ for token in doc if is_valid_lemma(token)]
     #print(lemmas)
 
     counter = Counter(lemmas)
