@@ -275,21 +275,42 @@ var app_bull = new Vue({
 
   data: {
     website: null,
+    labeled_website: null,
     url: "",
-    recalculate: false
+    labeled_url: "",
+    is_bullshit: false,
+    loading_eval: false,
+    loading_add: false
   },
 
   methods: {
-    get_website: function(){
+    evaluate_website: function(){
         let url_escaped = encodeURIComponent(this.url);
-        console.log(url_escaped);
-        axios.post("/bullshit_o_metre/website/?url="+url_escaped+"&recalculate="+this.recalculate).then(response => {
+        this.loading_eval = true;
+        axios.get("/bullshit_o_metre/website/?url="+url_escaped).then(response => {
           this.website = response.data
+
+        }).catch(error => {
+          console.log(error)
+        }).then(()=>{
+          this.loading_eval = false;
         });
     },
-    is_evaluated: function(name){
-      document.forms["lemmas_form"][name].checked=true;
-      console.log(name);
+
+    add_labeled_website: function(){
+        let data = {
+          url: this.labeled_url,
+          is_bullshit: this.is_bullshit
+        }
+        this.loading_add = true;
+        axios.post("/bullshit_o_metre/website/", data).then(response => {
+          this.labeled_website = response.data
+        }).catch(error =>{
+          console.log(error)
+        }).then(() => {
+          this.loading_add = false;
+        });
     }
+
   }
 })

@@ -14,14 +14,49 @@ from pytube import exceptions
 
 import html
 
+class TextTooShortException(Exception):
+
+    def __init__(self):
+        super().__init__("The text is too short to be evaluate and labeled.")
+
+class YoutubeNoCaptionException(Exception):
+
+    def __init__(self):
+        super().__init__("It's a youtube video but there are no captions.")
+
+
+
 def retrieve_text_from_website(q, url):
     asyncio.set_event_loop(asyncio.new_event_loop())
 
     session = HTMLSession()
     r = session.get(url)
+    print(r.html)
     r.html.render()
+    print("render done")
 
-    q.put(r.html.html)
+
+    soup = BeautifulSoup(r.html.html, 'lxml')
+    #print(soup.find_all('p')[0].text)
+
+    text = ""
+    for tag in soup.find_all("p"):
+        text += " "
+        text += tag.text
+
+    text = " ".join(text.split())
+    title = soup.h1.text
+
+
+    if len(text) > 25000:
+        text = text[:25000]
+
+    print("len text: ")
+    print(len(text))
+
+    q.put(title)
+    q.put(text)
+    print("okiii2")
 
 def get_captions_text_from_youtube(url, lang_code='fr'):
 
@@ -42,6 +77,11 @@ def get_captions_text_from_youtube(url, lang_code='fr'):
                 texts += " "
             #print(texts)
             texts = html.unescape(texts)
+
+            if len(texts) > 25000:
+                texts = text[:25000]
+
+
             print(texts)
             return yt.title, texts, True, False
         else:
@@ -57,112 +97,41 @@ def get_text_from_website(url):
     p = Process(target= retrieve_text_from_website, args=(queue, url))
     p.daemon = True
     p.start()
-    p.join()
-    result = queue.get()
 
+    p.join()
+
+    title = queue.get()
+    text = queue.get()
+    print(title)
     #print(result)
 
-    soup = BeautifulSoup(result, 'lxml')
-    #print(soup.find_all('p')[0].text)
-
-    text = ""
-    for tag in soup.find_all("p"):
-        text += " "
-        text += tag.text
-
-    text = " ".join(text.split())
-    title = soup.h1.text
     return title, text
 
-
-
-
-
-
-
-def evaluate_website(url, recalculate=False):
-    print("eval")
-    website = RecordedWebSite.objects.filter(url=url).first()
-    if website:
-        if recalculate:
-            print("recalcul")
-            website.score = score_website(website.meaningful_lemmas.all(), website.lemmas_count)
-            website.save()
-        return website
-
+def get_info_from_url(url):
+    print(url)
     title, text, is_youtube_url, errors = get_captions_text_from_youtube(url)
 
     if is_youtube_url and errors:
-        return None
+        raise YoutubeNoCaptionException()
 
     if not is_youtube_url:
         title, text = get_text_from_website(url)
 
-    intab = "0123456789?!:"
-    outtab = "          .. "
-
-    trans = str.maketrans(intab, outtab)
-
-    text = text.translate(trans)
-
-    #print(text)
     if len(text) < 100:
-        print("text to short")
-        return None
+        raise TextTooShortException()
 
-    lang = detect(text[:100])
-    print(lang)
+    lang = detect(text)
 
-    if lang != 'fr':
-        return None
+    return title, text, lang
 
+def add_website(website):
 
+    title, text, lang = get_info_from_url(website['url'])
+
+    return LabeledWebSite.objects.create(title=title, url=website['url'], texts=text, is_bullshit=website['is_bullshit'], lang=lang)
+
+def evaluate_website(url):
+    title, text, lang = get_info_from_url(url)
     print(title)
 
-    # download french model --> python3 -m spacy download fr_core_news_md
-    nlp = spacy.load("fr_core_news_sm")
-    nlp.begin_training()
-    #print(self.text)
-    doc = nlp(text)
-
-    def is_valid_lemma(token):
-        pos = token.pos_
-        if pos == 'PROPN' or pos == 'SYM' or pos == 'NUM' or pos == 'PUNCT':
-            return False
-        return True
-
-    #print(doc)
-    lemmas = [token.lemma_ for token in doc if is_valid_lemma(token)]
-    #print(lemmas)
-
-    counter = Counter(lemmas)
-
-    filtered_lemmas = [key for key, value in counter.items() if value == 1]
-    meaningful_lemmas = []
-    lemmas_count=len(lemmas)
-    print(lemmas_count)
-    website = RecordedWebSite.objects.create(title=title, url=url, lemmas_count=lemmas_count)
-
-    for lemma in filtered_lemmas:
-        tainted_lemma = TaintedLemma.objects.filter(name=lemma)
-        if tainted_lemma:
-            meaningful_lemmas.append(tainted_lemma[0])
-        else:
-            new_tainted_lemma = TaintedLemma.objects.create(name=lemma)
-            meaningful_lemmas.append(new_tainted_lemma)
-
-    website.meaningful_lemmas.set(meaningful_lemmas)
-
-    score = score_website(meaningful_lemmas, lemmas_count)
-    website.score = score
-    website.save()
-    return website
-
-def score_website(meaningful_lemmas, lemmas_count):
-    if lemmas_count == 0:
-        return 0
-    evaluate_meaningful_lemmas = [lemma for lemma in meaningful_lemmas if lemma.is_evaluated]
-    evaluate_meaningful_lemmas_neutral = [lemma for lemma in evaluate_meaningful_lemmas if lemma.type == 'NEU']
-    tainted_meaningful_lemma_count = len(evaluate_meaningful_lemmas) - len(evaluate_meaningful_lemmas_neutral)
-
-    return tainted_meaningful_lemma_count/lemmas_count
+    return title, 0.0

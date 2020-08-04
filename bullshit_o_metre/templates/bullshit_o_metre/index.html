@@ -13,44 +13,40 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">Bullshit-O-Mètre</h1>
+          <p>Il y a {{labeled_website_count}} sites webs labellés</p>
         </div>
       </div>
 
     </section>
     <section class="section">
       <div class="container">
-        <h1 class="title">Postulez un site</h1>
-        <form name="website_form" action="/bullshit_o_metre/" method="post">        
+        <h1 class="title">Évaluer un site</h1>
+
+        <form name="website_form" >
+
           <div class="field">
             <label for="website_url">Url: </label>
             <div class="control">
               <input type="url" name="website_url" v-model="url">
             </div>
           </div>
-          <div class="field">
-            <label for="recalcutate">Recalculer le score</label>
-            <div class="control">
-              <input type="checkbox" name="recalculate" v-model="recalculate">
-            </div>
 
-          </div>
 
           <div class="field">
             <div class="control">
-              <button class="button is-link is-small" @click="get_website" type="button" name="button">Postulez</button>
+              <button class="button is-link is-small" :class="{'is-loading': loading_eval }" @click="evaluate_website" type="button" name="button">Évaluer</button>
             </div>
           </div>
 
         </form>
-      </div>
 
+      </div>
 
     </section>
     <div v-if="website">
       <section class="section">
           <div class="container">
             <h1 class="title">${website.title}</h1>
-            <p>Nombre de lemmas: ${website.lemmas_count}</p>
             <p>score: ${website.score}</p>
           </div>
       </section>
@@ -59,37 +55,46 @@
     <section class="section">
 
       <div class="container">
-          <h1 class="title">Lemmas à évaluer</h1>
-          <p>Ils restent {{ not_evaluated_lemmas_count }} lemmas à évaluer.</p>
-          <form name="lemmas_form" action="/bullshit_o_metre/evaluate_tainted_lemmas" method="post">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            {% for form in formset %}
-                <div @click="is_evaluated('{{form.prefix}}-is_evaluated')">
-                {% for field in form %}
-                    {% if field.is_hidden %}
-                        {{ field }}
-                    {% else %}
-                        <div class="field">
-                          <label for="{{ field.id_for_label }}" class="label">{{ field.label }}</label>
-                            <div class="control">
-                            {{ field }}
-                            </div>
-                        </div>
-                    {% endif %}
-
-              {% endfor %}
+          <h1 class="title">Ajouter un site web labellé</h1>
+          <form name="labeled_website_form">
+            <div class="field">
+              <label for="website_url">Url: </label>
+              <div class="control">
+                <input type="url" name="website_url" v-model="labeled_url">
               </div>
-              <hr>
-            {% endfor %}
+            </div>
 
-              <div class="field">
-                <div class="control">
-                  <button class="button is-link is-small" type="submit" name="button">Enregistrer</button>
-                </div>
+            <div class="field">
+              <div class="control">
+
+                <label class="checkbox">C'est de la bullshit ?
+                  <input type="checkbox" name="is_bullshit" v-model="is_bullshit">
+                </label>
               </div>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <button type="button" class="button is-link is-small" :class="{'is-loading': loading_add}" @click="add_labeled_website" name="button">Ajouter</button>
+              </div>
+            </div>
           </form>
       </div>
+
+    </section>
+    <div v-if="labeled_website">
+      <section class="section">
+        <div class="container">
+          <h1 class="title">${labeled_website.title}</h1>
+          <p>Langue: ${labeled_website.lang}</p>
+          <p>${labeled_website.texts}</p>
+
+
+        </div>
+      </section>
+
+    </div>
+    <section>
 
     </section>
   </div>

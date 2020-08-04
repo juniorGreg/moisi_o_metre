@@ -1,7 +1,11 @@
 from rest_framework import serializers
 from .models import *
 
-class RecordedWebSiteSerializer(serializers.ModelSerializer):
+class LabeledWebSiteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RecordedWebSite
+        model = LabeledWebSite
         fields = "__all__"
+
+class WebSiteSerializer(serializers.Serializer):
+    url = serializers.URLField()
+    is_bullshit = serializers.BooleanField()

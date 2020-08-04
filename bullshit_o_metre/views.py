@@ -3,63 +3,52 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 
 from django.forms import modelformset_factory
-from .bullshit_detector import evaluate_website
-from .forms import TaintedLemmaForm
+from .bullshit_detector import evaluate_website, add_website
+
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from .serializers import *
 
-TaintedLemmaFormSet = modelformset_factory(TaintedLemma, form=TaintedLemmaForm, extra=0)
 
 # Create your views here.
 @login_required(login_url="index")
 def index(request):
-    if request.POST:
-        url = request.POST.get('website_url')
-        if url:
-            evaluate_website(url)
 
-    lemmas_to_evaluate_query = TaintedLemma.objects.filter(is_evaluated=False)[:50]
+    labeled_website_count = LabeledWebSite.objects.count()
 
-
-    not_evaluated_lemmas_count = TaintedLemma.objects.filter(is_evaluated=False).count()
-
-
-
-    lemmas_to_evaluate = TaintedLemma.objects.filter(id__in=lemmas_to_evaluate_query)
-
-    formset = TaintedLemmaFormSet(queryset=lemmas_to_evaluate)
-    context = {"formset": formset, 'not_evaluated_lemmas_count': not_evaluated_lemmas_count}
+    context = {"labeled_website_count": labeled_website_count}
 
     return render(request, "bullshit_o_metre/index.html", context)
 
-@login_required(login_url="index")
-def evaluate_tainted_lemmas(request):
-    if request.method == "POST":
 
-        formset = TaintedLemmaFormSet(request.POST)
-        if formset.is_valid():
-            print("oki")
-            formset.save()
-            print("valid")
-        else:
-            print(formset.errors)
 
-    return redirect('bullshit_index')
-
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 def website(request):
-    url = request.GET.get('url')
-    recalculate = request.GET.get('recalculate') == 'true'
-    print(recalculate)
+    
+    if request.method == "GET":
+        url = request.GET.get('url')
 
-    if "http" not in url:
-        return Response({'error': 'url not valid', 'error_no': '1'})
+        if "http" not in url:
+            return Response({'error': 'url not valid', 'error_no': '1'})
 
-    print(url)
+        print(url)
 
-    website = evaluate_website(url, recalculate)
+        title, score = evaluate_website(url)
 
-    serializer = RecordedWebSiteSerializer(website)
-    return Response(serializer.data)
+
+        return Response({'title': title, 'score': score})
+
+    if request.method == "POST" and request.user.is_authenticated:
+
+
+        website_serializer = WebSiteSerializer(data = request.data)
+        if website_serializer.is_valid():
+            labeled_website = add_website(website_serializer.data)
+            labeled_website_serializer = LabeledWebSiteSerializer(labeled_website)
+            return Response(labeled_website_serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(website_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({}, status=status.HTTP_404_NOT_FOUND)
