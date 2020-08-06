@@ -293,6 +293,7 @@ var app_bull = new Vue({
         }).catch(error => {
           console.log(error)
         }).then(()=>{
+          this.url = "";
           this.loading_eval = false;
         });
     },
@@ -308,6 +309,8 @@ var app_bull = new Vue({
         }).catch(error =>{
           console.log(error)
         }).then(() => {
+          this.labeled_url = "";
+          this.is_bullshit = false;
           this.loading_add = false;
         });
     }

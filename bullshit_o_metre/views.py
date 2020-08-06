@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 
 from django.forms import modelformset_factory
-from .bullshit_detector import evaluate_website, add_website
+from .bullshit_detector_api import evaluate_website, add_website
 
 
 from rest_framework.decorators import api_view
@@ -26,7 +26,7 @@ def index(request):
 
 @api_view(['GET', 'POST'])
 def website(request):
-    
+
     if request.method == "GET":
         url = request.GET.get('url')
 
