@@ -99,6 +99,12 @@ def contact(request):
 
     return render(request, "blog/contact.html", context)
 
+def bullshit_o_metre(request):
+
+    context = get_main_context("Bullshit O Mètre", "Évaluateur expérimental de bullshit", "/bullshit")
+
+    return render(request, "blog/bullshit_o_metre.html", context)
+
 
 #API
 @api_view(['GET'])

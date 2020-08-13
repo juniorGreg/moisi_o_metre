@@ -17,5 +17,6 @@ urlpatterns = [
     path('posts/<int:id>', views.posts, name="posts_with_id"),
     path('posts', views.posts, name="posts"),
     path('tests', views.tests, name="tests"),
-    path('support', views.support, name="support")
+    path('support', views.support, name="support"),
+    path('bullshit', views. bullshit_o_metre, name="bullshit")
 ]

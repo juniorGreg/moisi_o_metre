@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 
 class BullshitDetector():
     def __init__(self):
-        self.vectorizer = TfidfVectorizer(max_features=1000)
+        self.vectorizer = TfidfVectorizer(max_features=500, ngram_range=(1,2))
         self.clf = MultinomialNB()
         self.nlp = spacy.load('fr_core_news_sm')
         self.stopwords = self.nlp.Defaults.stop_words

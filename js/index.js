@@ -170,7 +170,10 @@ var app = new Vue({
     posts: [],
     post_ids: [],
     post_index: 0,
-    query_active: false
+    query_active: false,
+    website: null,
+    loading_eval:false,
+    url: ""
   },
 
   methods: {
@@ -251,7 +254,21 @@ var app = new Vue({
       hideSources: function (el){
         console.log("leave");
         el.style.maxHeight = 0;
+      },
+      evaluate_website: function(){
+          let url_escaped = encodeURIComponent(this.url);
+          this.loading_eval = true;
+          axios.get("/bullshit_o_metre/website/?url="+url_escaped).then(response => {
+            this.website = response.data
+
+          }).catch(error => {
+            console.log(error)
+          }).then(()=>{
+            this.url = "";
+            this.loading_eval = false;
+          });
       }
+
   },
 
   created: function(){
@@ -280,7 +297,7 @@ var app_bull = new Vue({
     labeled_url: "",
     is_bullshit: false,
     loading_eval: false,
-    loading_add: false
+    loading_add: false,
   },
 
   methods: {
