@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 
 from django.forms import modelformset_factory
-from .bullshit_detector_api import evaluate_website, add_website
+from .bullshit_detector_api import *
 
 
 from rest_framework.decorators import api_view
@@ -26,16 +26,29 @@ def index(request):
 
 @api_view(['GET', 'POST'])
 def website(request):
+    def get_error_dict(message):
+        return {'message': message }
 
     if request.method == "GET":
         url = request.GET.get('url')
 
         if "http" not in url:
-            return Response({'error': 'url not valid', 'error_no': '1'})
+            return Response(get_error_dict("L'adresse web n'est pas valid"), status=status.HTTP_400_BAD_REQUEST)
 
         print(url)
 
-        title, score = evaluate_website(url)
+        try:
+            title, score = evaluate_website(url)
+        except TextTooShortException:
+            return Response(get_error_dict("Le texte recupéré est trop court pour être évalué."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except YoutubeNoCaptionException:
+            return Response(get_error_dict("Le vidéo Youtube n'a pas de transcription ou de soutitre en français."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except EncodingNotFoundException:
+            return Response(get_error_dict("L'encodage du site est inconnu."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except InvalidLanguage:
+            return Response(get_error_dict("Le site n'est pas en français."), status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(get_error_dict("Un error s'est produite."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
         return Response({'title': title, 'score': score})

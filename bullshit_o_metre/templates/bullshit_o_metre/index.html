@@ -43,6 +43,16 @@
       </div>
 
     </section>
+    <div v-if="error">
+      <section class="section">
+        <div class="container">
+          <div class="notification is-danger">
+            ${error}
+          </div>
+        </div>
+      </section>
+
+    </div>
     <div v-if="website">
       <section class="section">
           <div class="container">

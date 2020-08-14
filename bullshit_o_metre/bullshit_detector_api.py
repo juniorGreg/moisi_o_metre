@@ -38,6 +38,11 @@ class EncodingNotFoundException(Exception):
     def __init__(self):
         super().__init__("Encoding not found.")
 
+class InvalidLanguage(Exception):
+
+    def __init__(self):
+        super().__init__("Language invalid.")
+
 def get_text_encoding(soup):
     encoding = None
 
@@ -190,6 +195,9 @@ def add_website(website):
 
 def evaluate_website(url):
     title, text, lang = get_info_from_url(url)
+
+    if lang != "fr":
+        raise InvalidLanguage()
 
 
     preds = bsd.predict(text)
