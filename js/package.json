@@ -15,7 +15,9 @@
     "babel-preset-react": "^6.24.1",
     "webpack": "^4.43.0",
     "webpack-bundle-tracker": "^1.0.0-alpha.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "elliptic": ">=6.5.3",
+    "lodash": ">=4.17.19"
   },
   "dependencies": {
     "animejs": "^3.2.0",
