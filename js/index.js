@@ -173,7 +173,8 @@ var app = new Vue({
     query_active: false,
     website: null,
     loading_eval:false,
-    url: ""
+    url: "",
+    error: null
   },
 
   methods: {
@@ -258,10 +259,12 @@ var app = new Vue({
       evaluate_website: function(){
           let url_escaped = encodeURIComponent(this.url);
           this.loading_eval = true;
+          this.error = null;
           axios.get("/bullshit_o_metre/website/?url="+url_escaped).then(response => {
             this.website = response.data
 
           }).catch(error => {
+            this.error = error.response.data.message
             console.log(error)
           }).then(()=>{
             this.url = "";

@@ -26,8 +26,14 @@
     </div>
 
   </form>
+  <br>
+  <div v-if="error">
+    <div class="notification is-danger">
+      ${error}
+    </div>
+  </div>
   <div v-if="website">
-    <br>
+
     <h2 class="subtitle">${website.title}</h2>
 
     <p>Il y a environ ${website.score} % selon Bullshit-O-Mètre</p>
