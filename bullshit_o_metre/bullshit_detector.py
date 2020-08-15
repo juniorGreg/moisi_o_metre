@@ -2,7 +2,7 @@
 import spacy
 
 import pandas as pd
-from sqlalchemy import create_engine
+
 import psycopg2
 
 from sklearn.feature_extraction.text import TfidfVectorizer
