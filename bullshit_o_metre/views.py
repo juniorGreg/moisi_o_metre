@@ -47,7 +47,8 @@ def website(request):
             return Response(get_error_dict("L'encodage du site est inconnu."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except InvalidLanguage:
             return Response(get_error_dict("Le site n'est pas en français."), status=status.HTTP_400_BAD_REQUEST)
-        except:
+        except Exception as e:
+            print(e)
             return Response(get_error_dict("Un error s'est produite."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

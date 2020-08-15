@@ -21,7 +21,10 @@ from django.conf import settings
 
 import re
 
-bsd = load(settings.BASE_DIR+"/bsd.joblib")
+from .bullshit_detector import BullshitDetector
+
+bsd = BullshitDetector()
+bsd.load_model(settings.BASE_DIR+"/model.json")
 
 class TextTooShortException(Exception):
 
