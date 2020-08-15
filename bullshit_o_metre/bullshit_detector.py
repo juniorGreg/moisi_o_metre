@@ -1,5 +1,5 @@
 
-import spacy
+import fr_core_news_sm
 
 import pandas as pd
 
@@ -16,7 +16,7 @@ class BullshitDetector():
     def __init__(self):
         self.vec = TfidfVectorizer(max_features=1000, ngram_range=(1,2))
         self.clf = MultinomialNB()
-        self.nlp = spacy.load('fr_core_news_sm')
+        self.nlp = fr_core_news_sm.load()
         self.stopwords = self.nlp.Defaults.stop_words
 
 
