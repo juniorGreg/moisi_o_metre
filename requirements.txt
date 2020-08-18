@@ -12,7 +12,7 @@ boto3==1.12.39
 beautifulsoup4 == 4.9.1
 
 spacy==2.2.4
-https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz#egg=fr_core_news_sm
+https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.2.5/fr_core_news_sm-2.2.5.tar.gz#egg=fr_core_news_sm
 
 requests== 2.24.0
 pytube3 == 9.6.4
@@ -20,3 +20,4 @@ scikit-learn == 0.23.2
 pandas == 1.1.0
 langdetect == 1.0.8
 joblib == 0.16.0
+lxml == 4.5.1
