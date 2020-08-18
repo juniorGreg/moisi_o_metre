@@ -1,5 +1,5 @@
 
-from requests_html import HTMLSession
+import requests
 from bs4 import BeautifulSoup
 from bs4 import UnicodeDammit
 import spacy
@@ -8,7 +8,6 @@ from langdetect import detect
 from .models import *
 import asyncio
 
-from multiprocessing import Process, Queue
 
 from pytube import YouTube
 from pytube import exceptions
@@ -67,21 +66,13 @@ def get_text_encoding(soup):
     return encoding
 
 
-def retrieve_text_from_website(q,eq, url):
-    asyncio.set_event_loop(asyncio.new_event_loop())
+def retrieve_text_from_website(url):
 
-    session = HTMLSession()
 
-    try:
-        r = session.get(url)
-        r.html.render()
+    r= requests.get(url)
 
-    except Exception as e:
-        eq.put(str(e))
-        return
-    #print(r.html)
+    soup = BeautifulSoup(r.text, 'lxml')
 
-    soup = BeautifulSoup(r.html.html, 'lxml')
     print(soup.original_encoding)
 
 
@@ -111,9 +102,8 @@ def retrieve_text_from_website(q,eq, url):
     print(len(text))
     print(title)
 
-    q.put(title)
-    q.put(text)
-    print("okiii2")
+    return title, text
+
 
 def get_captions_text_from_youtube(url, lang_code='fr'):
 
@@ -147,29 +137,6 @@ def get_captions_text_from_youtube(url, lang_code='fr'):
     #except exceptions.RegexMatchError as e:
     #    return None, "it's not a youtube url", False, True
 
-
-
-def get_text_from_website(url):
-    queue = Queue()
-    error_queue = Queue()
-
-    p = Process(target= retrieve_text_from_website, args=(queue, error_queue, url))
-    p.daemon = True
-    p.start()
-
-    p.join()
-
-    if not error_queue.empty():
-        #print(error_queue.get())
-        raise Exception(error_queue.get())
-
-    title = queue.get()
-    text = queue.get()
-    print(title)
-    #print(result)
-
-    return title, text
-
 def get_info_from_url(url):
     print(url)
     not_youtube_url = False
@@ -180,7 +147,7 @@ def get_info_from_url(url):
         not_youtube_url = True
 
     if not_youtube_url:
-        title, text = get_text_from_website(url)
+        title, text = retrieve_text_from_website(url)
 
 
     if len(text) < 100:
