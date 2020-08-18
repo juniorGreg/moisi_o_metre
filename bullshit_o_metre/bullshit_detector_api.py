@@ -20,10 +20,9 @@ from django.conf import settings
 
 import re
 
-from .bullshit_detector import BullshitDetector
+from moisi_o_metre.wsgi import bsd
 
-bsd = BullshitDetector()
-bsd.load_model(settings.BASE_DIR+"/model.json")
+
 
 class TextTooShortException(Exception):
 
@@ -58,7 +57,7 @@ def get_text_encoding(soup):
             if "content" in meta.attrs.keys():
                 encoding = meta["content"].replace("text/html; charset=", "").lower()
 
-    print(encoding)
+    #print(encoding)
 
     if not encoding:
         raise EncodingNotFoundException()
@@ -73,7 +72,7 @@ def retrieve_text_from_website(url):
 
     soup = BeautifulSoup(r.text, 'lxml')
 
-    print(soup.original_encoding)
+    #print(soup.original_encoding)
 
 
 
@@ -98,9 +97,9 @@ def retrieve_text_from_website(url):
     if len(text) > 25000:
         text = text[:25000]
 
-    print("len text: ")
-    print(len(text))
-    print(title)
+    #print("len text: ")
+    #print(len(text))
+    #print(title)
 
     return title, text
 
@@ -138,7 +137,7 @@ def get_captions_text_from_youtube(url, lang_code='fr'):
     #    return None, "it's not a youtube url", False, True
 
 def get_info_from_url(url):
-    print(url)
+    #print(url)
     not_youtube_url = False
     try:
         title, text = get_captions_text_from_youtube(url)
