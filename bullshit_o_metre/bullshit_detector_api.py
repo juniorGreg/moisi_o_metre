@@ -22,6 +22,11 @@ import re
 
 from moisi_o_metre.wsgi import bsd
 
+MAX_TEXT_LENGTH = 25000
+
+http_headers = {
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+}
 
 
 class TextTooShortException(Exception):
@@ -68,18 +73,12 @@ def get_text_encoding(soup):
 def retrieve_text_from_website(url):
 
 
-    r= requests.get(url)
+    r= requests.get(url, headers=http_headers)
+
 
     soup = BeautifulSoup(r.text, 'lxml')
 
-    #print(soup.original_encoding)
-
-
-
-    text = ""
-    for tag in soup.find_all("p"):
-        text += " "
-        text += tag.text
+    text = "".join([tag.text for tag in soup.find_all("p")])
 
     text = " ".join(text.split())
 
@@ -94,8 +93,8 @@ def retrieve_text_from_website(url):
         text = text.encode(encoding, 'ignore').decode("utf-8", 'ignore')
         title = title.encode(encoding, 'ignore').decode("utf-8", 'ignore')
 
-    if len(text) > 25000:
-        text = text[:25000]
+    if len(text) > MAX_TEXT_LENGTH:
+        text = text[:MAX_TEXT_LENGTH]
 
     #print("len text: ")
     #print(len(text))
@@ -114,23 +113,18 @@ def get_captions_text_from_youtube(url, lang_code='fr'):
 
         #print(yt.captions.keys())
 
-        bs = BeautifulSoup(caption.xml_captions, 'lxml')
-        texts = ""
-        for text in bs.find_all('text'):
-            if '[' in text.text:
-                continue
-            texts += text.text
-            texts += " "
+        soup = BeautifulSoup(caption.xml_captions, 'lxml')
+        text = " ".join([tag.text for tag in soup.find_all('text') if '[' not in tag.text])
 
-        texts = html.unescape(texts)
+        text = html.unescape(text)
 
 
-        if len(texts) > 25000:
-            texts = texts[:25000]
+        if len(text) > MAX_TEXT_LENGTH:
+            text = text[:MAX_TEXT_LENGTH]
 
 
         #print(texts)
-        return yt.title, texts
+        return yt.title, text
     else:
         raise YoutubeNoCaptionException()
     #except exceptions.RegexMatchError as e:
