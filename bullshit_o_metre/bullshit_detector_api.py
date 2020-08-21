@@ -6,15 +6,12 @@ from bs4 import UnicodeDammit
 from collections import Counter
 from langdetect import detect
 from .models import *
-import asyncio
 
 
 from pytube import YouTube
 from pytube import exceptions
 
 import html
-
-from joblib import load
 
 from django.conf import settings
 
@@ -162,6 +159,6 @@ def evaluate_website(url):
         raise InvalidLanguage()
 
     r = requests.post(settings.BULLSHIT_O_METRE_API, data=text.encode("utf8"))
-    pred = r.text     
+    pred = r.text
 
     return title, pred
