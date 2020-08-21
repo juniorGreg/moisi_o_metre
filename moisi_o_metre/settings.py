@@ -28,6 +28,8 @@ DEBUG = os.environ['DEBUG'] == 'TRUE'
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "moisi-o-metre.herokuapp.com"]
 
+BULLSHIT_O_METRE_API = os.environ['BULLSHIT_O_METRE_API']
+
 
 # Application definition
 

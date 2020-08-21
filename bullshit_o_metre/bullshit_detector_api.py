@@ -2,7 +2,7 @@
 import requests
 from bs4 import BeautifulSoup
 from bs4 import UnicodeDammit
-import spacy
+
 from collections import Counter
 from langdetect import detect
 from .models import *
@@ -20,7 +20,6 @@ from django.conf import settings
 
 import re
 
-from moisi_o_metre.wsgi import bsd
 
 MAX_TEXT_LENGTH = 25000
 
@@ -162,8 +161,7 @@ def evaluate_website(url):
     if lang != "fr":
         raise InvalidLanguage()
 
+    r = requests.post(settings.BULLSHIT_O_METRE_API, data=text.encode("utf8"))
+    pred = r.text     
 
-    preds = bsd.predict(text)
-    print(preds)
-
-    return title, int(preds[0][1] * 100)
+    return title, pred
