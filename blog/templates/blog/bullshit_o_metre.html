@@ -9,19 +9,19 @@
 
   <h1 class="title">Évaluer un site</h1>
 
-  <form name="website_form" >
+  <form id="website_form" @submit="evaluateWebsite">
 
     <div class="field">
       <label for="website_url">Url: </label>
       <div class="control">
-        <input type="url" name="website_url" v-model="url">
+        <input onfocus="this.value=''" type="url" name="website_url" v-model="url" required>
       </div>
     </div>
 
 
     <div class="field">
       <div class="control">
-        <button class="button is-link is-small" :class="{'is-loading': loading_eval }" @click="evaluate_website" type="button" name="button">Évaluer</button>
+        <button class="button is-link is-small" :class="{'is-loading': loading_eval }" type="submit" name="button">Évaluer</button>
       </div>
     </div>
 

@@ -13,7 +13,9 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">Bullshit-O-Mètre</h1>
-          <p>Il y a {{labeled_website_count}} sites webs labellés</p>
+          <p>Il y a {{labeled_website_count}} sites webs labellés,
+            avec {{no_bullshit_labeled_website_count}} sites webs sans bullshit,
+            et {{bullshit_labeled_website_count}} sites webs avec bullshit</p>
         </div>
       </div>
 
@@ -22,19 +24,19 @@
       <div class="container">
         <h1 class="title">Évaluer un site</h1>
 
-        <form name="website_form" >
+        <form id="website_form" @submit="evaluate_website">
 
           <div class="field">
             <label for="website_url">Url: </label>
             <div class="control">
-              <input type="url" name="website_url" v-model="url">
+              <input type="url" onfocus="this.value=''" name="website_url" v-model="url"  placeholder="http://" required>
             </div>
           </div>
 
 
           <div class="field">
             <div class="control">
-              <button class="button is-link is-small" :class="{'is-loading': loading_eval }" @click="evaluate_website" type="button" name="button">Évaluer</button>
+              <button class="button is-link is-small" :class="{'is-loading': loading_eval }" type="submit" name="button">Évaluer</button>
             </div>
           </div>
 
@@ -66,11 +68,11 @@
 
       <div class="container">
           <h1 class="title">Ajouter un site web labellé</h1>
-          <form name="labeled_website_form">
+          <form name="labeled_website_form" @submit="add_labeled_website">
             <div class="field">
               <label for="website_url">Url: </label>
               <div class="control">
-                <input type="url" name="website_url" v-model="labeled_url">
+                <input type="url" name="website_url" v-model="labeled_url" required>
               </div>
             </div>
 
@@ -85,7 +87,7 @@
 
             <div class="field">
               <div class="control">
-                <button type="button" class="button is-link is-small" :class="{'is-loading': loading_add}" @click="add_labeled_website" name="button">Ajouter</button>
+                <button type="submit" class="button is-link is-small" :class="{'is-loading': loading_add}"  name="button">Ajouter</button>
               </div>
             </div>
           </form>

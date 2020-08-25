@@ -256,7 +256,8 @@ var app = new Vue({
         console.log("leave");
         el.style.maxHeight = 0;
       },
-      evaluate_website: function(){
+
+      evaluateWebsite: function(e){
           let url_escaped = encodeURIComponent(this.url);
           this.loading_eval = true;
           this.error = null;
@@ -267,9 +268,11 @@ var app = new Vue({
             this.error = error.response.data.message
             console.log(error)
           }).then(()=>{
-            this.url = "";
+            //this.url = "";
             this.loading_eval = false;
           });
+
+          e.preventDefault();
       }
 
   },
@@ -305,7 +308,7 @@ var app_bull = new Vue({
   },
 
   methods: {
-    evaluate_website: function(){
+    evaluate_website: function(e){
         let url_escaped = encodeURIComponent(this.url);
         this.loading_eval = true;
         this.error = null;
@@ -316,12 +319,15 @@ var app_bull = new Vue({
           this.error = error.response.data.message
           console.log(error.response)
         }).then(()=>{
-          this.url = "";
+          //this.url = "";
           this.loading_eval = false;
         });
+        e.preventDefault();
+        //e.target.blur();
+        //document.getElementById("website_form").reset();
     },
 
-    add_labeled_website: function(){
+    add_labeled_website: function(e){
         let data = {
           url: this.labeled_url,
           is_bullshit: this.is_bullshit
@@ -336,6 +342,9 @@ var app_bull = new Vue({
           this.is_bullshit = false;
           this.loading_add = false;
         });
+
+
+        e.preventDefault();
     }
 
   }

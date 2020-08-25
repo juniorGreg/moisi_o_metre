@@ -17,8 +17,12 @@ from .serializers import *
 def index(request):
 
     labeled_website_count = LabeledWebSite.objects.count()
+    bullshit_labeled_website_count = LabeledWebSite.objects.filter(is_bullshit=True).count()
+    no_bullshit_labeled_website_count = LabeledWebSite.objects.filter(is_bullshit=False).count()
 
-    context = {"labeled_website_count": labeled_website_count}
+    context = {"labeled_website_count": labeled_website_count,
+                "bullshit_labeled_website_count": bullshit_labeled_website_count,
+                "no_bullshit_labeled_website_count": no_bullshit_labeled_website_count}
 
     return render(request, "bullshit_o_metre/index.html", context)
 
