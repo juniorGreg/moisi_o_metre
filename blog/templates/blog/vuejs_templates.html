@@ -11,7 +11,7 @@
 </script>
 
 <script type="text/x-template" id="shared-button">
-  <a target='_blank' :href="url">
+  <a ref="source" target='_blank' :href="url" @click="copyLink">
     <button class="button is-text">
       <img class="image is-24x24" :src="button_img" :alt="alt_text">
     </button>

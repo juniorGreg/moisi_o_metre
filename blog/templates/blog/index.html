@@ -28,6 +28,7 @@
 
               <shared-button shared_url="https://www.facebook.com/sharer.php?u=(link)" local_url="{{request.build_absolute_uri}}" :post_id="post.id" button_img="{% static 'images/facebook_share_button.png' %}" alt_text="share button facebook"></shared-button>
               <shared-button shared_url="https://twitter.com/intent/tweet?url=(link)&text=(text)&hashtags=espritcritique,zététique,humour" :text="post.title" local_url="{{request.build_absolute_uri}}" :post_id="post.id" button_img="{% static 'images/twitter_share_button.png' %}" alt_text="share button twitter"></shared-button>
+              <shared-button shared_url="(link)" local_url="{{request.build_absolute_uri}}" :post_id="post.id" button_img="{% static 'images/copy_link_button.png' %}" alt_text="share button facebook"></shared-button>
 
             </div>
             <a class="is-size-7" href="{% url 'support' %}">Supportez le blog</a>

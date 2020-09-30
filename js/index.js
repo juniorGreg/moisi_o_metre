@@ -107,8 +107,28 @@ Vue.component("shared-button", {
   delimiters: ['${', '}'],
 
   computed: {
+    clean_local_url: function() {
+      let regex_clean_local_url = /https?:\/\/[a-z.]*:?[0-9]*\//i;
+      return this.local_url.match(regex_clean_local_url) + this.post_id;
+    },
     url: function(){
-        return this.shared_url.replace("(link)", encodeURI(this.local_url+this.post_id)).replace("(text)", encodeURI(this.text));
+
+        //console.log(local_url);
+        return this.shared_url.replace("(link)", encodeURI(this.clean_local_url)).replace("(text)", encodeURI(this.text));
+    }
+  },
+  methods: {
+    copyLink: function(e){
+      if(this.clean_local_url == this.url){
+        e.preventDefault();
+        navigator.clipboard.writeText(this.url);
+
+        document.execCommand("copy");
+      }
+
+
+      //console.log(this.$el.value);
+
     }
   }
 });
