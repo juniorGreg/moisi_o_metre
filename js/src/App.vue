@@ -1,16 +1,117 @@
+//import "./mystyles.scss";
+<template>
+  <div class="container">
+    <div class="posts" v-for="post in posts">
+      <div class="box">
+        <h1 class="title is-size-6-mobile">{{post.title}}</h1>
+        <h2 class="subtitle is-size-7 is-italic">Temps de lecture: environ {{post.statistics.avg_reading_time}} minutes</h2>
+
+        <div v-if="post.post_type == 'BD'">
+            <p class="has-text-justified">{{post.content}}</p>
+            <br>
+            <figure class='image'>
+                <img :src="post.image" alt="imâge">
+            </figure>
+            <br>
+        </div>
+
+        <div v-else>
+          <div v-if="post.image && !post.hidden_image">
+            <img class="image-post is-hidden-mobile" :src="post.image" alt="imâge">
+            <img class="image-post-mobile is-hidden-tablet" :src="post.image" alt="imâge">
+          </div>
+
+          <div v-if="post.image && post.hidden_image">
+              <HiddenImage :image_src="post.image" :hidden_image_src="post.hidden_image" />
+          </div>
+
+          <div>
+            <vue-showdown :markdown="post.content">
+          </div>
+
+          <div v-if="post.rottenpoint_set.length > 0 ">
+            <h2 class="subtitle is-size-6-mobile">Les Points Moisis</h2>
+            <div v-for="point in post.rottenpoint_set">
+              <h3 class="has-text-weight-bold">{{point.title}}</h3>
+              <br>
+              <div class="">
+                <vue-showdown :markdown="point.description">
+              </div>
+            </div>
+          </div>
+
+          <div v-if="post.sources.length > 0">
+              <transition
+                @enter="showSources"
+                @leave="hideSources">
+                <div class="sources" v-show="post.show_sources">
+                  <h2 class="subtitle is-size-6-mobile">Les Sources</h2>
+                  <div v-for="source in post.sources" >
+                    <SourceUrl :title="source.title" :source="source.source" />
+                  </div>
+                </div>
+              </transition>
+
+              <button @click="post.show_sources = !post.show_sources" class="button is-small">
+                <span v-if="post.show_sources">Cacher&nbsp</span>
+                <span v-else>Afficher&nbsp</span>les sources
+              </button>
+          </div>
+
+
+
+
+        </div>
+        <br>
+
+        <div class="is-size-7">Créer le {{post.date_created}}</div>
+        <div v-if="post.show_modified_date">
+          <div class="is-size-7">Modifier le {{post.date_modified}}</div>
+        </div>
+
+        <div class="buttons has-addons">
+          <div class="is-shared is-size-6 is-size-7-mobile">
+            Partagez:
+          </div>
+
+
+          <SharedButton shared_url="https://www.facebook.com/sharer.php?u=(link)"
+              :local_url="local_url"
+              :post_id="post.id"
+              :button_img="facebook_button_img"
+              alt_text="share button facebook"></SharedButton>
+
+          <SharedButton shared_url="https://twitter.com/intent/tweet?url=(link)&text=(text)&hashtags=espritcritique,zététique,humour"
+              :text="post.title"
+              :local_url="local_url"
+              :post_id="post.id"
+              :button_img="twitter_button_img"
+              alt_text="share button twitter"></SharedButton>
+          <SharedButton shared_url="(link)" :local_url="local_url"
+              :post_id="post.id" :button_img="copy_link_button_img" alt_text="copy link button"></SharedButton>
+
+        </div>
+        <a class="is-size-7" :href="support_href" >Supportez le blog</a>
+      </div>
+
+      <br>
+    </div>
+</template>
+
+
+<script>
 import Vue from 'vue'
 import VueShowdown from 'vue-showdown'
 import Vue2TouchEvents from 'vue2-touch-events'
-import anime from 'animejs/lib/anime.es.js'
+
 import axios from 'axios'
 
 axios.defaults.xsrfHeaderName = "X-CSRFToken"
 axios.defaults.xsrfCookieName = 'csrftoken'
 
-Vue.use(Vue2TouchEvents, {
-  touchHoldTolerance: 10000,
-  longTapTimeInterval: 10000
-})
+
+
+
 
 // the second parameter of Vue.use() is optional
 Vue.use(VueShowdown, {
@@ -20,188 +121,44 @@ Vue.use(VueShowdown, {
   options: {
     emoji: false,
   },
-})
-
-Vue.component("custom-progress", {
-  props: ['count'],
-
-  template: "#custom-progress",
-
-  data: function() {
-    return  {
-      currentCount: 0,
-      animated: false,
-      cursor: null,
-      maxCount: 7
-    }
-  },
-
-  methods: {
-
-    startAnimation: function(){
-      var element = this.$el;
-      var position = element.getBoundingClientRect();
-
-
-      // checking whether fully visible
-      if(position.top >= 0 && position.bottom <= window.innerHeight) {
-
-        if(!this.animated){
-          var rect = this.$el.getBoundingClientRect();
-          var cursor_position = this.count/this.maxCount * rect.width - 12;
-
-            anime({
-              targets: this.cursor,
-              translateX: cursor_position,
-              duration: 5000
-            });
-
-            anime({
-              targets: this,
-              currentCount: this.count,
-              duration: 5000,
-              update: this.setCursorPosition
-            })
-          //this.interval = setInterval(this.animateValue, 5);
-
-        }
-        this.animated = true
-      }
-
-    },
-
-    setCursorPosition: function(){
-
-      var positionPercent = this.currentCount/this.maxCount * 100;
-
-      var gradient = `linear-gradient(to right, lightgreen ${100 - positionPercent}%, yellow)`;
-
-      if(positionPercent > 33.3333)
-        gradient = `linear-gradient(to right, lightgreen ${66.6666 - 16.6666 * ((positionPercent-33.3333)/33.3333)}%, yellow)`;
-      if(positionPercent > 66.6666)
-        gradient = `linear-gradient(to right, lightgreen ${50 - 16.6666 * ((positionPercent-66.666)/33.3333)}%, yellow ${100 - 33.3333 * ((positionPercent-66.6666)/33.3333)}%, red)`;
-
-      this.$el.style.setProperty('--progress-bar-background', gradient);
-    }
-  },
-
-  created: function(){
-    window.addEventListener('scroll', this.startAnimation);
-  },
-
-  mounted: function(){
-
-    this.cursor = this.$el.getElementsByTagName("img")[0];
-  }
 });
 
-Vue.component("source-url", {
-  props: ["source", "title"],
-  template: "#source-url",
-  delimiters: ['${', '}']
-});
+Vue.config.productionTip = false
 
-Vue.component("shared-button", {
-  props : ['shared_url', "post_id", "local_url", "button_img", "alt_text", "text"],
-  template: "#shared-button",
-  delimiters: ['${', '}'],
 
-  computed: {
-    clean_local_url: function() {
-      let regex_clean_local_url = /https?:\/\/[a-z.]*:?[0-9]*\//i;
-      return this.local_url.match(regex_clean_local_url) + this.post_id;
-    },
-    url: function(){
+import CustomProgress from "./components/CustomProgress.vue";
+import SourceUrl from "./components/SourceUrl.vue";
+import SharedButton from "./components/SharedButton.vue";
+import HiddenImage from './components/HiddenImage.vue';
 
-        //console.log(local_url);
-        return this.shared_url.replace("(link)", encodeURI(this.clean_local_url)).replace("(text)", encodeURI(this.text));
-    }
+
+export default {
+  name: 'App',
+
+  props: ['local_url', "facebook_button_img", "twitter_button_img", 'copy_link_button_img' ,"support_href"],
+
+  components: {
+    CustomProgress,
+    SourceUrl,
+    SharedButton,
+    HiddenImage
   },
-  methods: {
-    copyLink: function(e){
-      if(this.clean_local_url == this.url){
-        e.preventDefault();
-        navigator.clipboard.writeText(this.url);
 
-        document.execCommand("copy");
-      }
-
-
-      //console.log(this.$el.value);
-
-    }
-  }
-});
-
-Vue.component("hidden-image", {
-  props : ["image_src", "hidden_image_src"],
-  template: "#hidden-image",
-  delimiters: ['${', '}'],
-
-  data: function() {
+  data() {
     return {
-      hidden: false,
+      posts: [],
+      post_ids: [],
+      post_index: 0,
+      query_active: false,
+      website: null,
+      loading_eval:false,
+      url: "",
+      error: null
     }
   },
 
   methods: {
-    showHiddenImage: function(){
-        if(typeof window.ontouchstart !== 'undefined'){
-            return;
-        }
 
-        this.hidden=true;
-    },
-
-    showImage: function(){
-      if(typeof window.ontouchstart !== 'undefined'){
-          return;
-      }
-      this.hidden = false;
-    },
-
-    showHiddenImageMobile: function(){
-        this.hidden=true;
-    },
-
-    showImageMobile: function(){
-      this.hidden = false;
-    }
-  },
-
-  mounted: function(){
-    this.$el.addEventListener('contextmenu', e=> {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      return false;
-    })
-  }
-});
-
-
-var app = new Vue({
-  el: '#app',
-
-  delimiters: ['${', '}'],
-
-  data: {
-    isActive: false,
-    posts: [],
-    post_ids: [],
-    post_index: 0,
-    query_active: false,
-    website: null,
-    loading_eval:false,
-    url: "",
-    error: null
-  },
-
-  methods: {
-      toggleMenu: function(){
-
-        this.isActive = !this.isActive
-      },
 
       formatDate: function(date){
         var months = ["Janvier", "Février", "Mars", "Avril", "Mai", 'Juin', "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
@@ -309,8 +266,8 @@ var app = new Vue({
       this.post_ids = []
     }
   }
-})
-
+}
+/*
 var app_bull = new Vue({
   el: '#app_bull',
 
@@ -368,4 +325,5 @@ var app_bull = new Vue({
     }
 
   }
-})
+})*/
+</scripts>

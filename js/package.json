@@ -9,21 +9,31 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@creativebulma/bulma-tooltip": "^1.2.0",
+    "@vue/component-compiler-utils": "^3.2.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.1.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "elliptic": ">=6.5.3",
+    "lodash": ">=4.17.19",
+    "sass": "^1.26.11",
+    "vue-template-compiler": "^2.6.12",
     "webpack": "^4.43.0",
     "webpack-bundle-tracker": "^1.0.0-alpha.1",
-    "webpack-cli": "^3.3.11",
-    "elliptic": ">=6.5.3",
-    "lodash": ">=4.17.19"
+    "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "@vue/compiler-sfc": "^3.0.0",
     "animejs": "^3.2.0",
     "axios": "^0.19.2",
-    "vue": "^2.6.11",
+    "bulma": "^0.9.1",
+    "vue": "^2.6.12",
+    "vue-hot-reload-api": "^2.3.4",
     "vue-showdown": "^2.4.1",
     "vue2-touch-events": "^2.2.1"
+  },
+  "alias": {
+    "vue": "./node_modules/vue/dist/vue.common.js"
   }
 }
