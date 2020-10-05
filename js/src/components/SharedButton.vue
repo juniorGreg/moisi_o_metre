@@ -26,7 +26,7 @@ export default {
 
   computed: {
     clean_local_url: function() {
-      let regex_clean_local_url = /https?:\/\/[a-z.]*:?[0-9]*\//i;
+      let regex_clean_local_url = /https?:\/\/[a-z0-9.-]*:?[0-9]*\//i;
       return this.local_url.match(regex_clean_local_url) + this.post_id;
     },
     url: function(){
