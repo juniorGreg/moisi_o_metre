@@ -1,4 +1,4 @@
-//import "./mystyles.scss";
+
 <template>
   <div class="container">
     <div class="posts" v-for="post in posts">
@@ -150,10 +150,7 @@ export default {
       post_ids: [],
       post_index: 0,
       query_active: false,
-      website: null,
-      loading_eval:false,
-      url: "",
-      error: null
+
     }
   },
 
@@ -234,23 +231,6 @@ export default {
         el.style.maxHeight = 0;
       },
 
-      evaluateWebsite: function(e){
-          let url_escaped = encodeURIComponent(this.url);
-          this.loading_eval = true;
-          this.error = null;
-          axios.get("/bullshit_o_metre/website/?url="+url_escaped).then(response => {
-            this.website = response.data
-
-          }).catch(error => {
-            this.error = error.response.data.message
-            console.log(error)
-          }).then(()=>{
-            //this.url = "";
-            this.loading_eval = false;
-          });
-
-          e.preventDefault();
-      }
 
   },
 

@@ -7,36 +7,7 @@
   Pour le moment, ça marche seulement avec les sites francophones. Quand j'aurais un modèle assez bon en français,
   je vais en développer un en anglais. Prenez le résultat du Bullshit-O-Mêtre avec un grain de sel.</p>
 
-  <h1 class="title">Évaluer un site</h1>
-
-  <form id="website_form" @submit="evaluateWebsite">
-
-    <div class="field">
-      <label for="website_url">Url: </label>
-      <div class="control">
-        <input onfocus="this.value=''" type="url" name="website_url" v-model="url" required>
-      </div>
-    </div>
-
-
-    <div class="field">
-      <div class="control">
-        <button class="button is-link is-small" :class="{'is-loading': loading_eval }" type="submit" name="button">Évaluer</button>
-      </div>
-    </div>
-
-  </form>
-  <br>
-  <div v-if="error">
-    <div class="notification is-danger">
-      ${error}
-    </div>
+  <div id="app-bull">
+      <App-Bull></App-Bull>
   </div>
-  <div v-if="website">
-
-    <h2 class="subtitle">${website.title}</h2>
-
-    <p>Il y a environ ${website.score} % selon Bullshit-O-Mètre</p>
-  </div>
-
 {% endblock %}

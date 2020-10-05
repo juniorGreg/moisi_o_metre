@@ -8,7 +8,7 @@
     <title>Bullshit-O-Mètre</title>
   </head>
   <body>
-  <div id="app_bull">
+  <div id="app-bull-label">
     <section class='hero is-link'>
       <div class="hero-body">
         <div class="container">
@@ -22,94 +22,14 @@
     </section>
     <section class="section">
       <div class="container">
-        <h1 class="title">Évaluer un site</h1>
-
-        <form id="website_form" @submit="evaluate_website">
-
-          <div class="field">
-            <label for="website_url">Url: </label>
-            <div class="control">
-              <input type="url" onfocus="this.value=''" name="website_url" v-model="url"  placeholder="http://" required>
-            </div>
-          </div>
-
-
-          <div class="field">
-            <div class="control">
-              <button class="button is-link is-small" :class="{'is-loading': loading_eval }" type="submit" name="button">Évaluer</button>
-            </div>
-          </div>
-
-        </form>
-
+        <app-bull></app-bull>
       </div>
-
     </section>
-    <div v-if="error">
-      <section class="section">
-        <div class="container">
-          <div class="notification is-danger">
-            ${error}
-          </div>
-        </div>
-      </section>
-
-    </div>
-    <div v-if="website">
-      <section class="section">
-          <div class="container">
-            <h1 class="title">${website.title}</h1>
-            <p>score: ${website.score}</p>
-          </div>
-      </section>
-    </div>
-
-    <section class="section">
-
-      <div class="container">
-          <h1 class="title">Ajouter un site web labellé</h1>
-          <form name="labeled_website_form" @submit="add_labeled_website">
-            <div class="field">
-              <label for="website_url">Url: </label>
-              <div class="control">
-                <input type="url" name="website_url" v-model="labeled_url" required>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-
-                <label class="checkbox">C'est de la bullshit ?
-                  <input type="checkbox" name="is_bullshit" v-model="is_bullshit">
-                </label>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-                <button type="submit" class="button is-link is-small" :class="{'is-loading': loading_add}"  name="button">Ajouter</button>
-              </div>
-            </div>
-          </form>
-      </div>
-
-    </section>
-    <div v-if="labeled_website">
-      <section class="section">
-        <div class="container">
-          <h1 class="title">${labeled_website.title}</h1>
-          <p>Langue: ${labeled_website.lang}</p>
-          <p>${labeled_website.texts}</p>
 
 
-        </div>
-      </section>
+    <app-bull-label></app-bull-label>
 
-    </div>
-    <section>
-
-    </section>
   </div>
-    <script type="text/javascript" src="{% static 'js/bundle.js' %}"></script>
+    <script type="text/javascript" src="{% static 'index.js' %}"></script>
   </body>
 </html>

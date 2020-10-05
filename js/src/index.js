@@ -1,8 +1,12 @@
+import "./mystyles.scss";
+
 import Vue from 'vue';
-import App from "./App"
+import App from "./App";
+import AppBull from "./AppBull";
+import AppBullLabel from "./AppBullLabel";
 
 new Vue({
-  el: '#app',  
+  el: '#app',
   components: { App }
 });
 
@@ -19,4 +23,14 @@ new Vue({
       this.isActive = !this.isActive
     },
   }
+});
+
+new Vue({
+  el: '#app-bull',
+  components: { AppBull }
+});
+
+new Vue({
+  el: '#app-bull-label',
+  components: { AppBull, AppBullLabel }
 })

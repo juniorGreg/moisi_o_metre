@@ -20,8 +20,6 @@ Vue.use(Vue2TouchEvents, {
 
 export default {
   props : ["image_src", "hidden_image_src"],
-  template: "#hidden-image",
-  delimiters: ['${', '}'],
 
   data: function() {
     return {
