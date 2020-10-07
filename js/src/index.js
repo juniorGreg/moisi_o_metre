@@ -4,6 +4,7 @@ import Vue from 'vue';
 import App from "./App";
 import AppBull from "./AppBull";
 import AppBullLabel from "./AppBullLabel";
+import AppQuiz  from "./AppQuiz";
 
 new Vue({
   el: '#app',
@@ -33,4 +34,10 @@ new Vue({
 new Vue({
   el: '#app-bull-label',
   components: { AppBull, AppBullLabel }
+});
+
+new Vue({
+  el: "#app-quiz",
+  components: {AppQuiz},
+
 })
