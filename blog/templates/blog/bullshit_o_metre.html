@@ -1,6 +1,10 @@
 {% extends 'blog/main.html' %}
 {% load static %}
 {% block content %}
+
+<div class="container">
+
+
 <h1 class="title is-size-6-mobile">Bullshit O Mètre</h1>
 <p>Attention ! C'est encore très expérimental. Cependant, le but du Bullshit-O-Mètre est détecté le niveau de
   bullshit (ou de subjectivité) d'un site web ou d'un vidéo Youtube qui a des transcriptions ou des soutitres en français.
@@ -10,4 +14,6 @@
   <div id="app-bull">
       <App-Bull></App-Bull>
   </div>
+
+</div>
 {% endblock %}

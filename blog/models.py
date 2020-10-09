@@ -67,11 +67,6 @@ class Post(models.Model):
             self.statistics.save()
 
 
-
-
-
-
-
 class RottenPoint(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     title = models.CharField(max_length=400)
