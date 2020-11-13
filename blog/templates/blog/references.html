@@ -1,6 +1,8 @@
 {% extends 'blog/main.html' %}
 
 {% block content %}
+<div class="container">
+
 
 <h1 class="title is-size-6-mobile">Références</h1>
 
@@ -10,4 +12,5 @@
   <a href="{{reference.source}}">{{reference.source}}</a>
   <br><br>
 {% endfor %}
+</div>
 {% endblock %}

@@ -1,27 +1,35 @@
+
 {% extends 'blog/main.html' %}
 
 {% block content %}
-<h1 class="title is-size-1-touch">Contact</h1>
-<form class="" action="" method="post">
-  {% csrf_token %}
-  <div class="field">
-    <label class="label" for="scriptsrcubject">Titre</label>
-    <div class="control">
-      <input type="text" size="40" name="subject">
+<div class="container">
+  <h1 class="title is-size-6-mobile">Contact</h1>
+  <p>N'hésitez pas à aller sur ma page facebook ou sur mon twitter pour communiquer avec moi.
+    J'ai même un instagram. Les liens de mes réseaux sociaux sont en bas de page de l'onglet
+    <a href="{% url 'about' %}">À propos</a>. Si vous voulez me contactez par courriel, vous pouvez
+    utilisez le formulaire ci-bas !
+  </p>
+  <form class="" action="" method="post">
+    {% csrf_token %}
+    <div class="field">
+      <label class="label" for="scriptsrcubject">Titre</label>
+      <div class="control">
+        <input type="text" size="40" name="subject">
+      </div>
     </div>
-  </div>
 
-  <div class="field">
-    <label for="message" class="label" >Message</label>
-    <div class="control">
-      <textarea name="message" rows="7" cols="50"></textarea>
+    <div class="field">
+      <label for="message" class="label" >Message</label>
+      <div class="control">
+        <textarea name="message" rows="7" cols="50"></textarea>
+      </div>
     </div>
-  </div>
 
-  <div class="field">
-    <div class="control">
-      <button class="button is-link" type="submit" name="Submit">Soumettre</button>
+    <div class="field">
+      <div class="control">
+        <button class="button is-link" type="submit" name="Submit">Soumettre</button>
+      </div>
     </div>
-  </div>
-</form>
+  </form>
+</div>
 {% endblock %}

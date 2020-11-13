@@ -36,6 +36,8 @@ class Post(models.Model):
     sources = models.ManyToManyField(Reference)
     rotten_score = models.PositiveSmallIntegerField(default=4)
 
+    pub = models.TextField(max_length=8000, null=True, blank=True)
+
     statistics = models.OneToOneField(PostStatistics, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):

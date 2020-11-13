@@ -3,6 +3,8 @@
 {% load static %}
 
 {% block content %}
+<div class="container">
+
 <h1 class="title is-size-6-mobile">À propos</h1>
 <p class="has-text-justified">{{about.text}}</p>
 <br>
@@ -17,5 +19,12 @@
       <img class="image is-64x64" src="{% static 'images/twitter_share_button.png' %}" alt="share button twitter">
     </button>
   </a>
+  <a target='_blank' href="https://www.instagram.com/moisiometre/">
+    <button class="button is-text">
+      <img class="image is-64x64" src="{% static 'images/twitter_share_button.png' %}" alt="share button twitter">
+    </button>
+  </a>
+</div>
+
 
 {% endblock %}
