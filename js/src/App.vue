@@ -34,9 +34,15 @@
             <div v-for="point in post.rottenpoint_set">
               <h3 class="has-text-weight-bold">{{point.title}}</h3>
               <br>
-              <div class="">
+              <div>
                 <vue-showdown :markdown="point.description">
               </div>
+            </div>
+          </div>
+          <div v-if="post.pub" >
+            <h2 class="subtitle is-size-6-mobile">Le lien affiliate du post</h2>
+            <div>
+              <vue-showdown :markdown="post.pub" :extensions="['targetlink']">
             </div>
           </div>
 
@@ -101,13 +107,39 @@
 
 <script>
 import Vue from 'vue'
-import VueShowdown from 'vue-showdown'
+import VueShowdown, { showdown } from 'vue-showdown'
 import Vue2TouchEvents from 'vue2-touch-events'
 
 import axios from 'axios'
 
 axios.defaults.xsrfHeaderName = "X-CSRFToken"
 axios.defaults.xsrfCookieName = 'csrftoken'
+
+//Extension to add target to link
+showdown.extension('targetlink', function() {
+  return [{
+    type: 'lang',
+    regex: /\[((?:\[[^\]]*]|[^\[\]])*)]\([ \t]*<?(.*?(?:\(.*?\).*?)?)>?[ \t]*((['"])(.*?)\4[ \t]*)?\)\{\:target=(["'])(.*?)\6}/g,
+    replace: function(wholematch, linkText, url, a, b, title, c, target) {
+
+      var result = '<a href="' + url + '"';
+
+      if (typeof title != 'undefined' && title !== '' && title !== null) {
+        title = title.replace(/"/g, '&quot;');
+        title = showdown.helper.escapeCharacters(title, '*_', false);
+        result += ' title="' + title + '"';
+      }
+
+      if (typeof target != 'undefined' && target !== '' && target !== null) {
+        result += ' target="' + target + '"';
+      }
+
+      result += '>' + linkText + '</a>';
+      return result;
+    }
+  }];
+});
+
 
 
 
@@ -119,7 +151,7 @@ Vue.use(VueShowdown, {
   flavor: 'github',
   // set default options of showdown (will override the flavor options)
   options: {
-    emoji: false,
+    emoji: true,
   },
 });
 
