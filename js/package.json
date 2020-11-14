@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "parcel build src/index.js -d ../static/ --public-url=/static/",
+    "build": "parcel build src/index.js -d ../static/",
     "watch": "parcel watch src/index.js -d ../static/ --public-url=/static/"
   },
   "author": "",

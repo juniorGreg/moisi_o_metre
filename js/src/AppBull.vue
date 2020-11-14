@@ -1,13 +1,13 @@
 <template lang="html">
 <div>
-  <h1 class="title">Évaluer un site</h1>
+  <h1 class="title is-size-6-mobile">Évaluer un site</h1>
 
   <form id="website_form" @submit.prevent="evaluateWebsite">
 
     <div class="field">
       <label for="website_url">Url: </label>
       <div class="control">
-        <input onfocus="this.value=''" type="url" name="website_url" v-model="url" required>
+        <input class="input is-small" onfocus="this.value=''" type="url" name="website_url" v-model="url" required>
       </div>
     </div>
 
