@@ -97,7 +97,7 @@
               :post_id="post.id" :button_img="copy_link_button_img" alt_text="copy link button"></SharedButton>
 
         </div>
-        <a class="is-size-7" :href="support_href" >Supportez le blog</a>
+
       </div>
 
       <br>

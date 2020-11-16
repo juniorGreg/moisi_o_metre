@@ -65,7 +65,7 @@ export default {
       selected_value: "",
       values: [],
       sub_questions_sequence: 0,
-  
+
 
     }
   },
