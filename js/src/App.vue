@@ -26,7 +26,7 @@
           </div>
 
           <div>
-            <vue-showdown :markdown="post.content">
+            <vue-showdown :markdown="post.content" :extensions="['targetlink']">
           </div>
 
           <div v-if="post.rottenpoint_set.length > 0 ">
@@ -119,9 +119,11 @@ axios.defaults.xsrfCookieName = 'csrftoken'
 showdown.extension('targetlink', function() {
   return [{
     type: 'lang',
-    regex: /\[((?:\[[^\]]*]|[^\[\]])*)]\([ \t]*<?(.*?(?:\(.*?\).*?)?)>?[ \t]*((['"])(.*?)\4[ \t]*)?\)\{\:target=(["'])(.*?)\6}/g,
-    replace: function(wholematch, linkText, url, a, b, title, c, target) {
-
+    regex: /\[([^\[\]]+)\]\(([^\(\)]+)\)\{:target="([^\{\}]+)"\}/g,
+    replace: function(wholematch, linkText, url, target) {
+      console.log(url)
+      console.log(linkText)
+      console.log(target)
       var result = '<a href="' + url + '"';
 
       if (typeof title != 'undefined' && title !== '' && title !== null) {
