@@ -19,5 +19,6 @@ urlpatterns = [
     path('tests', views.tests, name="tests"),
     path('support', views.support, name="support"),
     path('bullshit', views. bullshit_o_metre, name="bullshit"),
-    path("quiz", views.quiz, name="quiz")
+    path("quiz", views.quiz, name="quiz"),
+    path("search/<str:word>", views.search, name="search")
 ]

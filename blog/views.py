@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.templatetags.static import static
 from django.http import Http404
+from django.db.models import Q
 
 from .models import *
 from django.contrib.sites.models import Site
@@ -12,7 +13,7 @@ from django.conf import settings
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import PostSerializer
+from .serializers import PostSerializer, SearchedPostSerializer
 
 
 
@@ -119,4 +120,10 @@ def posts(request, id=-1):
         post = Post.objects.get(id=id)
 
     serializer = PostSerializer(post)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def search(request, word):
+    posts = Post.objects.filter(Q(content__contains=word) | Q(title__contains=word) )
+    serializer = SearchedPostSerializer(posts[:5], many=True)
     return Response(serializer.data)
