@@ -2,7 +2,7 @@
 <template>
   <div class="container">
     <div class="posts" v-for="post in posts">
-      <div class="box">
+      <div :id="post.id" class="box">
         <h1 class="title is-size-6-mobile">{{post.title}}</h1>
         <h2 class="subtitle is-size-7 is-italic">Temps de lecture: environ {{post.statistics.avg_reading_time}} minutes</h2>
 
@@ -121,9 +121,7 @@ showdown.extension('targetlink', function() {
     type: 'lang',
     regex: /\[([^\[\]]+)\]\(([^\(\)]+)\)\{:target="([^\{\}]+)"\}/g,
     replace: function(wholematch, linkText, url, target) {
-      console.log(url)
-      console.log(linkText)
-      console.log(target)
+
       var result = '<a href="' + url + '"';
 
       if (typeof title != 'undefined' && title !== '' && title !== null) {
@@ -169,7 +167,7 @@ import HiddenImage from './components/HiddenImage.vue';
 export default {
   name: 'App',
 
-  props: ['local_url', "facebook_button_img", "twitter_button_img", 'copy_link_button_img' ,"support_href"],
+  props: ['searched_post_id', 'local_url', "facebook_button_img", "twitter_button_img", 'copy_link_button_img' ,"support_href"],
 
   components: {
     CustomProgress,
@@ -184,6 +182,7 @@ export default {
       post_ids: [],
       post_index: 0,
       query_active: false,
+      updated_searched_post_id: false
 
     }
   },
@@ -249,6 +248,23 @@ export default {
 
       },
 
+      getSearchedPost: function(id) {
+        var postElement = document.getElementById(""+id);
+        if(postElement){
+          return;
+        }
+        this.updated_searched_post_id = true;
+        //console.log("post: "+id);
+        axios.get("/posts/"+id).then(
+          response => {
+            this.addPost(response.data);
+            this.post_ids = this.post_ids.filter(
+              function(post_id){
+                return post_id !== id
+              }
+            )})
+      },
+
       checkEndPost: function(ev){
         if ((window.innerHeight + window.scrollY + 50) >= document.body.offsetHeight) {
           this.getPost()
@@ -268,6 +284,21 @@ export default {
 
   },
 
+  updated: function() {
+    if(!this.updated_searched_post_id)
+      return
+
+    var postElement = document.getElementById(""+this.searched_post_id);
+    if(postElement){
+      postElement.scrollIntoView();
+      window.scrollBy(0, -80);
+    }
+
+    this.updated_searched_post_id = false;
+    //this.searched_post_id = -1;
+
+  },
+
   created: function(){
     window.addEventListener('scroll', this.checkEndPost);
   },
@@ -279,7 +310,14 @@ export default {
     } catch(error){
       this.post_ids = []
     }
+  },
+
+  watch: {
+    searched_post_id: function(){
+      if(this.searched_post_id > 0)
+        this.getSearchedPost(this.searched_post_id);
+    }
   }
 }
 
-</scripts>
+</script>

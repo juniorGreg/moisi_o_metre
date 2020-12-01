@@ -15,28 +15,33 @@ var navapp = document.getElementById("nav-app");
 
 var store = {
 
-    searchPostId: -1
+    searchedPostId: -1
 
 }
+
+var index = false;
 
 
 if(app){
   new Vue({
     el: '#app',
-    data: store,
+    data() {
+      return store
+    },
     components: { App }
   });
+  index = true;
 }
 
 if(navapp)
 {
   new Vue({
     el: '#nav-app',
-    data: store,
+
     components: { SearchBar },
     data() {
       return {
-        searchPostId: store.searchPostId,
+        index: index,
         isActive: false,
         isSearchBarVisible: false
       }
@@ -51,8 +56,8 @@ if(navapp)
       },
 
       getSearchedPost: function(id){
-        console.log("emit id:"+id);
-        store.searchPostId = id;
+        //console.log("emit id:"+id);
+        store.searchedPostId = id;
       }
     }
   });

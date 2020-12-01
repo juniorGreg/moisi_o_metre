@@ -123,7 +123,7 @@ def posts(request, id=-1):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def search(request, word):
-    posts = Post.objects.filter(Q(content__contains=word) | Q(title__contains=word) )
+def search(request, word):    
+    posts = Post.objects.filter(Q(content__icontains=word) | Q(title__icontains=word) )
     serializer = SearchedPostSerializer(posts[:5], many=True)
     return Response(serializer.data)
