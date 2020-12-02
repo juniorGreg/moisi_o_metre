@@ -43,10 +43,10 @@
             </a>
 
 
-              <a  v-if="index" class="navbar-item" role="button" @click="showSearchBar">
+              <a  v-if="showLoupe" class="navbar-item" role="button" @click="toggleSearchBar">
                 <img src="{% static '/images/loupe.svg' %}" alt="">
               </a>
-            
+
 
 
             <a role="button" :class="{'is-active': isActive}" @click="toggleMenu()" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
@@ -70,8 +70,8 @@
         </div>
       </div>
     </nav>
-    <div v-if="index">
-        <search-bar :isvisible.sync="isSearchBarVisible" @searchedPostId="getSearchedPost"/>
+    <div v-if="showLoupe">
+        <search-bar />
     </div>
 
   </div>

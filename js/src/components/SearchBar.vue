@@ -1,7 +1,7 @@
 <template lang="html">
 
-    <div class="modal" :class="{'is-active': isvisible}">
-        <div class="modal-background" @click="toggle"></div>
+    <div class="modal" :class="{'is-active': isSearchBarVisible}">
+        <div class="modal-background" @click="toggleSearchBar"></div>
         <div class="modal-content">
           <article class="panel is-dark">
             <p class="panel-heading">
@@ -9,18 +9,18 @@
             </p>
             <div class="panel-block">
               <p class="control">
-                <input class="input is-small" type="text" placeholder="Rechercher un article" v-model="word">
+                <input id="searchBarInput" class="input is-small" type="text" placeholder="Rechercher un article" v-model="searched_word" >
 
               </p>
             </div>
-            <a class="panel-block" v-for="post in posts" @click="getPost(post.id)">
+            <a class="panel-block" v-for="post in searched_posts" @click="getSearchedPost(post.id)">
               {{ post.title }}
             </a>
 
           </article>
         </div>
 
-        <button class="modal-close is-large" aria-label="close"  @click="toggle"></button>
+        <button class="modal-close is-large" aria-label="close"  @click="toggleSearchBar"></button>
     </div>
 
 </template>
@@ -32,38 +32,60 @@ import axios from 'axios'
 axios.defaults.xsrfHeaderName = "X-CSRFToken"
 axios.defaults.xsrfCookieName = 'csrftoken'
 
+import { mapState , mapMutations , mapActions } from 'vuex';
+
+
 export default {
-  props: ['isvisible'],
+  emits: ['searchedpostidevent'],
+
   data() {
     return {
       posts: [],
-      word: ""
+      word: "",
+      eventId: 0,
+      currentId: -1
     }
   },
-  methods: {
-      search: function(){
-        if(this.word){
-          axios.get("/search/"+this.word).then(
-            response => {this.posts = response.data}
-          )
-        }else{
-          this.posts = []
-        }
-      },
+  computed: {
+      ...mapState([
+        'isSearchBarVisible',
+        'searched_posts'
+      ]),
 
-      getPost: function(id){
-        this.$emit("searchedpostid", id)
-        this.toggle();
-      },
+      searched_word: {
+          get(){
+            return this.$store.state.searched_word;
+          },
 
-      toggle: function(){
-        //this.isvisible = !this.isvisible
-        this.$emit('update:isvisible', !this.isvisible)
+          set(value){
+            this.$store.commit("SET_SEARCHED_WORD", value)
+          }
       }
   },
+  methods: {
+      ...mapActions([
+        'toggleSearchBar',
+        'fetchSearchedPosts',
+        'getSearchedPost'
+      ]),
+  },
   watch: {
-    word: function(){
-      this.search();
+    searched_word: function(){
+      this.fetchSearchedPosts();
+      //var input = document.getElementById("searchBarInput");
+      //alert("ok");
+
+    }
+  },
+  updated: function(){
+
+    if(this.isSearchBarVisible){
+        //console.log("updated");
+        var searchBarInput = document.getElementById("searchBarInput");
+        searchBarInput.focus();
+        //searchBarInput.select();
+    }else{
+        //this.$emit("searchedpostidevent", 1);
     }
   }
 

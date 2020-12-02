@@ -109,6 +109,9 @@
 import Vue from 'vue'
 import VueShowdown, { showdown } from 'vue-showdown'
 import Vue2TouchEvents from 'vue2-touch-events'
+import { mapState , mapMutations , mapActions } from 'vuex';
+
+
 
 import axios from 'axios'
 
@@ -164,10 +167,11 @@ import SharedButton from "./components/SharedButton.vue";
 import HiddenImage from './components/HiddenImage.vue';
 
 
+
 export default {
   name: 'App',
 
-  props: ['searched_post_id', 'local_url', "facebook_button_img", "twitter_button_img", 'copy_link_button_img' ,"support_href"],
+  props: ['local_url', "facebook_button_img", "twitter_button_img", 'copy_link_button_img' ,"support_href"],
 
   components: {
     CustomProgress,
@@ -176,98 +180,40 @@ export default {
     HiddenImage
   },
 
-  data() {
-    return {
-      posts: [],
-      post_ids: [],
-      post_index: 0,
-      query_active: false,
-      updated_searched_post_id: false
-
-    }
+  computed: {
+    ...mapState([
+      'posts',
+      'post_ids',
+      'post_index',
+      'searched_post_active',
+      'new_searched_post_active',
+      'searched_post_id'
+    ])
   },
 
   methods: {
+      ...mapMutations([
+          'SET_POST_IDS',
+          'SET_POST_INDEX',
+          'SET_SEARCHED_POST_ACTIVE',
+          'SET_NEW_SEARCHED_POST_ACTIVE'
+      ]),
 
+      ...mapActions([
+        'getNextPost'
+      ]),
 
-      formatDate: function(date){
-        var months = ["Janvier", "Février", "Mars", "Avril", "Mai", 'Juin', "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
-        var date_element = date.split(" ")
-        var month_string = date_element[1];
-        var month_index = parseInt(month_string);
-
-        var new_date = date.replace(month_string, months[month_index - 1]);
-
-        return new_date;
-      },
-
-      showModifiedDate: function(dateCreated, dateModified){
-        var date_created_element = dateCreated.split(" ")
-        var date_modified_element = dateModified.split(" ")
-        if(date_created_element[0] < date_modified_element[0])
-          return true;
-
-        if(date_created_element[1] < date_modified_element[1])
-          return true;
-
-        if(date_created_element[2] < date_modified_element[2])
-          return true;
-
-        var time_created = date_created_element[3].split(":")
-        var time_modified = date_modified_element[3].split(":")
-
-        if(time_created[0] < time_modified[0])
-          return true;
-
-        if(time_created[1] < time_modified[1])
-          return true;
-
-        return false;
-      },
-
-      addPost: function(post){
-        post.rottenpoint_set = post.rottenpoint_set.sort((a,b) => (a.order > b.order) ? 1 : -1);
-        post["show_modified_date"] = this.showModifiedDate(post.date_created, post.date_modified);
-        post.date_created = this.formatDate(post.date_created);
-        post.date_modified = this.formatDate(post.date_modified);
-        post["show_sources"] = false;
-        this.posts.push(post);
-      },
-
-      getPost: function(){
-        if(this.query_active)
-          return;
-
-        this.query_active = true;
-
-        if(this.post_index < this.post_ids.length){
-          axios.get("/posts/"+this.post_ids[this.post_index]).then(
-            response => {this.addPost(response.data); this.post_index+=1;this.query_active=false;}
-          )
-        }
-
-      },
-
-      getSearchedPost: function(id) {
-        var postElement = document.getElementById(""+id);
+     scrollToPost: function(){
+        var postElement = document.getElementById(this.searched_post_id);
         if(postElement){
-          return;
+          postElement.scrollIntoView();
+          window.scrollBy(0, -80);
         }
-        this.updated_searched_post_id = true;
-        //console.log("post: "+id);
-        axios.get("/posts/"+id).then(
-          response => {
-            this.addPost(response.data);
-            this.post_ids = this.post_ids.filter(
-              function(post_id){
-                return post_id !== id
-              }
-            )})
       },
 
       checkEndPost: function(ev){
         if ((window.innerHeight + window.scrollY + 50) >= document.body.offsetHeight) {
-          this.getPost()
+          this.getNextPost()
           }
       },
 
@@ -285,16 +231,11 @@ export default {
   },
 
   updated: function() {
-    if(!this.updated_searched_post_id)
-      return
-
-    var postElement = document.getElementById(""+this.searched_post_id);
-    if(postElement){
-      postElement.scrollIntoView();
-      window.scrollBy(0, -80);
+    if(this.new_searched_post_active){
+        this.scrollToPost();
+        this.SET_NEW_SEARCHED_POST_ACTIVE(false);
     }
-
-    this.updated_searched_post_id = false;
+    //this.scrollToPost()
     //this.searched_post_id = -1;
 
   },
@@ -305,19 +246,23 @@ export default {
 
   mounted: function(){
     try{
-      this.post_ids = JSON.parse(document.getElementById("post-ids").innerHTML);
-      this.getPost();
+      var post_ids = JSON.parse(document.getElementById("post-ids").innerHTML);
+      this.SET_POST_IDS(post_ids);
+      this.getNextPost();
     } catch(error){
-      this.post_ids = []
+      //this.post_ids = []
     }
   },
 
   watch: {
-    searched_post_id: function(){
-      if(this.searched_post_id > 0)
-        this.getSearchedPost(this.searched_post_id);
+    searched_post_active: function(){
+      if(this.searched_post_active){
+          this.scrollToPost();
+          this.SET_SEARCHED_POST_ACTIVE(false);
+      }
     }
   }
+
 }
 
 </script>
