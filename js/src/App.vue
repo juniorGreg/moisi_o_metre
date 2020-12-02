@@ -39,6 +39,13 @@
               </div>
             </div>
           </div>
+
+          <div v-if="post.post_type == 'CRITIC'">
+            <CustomProgress :count="post.rotten_score" :image_src="cursor_img"/>
+          </div>
+
+          <br>
+
           <div v-if="post.pub" >
             <h2 class="subtitle is-size-6-mobile">Le lien affiliate du post</h2>
             <div>
@@ -171,7 +178,7 @@ import HiddenImage from './components/HiddenImage.vue';
 export default {
   name: 'App',
 
-  props: ['local_url', "facebook_button_img", "twitter_button_img", 'copy_link_button_img' ,"support_href"],
+  props: ['local_url', "facebook_button_img", "twitter_button_img", 'copy_link_button_img' ,"support_href", "cursor_img"],
 
   components: {
     CustomProgress,

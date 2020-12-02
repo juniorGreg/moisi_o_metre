@@ -9,7 +9,8 @@
             </p>
             <div class="panel-block">
               <p class="control">
-                <input id="searchBarInput" class="input is-small" type="text" placeholder="Rechercher un article" v-model="searched_word" >
+                <input id="searchBarInput" class="input is-small" type="text" placeholder="Rechercher un article"
+                :value='searched_word'  @input='evt=>searched_word=evt.target.value'>
 
               </p>
             </div>
@@ -58,6 +59,7 @@ export default {
           },
 
           set(value){
+
             this.$store.commit("SET_SEARCHED_WORD", value)
           }
       }
@@ -83,7 +85,7 @@ export default {
         //console.log("updated");
         var searchBarInput = document.getElementById("searchBarInput");
         searchBarInput.focus();
-        //searchBarInput.select();
+
     }else{
         //this.$emit("searchedpostidevent", 1);
     }
