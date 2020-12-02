@@ -160,6 +160,7 @@ export default new Vuex.Store({
 
 
         return context.dispatch("getPost", id).then(()=>{
+          
           var post_ids = context.state.post_ids.filter(
             function(post_id){
               return post_id !== id
@@ -169,6 +170,8 @@ export default new Vuex.Store({
           context.commit("SET_POST_IDS", post_ids);
           context.commit("SET_NEW_SEARCHED_POST_ACTIVE", true);
           context.commit("SET_IS_SEARCH_BAR_VISIBLE", false);
+
+
         })
     },
 
