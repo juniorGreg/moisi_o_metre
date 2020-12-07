@@ -9,16 +9,16 @@
         <div v-if="post.post_type == 'BD'">
             <p class="has-text-justified">{{post.content}}</p>
             <br>
-            <figure class='image no-dark-mode'>
-                <img :src="post.image" alt="imâge">
+            <figure class='image'>
+                <img class="no-dark-mode" :src="post.image" alt="imâge">
             </figure>
             <br>
         </div>
 
         <div v-else>
           <div v-if="post.image && !post.hidden_image" class="no-dark-mode">
-            <img class="image-post is-hidden-mobile" :src="post.image" alt="imâge">
-            <img class="image-post-mobile is-hidden-tablet" :src="post.image" alt="imâge">
+            <img class="image-post is-hidden-mobile no-dark-mode" :src="post.image" alt="imâge">
+            <img class="image-post-mobile is-hidden-tablet no-dark-mode" :src="post.image" alt="imâge">
           </div>
 
           <div v-if="post.image && post.hidden_image">
@@ -66,8 +66,10 @@
               </transition>
 
               <button @click="post.show_sources = !post.show_sources" class="button is-small">
+                <span class="text">
                 <span v-if="post.show_sources">Cacher&nbsp</span>
                 <span v-else>Afficher&nbsp</span>les sources
+              </span>
               </button>
           </div>
 
@@ -77,13 +79,13 @@
         </div>
         <br>
 
-        <div class="is-size-7">Créer le {{post.date_created}}</div>
+        <div class="text is-size-7">Créer le {{post.date_created}}</div>
         <div v-if="post.show_modified_date">
-          <div class="is-size-7">Modifier le {{post.date_modified}}</div>
+          <div class="text is-size-7">Modifier le {{post.date_modified}}</div>
         </div>
 
         <div class="buttons has-addons">
-          <div class="is-shared is-size-6 is-size-7-mobile">
+          <div class="text is-shared is-size-6 is-size-7-mobile">
             Partagez:
           </div>
 

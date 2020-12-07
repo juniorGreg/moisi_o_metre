@@ -1,6 +1,6 @@
 <template lang="html">
   <div v-if="source">
-    <div>{{ title }}</div>
+    <h5>{{ title }}</h5>
       <div v-if="source.includes('http')">
           <a target='_blank' :href="source">{{ source }}</a>
       </div>

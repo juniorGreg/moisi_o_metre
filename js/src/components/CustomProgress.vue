@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="no-dark-mode">
-    <img :src="image_src" class="cursor image is-48x48">
+  <div>
+    <img :src="image_src" class="cursor no-dark-mode image is-48x48">
     <progress class="progress is-small" :value="currentCount" :max="maxCount"></progress>
   </div>
 </template>

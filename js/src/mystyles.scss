@@ -28,20 +28,33 @@ $navbar-breakpoint: 1026px;
 
 $dark-mode-transition-time: 1s;
 
-html, section, .no-dark-mode{
+html, section * {
   transition: color $dark-mode-transition-time,
   background-color $dark-mode-transition-time,
   filter $dark-mode-transition-time;
 }
 
-.dark-mode {
-//  background: black;
 
-  filter: invert(1) hue-rotate(3.1416rad);
 
-  .no-dark-mode {
-    filter: invert(1) hue-rotate(3.1416rad);
-  }
+section.dark-mode {
+    p, h1, h2, h3, h4, h5, .text, img:not(.no-dark-mode),
+
+    label, input, textarea{
+    //  background: black;
+
+      filter: invert(1) hue-rotate(3.1416rad);
+
+    }
+
+
+
+    .box, button{
+      //filter: invert(1) hue-rotate(3.1416rad);
+      background-color: black;
+      box-shadow: 0 0.5em 1em -0.125em invert(rgba(10, 10, 10, 0.1)), 0 0px 0 1px invert(rgba(10, 10, 10, 0.02));
+    }
+
+
 }
 
 .dark-mode-html{

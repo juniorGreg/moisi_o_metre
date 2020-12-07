@@ -1,10 +1,10 @@
 <template lang="html">
   <div class="no-dark-mode" @mouseover="showHiddenImage" @mouseout="showImage" v-touch:start="showHiddenImageMobile" v-touch:end="showImageMobile">
-    <img v-show="!hidden" class="image-post is-hidden-mobile"  :src="image_src" alt="image source" >
-    <img v-show="!hidden" class="image-post-mobile is-hidden-tablet"  :src="image_src" alt="image source" >
+    <img v-show="!hidden" class="image-post is-hidden-mobile no-dark-mode"  :src="image_src" alt="image source" >
+    <img v-show="!hidden" class="image-post-mobile is-hidden-tablet no-dark-mode"  :src="image_src" alt="image source" >
 
-    <img v-show="hidden" class="image-post is-hidden-mobile"  :src="hidden_image_src" alt="image source" >
-    <img v-show="hidden" class="image-post-mobile is-hidden-tablet" :src="hidden_image_src" alt="image source" >
+    <img v-show="hidden" class="image-post is-hidden-mobile no-dark-mode"  :src="hidden_image_src" alt="image source" >
+    <img v-show="hidden" class="image-post-mobile is-hidden-tablet no-dark-mode" :src="hidden_image_src" alt="image source" >
   </div>
 </template>
 
