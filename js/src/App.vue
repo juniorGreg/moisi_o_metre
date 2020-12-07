@@ -9,14 +9,14 @@
         <div v-if="post.post_type == 'BD'">
             <p class="has-text-justified">{{post.content}}</p>
             <br>
-            <figure class='image'>
+            <figure class='image no-dark-mode'>
                 <img :src="post.image" alt="imâge">
             </figure>
             <br>
         </div>
 
         <div v-else>
-          <div v-if="post.image && !post.hidden_image">
+          <div v-if="post.image && !post.hidden_image" class="no-dark-mode">
             <img class="image-post is-hidden-mobile" :src="post.image" alt="imâge">
             <img class="image-post-mobile is-hidden-tablet" :src="post.image" alt="imâge">
           </div>

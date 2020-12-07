@@ -44,7 +44,7 @@
 
 
               <a  v-if="showLoupe" class="navbar-item" role="button" @click="toggleSearchBar">
-                <img src="{% static '/images/loupe.svg' %}" alt="">
+                <img src="{% static '/images/loupe.svg' %}" alt="loupe de recherche">
               </a>
 
 
@@ -66,6 +66,9 @@
             <a class="navbar-item" href="{% url 'contact' %}">Contact</a>
             <a class="navbar-item" href="{% url 'support' %}">Supportez le blog</a>
             <a class="navbar-item" href="https://www.redbubble.com/fr/people/moisiometre/shop?asc=u" target="_blank">Boutique</a>
+            <a class="navbar-item" role="button" @click="toggleDarkMode">
+              <img src="{% static '/images/dark_mode_icon.svg' %}" alt="icon mode sombre">
+            </a>
           </div>
         </div>
       </div>
@@ -86,13 +89,17 @@
           </div>
       </div>
     </section>
-    <section class="section is-size-7-mobile">
+    <!-- <div class="dark-mode"> -->
+      <section id="main-section" class="section is-size-7-mobile">
 
-      {% block content %}
-      {% endblock %}
+        {% block content %}
+        {% endblock %}
 
-    </section>
+      </section>
+    <!-- </div> -->
+
 
     <script type="text/javascript" src="{% static 'index.js' %}"></script>
+    
   </body>
 </html>

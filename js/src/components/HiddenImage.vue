@@ -1,5 +1,5 @@
 <template lang="html">
-  <div @mouseover="showHiddenImage" @mouseout="showImage" v-touch:start="showHiddenImageMobile" v-touch:end="showImageMobile">
+  <div class="no-dark-mode" @mouseover="showHiddenImage" @mouseout="showImage" v-touch:start="showHiddenImageMobile" v-touch:end="showImageMobile">
     <img v-show="!hidden" class="image-post is-hidden-mobile"  :src="image_src" alt="image source" >
     <img v-show="!hidden" class="image-post-mobile is-hidden-tablet"  :src="image_src" alt="image source" >
 

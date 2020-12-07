@@ -8,6 +8,9 @@
 
 $navbar-item-color: lightgrey;
 
+$navbar-height: 2rem;
+$navbar-item-img-max-height : 1.35rem;
+
 :root {
   --progress-bar-background: linear-gradient(to right, lightgreen, green);
 }
@@ -20,6 +23,35 @@ $section-padding: 3rem 1rem;
 $box-padding: 1rem;
 
 $notification-padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+
+$navbar-breakpoint: 1026px;
+
+$dark-mode-transition-time: 1s;
+
+html, section, .no-dark-mode{
+  transition: color $dark-mode-transition-time,
+  background-color $dark-mode-transition-time,
+  filter $dark-mode-transition-time;
+}
+
+.dark-mode {
+//  background: black;
+
+  filter: invert(1) hue-rotate(3.1416rad);
+
+  .no-dark-mode {
+    filter: invert(1) hue-rotate(3.1416rad);
+  }
+}
+
+.dark-mode-html{
+  //transition: color 3s, background-color 3s;
+  background: black;
+}
+
+html {
+  height: 100%;
+}
 
 
 .image-post {

@@ -42,7 +42,8 @@ if(navapp)
 
     computed: {
       ...mapState([
-        "post_ids"
+        "post_ids",
+        "dark_mode"
       ]),
       showLoupe: function(){
         return this.post_ids.length > 0
@@ -51,12 +52,51 @@ if(navapp)
 
     methods: {
       ...mapActions([
-        "toggleSearchBar"
+        "toggleSearchBar",
+        "getDarkMode"
+      ]),
+      ...mapMutations([
+        "SET_DARK_MODE"
       ]),
       toggleMenu: function(){
         this.isActive = !this.isActive
+      },
+      toggleDarkMode: function(){
+        var mode = !this.dark_mode;
+        this.SET_DARK_MODE(mode);
+        this.isActive = false;
       }
 
+    },
+
+    created: function(){
+      this.getDarkMode();
+
+
+    },
+
+    mounted: function(){
+      //document.body.classList.add("dark-mode-transition");
+    },
+
+    watch: {
+      dark_mode: function(){
+
+        var mainSection = document.getElementById("main-section");
+
+
+        if(this.dark_mode){
+            mainSection.classList.add("dark-mode");
+            document.documentElement.classList.add("dark-mode-html");
+            //document.body.c
+        }else{
+          mainSection.classList.remove("dark-mode");
+          document.documentElement.classList.remove("dark-mode-html");
+        }
+
+
+
+      }
     }
   });
 }

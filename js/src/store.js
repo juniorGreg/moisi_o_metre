@@ -19,7 +19,8 @@ export default new Vuex.Store({
     searched_word: "",
     searched_post_id: 0,
     searched_post_active: false,
-    new_searched_post_active: false
+    new_searched_post_active: false,
+    dark_mode: false
 
   },
   mutations: {
@@ -110,6 +111,12 @@ export default new Vuex.Store({
 
     SET_SEARCHED_POST_ID: (state, value) => {
       state.searched_post_id = value
+    },
+
+    SET_DARK_MODE: (state, value) => {
+      state.dark_mode = value
+      //console.log(value);
+      localStorage.setItem("darkMode", JSON.stringify(value));
     }
 
   },
@@ -160,7 +167,7 @@ export default new Vuex.Store({
 
 
         return context.dispatch("getPost", id).then(()=>{
-          
+
           var post_ids = context.state.post_ids.filter(
             function(post_id){
               return post_id !== id
@@ -194,6 +201,13 @@ export default new Vuex.Store({
 
       var newState = !context.state.isSearchBarVisible;
       context.commit("SET_IS_SEARCH_BAR_VISIBLE", newState);
+    },
+
+    getDarkMode: (context) => {
+      var darkMode = localStorage.getItem("darkMode");
+      if(darkMode){
+        context.commit("SET_DARK_MODE", JSON.parse(darkMode));
+      }
     }
   },
   getters: {
