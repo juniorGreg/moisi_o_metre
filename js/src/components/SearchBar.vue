@@ -3,20 +3,23 @@
     <div class="modal" :class="{'is-active': isSearchBarVisible}">
         <div class="modal-background" @click="toggleSearchBar"></div>
         <div class="modal-content">
-          <article class="panel is-dark">
+          <article class="panel is-dark" :class="{'dark-mode': dark_mode}">
             <p class="panel-heading">
               Rechercher un article
             </p>
-            <div class="panel-block">
-              <p class="control">
-                <input id="searchBarInput" class="input is-small" type="text" placeholder="Rechercher un article"
-                :value='searched_word'  @input='evt=>searched_word=evt.target.value'>
+            <div class="panel-body">
+              <div class="panel-block">
+                <p class="control">
+                  <input id="searchBarInput" class="input is-small" type="text" placeholder="Rechercher un article"
+                  :value='searched_word'  @input='evt=>searched_word=evt.target.value'>
 
-              </p>
+                </p>
+              </div>
+              <a class="panel-block" v-for="post in searched_posts" @click="getSearchedPost(post.id)">
+                {{ post.title }}
+              </a>
             </div>
-            <a class="panel-block" v-for="post in searched_posts" @click="getSearchedPost(post.id)">
-              {{ post.title }}
-            </a>
+
 
           </article>
         </div>
@@ -50,7 +53,8 @@ export default {
   computed: {
       ...mapState([
         'isSearchBarVisible',
-        'searched_posts'
+        'searched_posts',
+        'dark_mode'
       ]),
 
       searched_word: {
@@ -74,8 +78,8 @@ export default {
   watch: {
     searched_word: function(){
       this.fetchSearchedPosts();
-      //var input = document.getElementById("searchBarInput");
-      //alert("ok");
+    },
+    dark_mode: {
 
     }
   },

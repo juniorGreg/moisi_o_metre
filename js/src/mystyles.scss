@@ -46,20 +46,33 @@ section.dark-mode {
 
     }
 
+    $dark-mode-background-color: #171717;
 
+    button {
+      background-color: $dark-mode-background-color;
+    }
 
-    .box, button{
+    .box {
       //filter: invert(1) hue-rotate(3.1416rad);
-      background-color: black;
+      background-color: $dark-mode-background-color;
       box-shadow: 0 0.5em 1em -0.125em invert(rgba(10, 10, 10, 0.1)), 0 0px 0 1px invert(rgba(10, 10, 10, 0.02));
     }
 
 
 }
 
+$dark-mode-background-color-html: #1F1F1F;
+
 .dark-mode-html{
   //transition: color 3s, background-color 3s;
-  background: black;
+  background: $dark-mode-background-color-html;
+}
+
+article.panel.dark-mode {
+  background-color: $dark-mode-background-color-html;
+  .panel-body{
+    filter: invert(1) hue-rotate(3.1416rad);
+  }
 }
 
 html {
