@@ -4,6 +4,7 @@
       <img class="image is-24x24" :src="button_img" :alt="alt_text" >
     </button>
   </a>
+
 </template>
 
 <script>
@@ -37,17 +38,29 @@ export default {
   },
   methods: {
     copyLink: function(e){
+      //alert("clik")
 
       if(this.clean_local_url == this.url){
 
         e.preventDefault();
-        //alert("oki");
-        navigator.clipboard.writeText(this.url).then(this.showTooltip(),
-        function(){alert("error")});
+
+        var temp = document.createElement("input");
+
+        this.$el.appendChild(temp);
+        //console.log(temp);
+
+        temp.setAttribute("value", this.url);
+        temp.focus();
+        temp.select();
+
+        const isSuccessful = document.execCommand("copy");
+        if(!isSuccessful){
+          console.error("Failed to copy text");
+        }
 
         this.showTooltip();
 
-        //document.execCommand("copy");
+        this.$el.removeChild(temp);
       }
     },
 
