@@ -37,8 +37,12 @@ def get_main_context(tag_title, tag_desc, tag_url, tag_image="/images/moisiometr
 
 # Create your views here.
 def index(request, id=-1):
+    if request.user.is_authenticated:
+        post_ids = list(Post.objects.order_by('-date_created').values_list('id', flat=True))
+    else:
+        post_ids = list(Post.objects.filter(admin_only=False).order_by('-date_created').values_list('id', flat=True))
 
-    post_ids = list(Post.objects.order_by('-date_created').values_list('id', flat=True))
+
     if id in post_ids:
 
         index = post_ids.index(id)
@@ -123,7 +127,10 @@ def posts(request, id=-1):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def search(request, word):    
-    posts = Post.objects.filter(Q(content__icontains=word) | Q(title__icontains=word) )
+def search(request, word):
+    if request.user.is_authenticated:
+        posts = Post.objects.filter(Q(content__icontains=word) | Q(title__icontains=word) )
+    else:
+        posts = Post.objects.filter(admin_only=False).filter(Q(content__icontains=word) | Q(title__icontains=word))
     serializer = SearchedPostSerializer(posts[:5], many=True)
     return Response(serializer.data)

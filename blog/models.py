@@ -33,10 +33,12 @@ class Post(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(null=True, blank=True)
     hidden_image = models.ImageField(null=True, blank=True)
-    sources = models.ManyToManyField(Reference)
+    sources = models.ManyToManyField(Reference, blank=True)
     rotten_score = models.PositiveSmallIntegerField(default=4)
 
     pub = models.TextField(max_length=8000, null=True, blank=True)
+
+    admin_only = models.BooleanField(default=False)
 
     statistics = models.OneToOneField(PostStatistics, null=True, blank=True, on_delete=models.CASCADE)
 

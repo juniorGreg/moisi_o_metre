@@ -3,8 +3,13 @@
   <div class="container">
     <div class="posts" v-for="post in posts">
       <div :id="post.id" class="box">
-        <h1 class="title is-size-6-mobile">{{post.title}}</h1>
-        <h2 class="subtitle is-size-7 is-italic">Temps de lecture: environ {{post.statistics.avg_reading_time}} minutes</h2>
+        <h1 class="title is-size-6-mobile">{{post.title}} </h1>
+        <h2 class="subtitle is-size-7 is-italic">
+          Temps de lecture: <span v-if="post.statistics.avg_reading_time > 1"> environ {{post.statistics.avg_reading_time}} minutes </span>
+                            <span v-if="post.statistics.avg_reading_time == 1">environ une minute</span>
+                            <span v-if="post.statistics.avg_reading_time == 0">moins qu'une minute</span>
+                            <span class="has-text-danger" v-if="post.admin_only">ADMIN SEULEMENT</span>
+        </h2>
 
         <div v-if="post.post_type == 'BD'">
             <p class="has-text-justified">{{post.content}}</p>
