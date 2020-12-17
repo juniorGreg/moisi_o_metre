@@ -5,10 +5,15 @@
     Plus que la solution est bleue, plus qu'elle est diluée</p>
 
     <div class="dilution-game">
-      <p>CH: {{ CH }}</p>
-      <p class="format-percent">% de teinture originale: {{ format_percent_tinture }}</p>
-      <p class="has-text-weight-bold">{{ message }}</p>
-
+      <p>CH: <transition mode="out-in" name="fade"> <span :key="CH">{{ CH }} </span></transition></p>
+      <p class="format-percent">% de teinture originale:
+        <transition mode="out-in" name="fade">
+          <span :key="format_percent_tinture">{{ format_percent_tinture }}
+        </span></transition>
+      </p>
+      <transition mode="out-in" name="fade">
+          <p class="has-text-weight-bold" :key="message">{{ message }}</p>
+      </transition>
       <div id="solution" :style="{ 'background-color': 'hsl(200, '+ saturation + '%, '+ lighness +'%)'}">
       </div>
 
@@ -124,5 +129,14 @@ export default {
 
 .format-percent{
   word-break: break-all;
+}
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

@@ -30,14 +30,14 @@
               <HiddenImage :image_src="post.image" :hidden_image_src="post.hidden_image" />
           </div>
 
-          <div>
+          <div v-if="post.content">
             <vue-showdown :markdown="post.content" :extensions="['targetlink']">
           </div>
 
           <div v-if="post.rottenpoint_set.length > 0 ">
             <div v-for="point in post.rottenpoint_set">
               <h2 class="subtitle is-size-6-mobile has-text-weight-bold">{{point.title}}</h2>
-        
+
               <div>
                 <vue-showdown :markdown="point.description">
               </div>
