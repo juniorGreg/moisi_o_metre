@@ -29,7 +29,7 @@
 
     <h2 class="subtitle">{{website.title}}</h2>
 
-    <p>Il y a environ {{website.score}} % selon Bullshit-O-Mètre</p>
+    <p>Il y a environ {{website.score}} % de b*llshit selon le B*llshit-O-Mètre</p>
   </div>
 </div>
 </template>

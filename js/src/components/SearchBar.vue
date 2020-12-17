@@ -79,9 +79,6 @@ export default {
     searched_word: function(){
       this.fetchSearchedPosts();
     },
-    dark_mode: {
-
-    }
   },
   updated: function(){
 

@@ -35,10 +35,9 @@
           </div>
 
           <div v-if="post.rottenpoint_set.length > 0 ">
-            <h2 class="subtitle is-size-6-mobile">Les Points Moisis</h2>
             <div v-for="point in post.rottenpoint_set">
-              <h3 class="has-text-weight-bold">{{point.title}}</h3>
-              <br>
+              <h2 class="subtitle is-size-6-mobile has-text-weight-bold">{{point.title}}</h2>
+        
               <div>
                 <vue-showdown :markdown="point.description">
               </div>

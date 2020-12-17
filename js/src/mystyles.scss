@@ -1,5 +1,9 @@
 @charset "utf-8";
 
+html.preload, .preload * {
+  transition: none !important;
+}
+
 
 @font-face {
   font-family: "Josefin";

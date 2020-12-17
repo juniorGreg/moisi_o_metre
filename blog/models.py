@@ -28,7 +28,7 @@ class Post(models.Model):
 
     post_type = models.CharField(max_length=10, choices=POST_TYPE, default='CRITIC')
     title = models.CharField(max_length=400)
-    content = models.TextField(max_length=8000)
+    content = models.TextField(max_length=8000, blank=True)
     date_modified = models.DateTimeField(auto_now=True)
     date_created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(null=True, blank=True)

@@ -9,7 +9,7 @@ axios.defaults.xsrfCookieName = 'csrftoken'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
+  state: () => ({
     posts: [],
     post_ids: [],
     post_index: 0,
@@ -22,7 +22,7 @@ export default new Vuex.Store({
     new_searched_post_active: false,
     dark_mode: false
 
-  },
+  }),
   mutations: {
     ADD_POST: (state, post) => {
       function formatPost(post){
@@ -115,7 +115,7 @@ export default new Vuex.Store({
 
     SET_DARK_MODE: (state, value) => {
       state.dark_mode = value
-      //console.log(value);
+      console.log(state);
       localStorage.setItem("darkMode", JSON.stringify(value));
     }
 

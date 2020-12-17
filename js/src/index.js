@@ -70,13 +70,14 @@ if(navapp)
     },
 
     created: function(){
-      this.getDarkMode();
-
-
+        this.getDarkMode();
     },
 
     mounted: function(){
-      //document.body.classList.add("dark-mode-transition");
+      setTimeout(() => {
+        console.log("preload")
+        document.documentElement.classList.remove("preload");
+      }, 1000);
     },
 
     watch: {

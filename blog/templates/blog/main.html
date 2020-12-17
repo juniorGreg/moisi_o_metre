@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="fr" dir="ltr" class="has-navbar-fixed-top">
+<html lang="fr" dir="ltr" class="preload has-navbar-fixed-top">
   <head>
     <meta charset="utf-8">
     <title>Moisi O Mètre</title>
@@ -60,7 +60,7 @@
         <div :class="{'is-active': isActive}" id="navbarBasic" class="navbar-menu">
           <div class="navbar-end is-size-7">
             <a class="navbar-item" href="{% url 'bullshit' %}">B*llshit O Mètre</a>
-            <!-- <a class="navbar-item" href="{% url 'quiz' %}">Quiz</a> -->
+            <a class="navbar-item" href="{% url 'quiz' %}">Jeux et Quiz</a> 
             <a class="navbar-item" href="{% url 'references' %}">Références</a>
             <a class="navbar-item" href="{% url 'about' %}">À propos</a>
             <a class="navbar-item" href="{% url 'contact' %}">Contact</a>
@@ -100,6 +100,6 @@
 
 
     <script type="text/javascript" src="{% static 'index.js' %}"></script>
-    
+
   </body>
 </html>
