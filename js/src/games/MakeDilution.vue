@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="box">
+
     <h2 class="subtitle is-size-6-mobile">Faîtes votre propre dilution homéopathique</h2>
     <p>En partant d'une teinture mère, faîtes votre propre dilution homéopathique en CH.
     Plus que la solution est bleue, plus qu'elle est diluée</p>

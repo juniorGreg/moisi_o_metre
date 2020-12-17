@@ -111,7 +111,7 @@ def bullshit_o_metre(request):
     return render(request, "blog/bullshit_o_metre.html", context)
 
 def quiz(request):
-    context = get_main_context("Quiz", 'Les quiz le MoisiOMètre', "/quiz")
+    context = get_main_context("Quiz", 'Les quiz du MoisiOMètre', "/quiz")
     return render(request, "blog/quiz.html", context)
 
 
