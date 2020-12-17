@@ -24,7 +24,8 @@
     "vue-template-compiler": "^2.6.12",
     "webpack": "^4.43.0",
     "webpack-bundle-tracker": "^1.0.0-alpha.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "node-forge": ">=0.10.0"
   },
   "dependencies": {
     "@vue/compiler-sfc": "^3.0.0",
