@@ -20,7 +20,8 @@ export default new Vuex.Store({
     searched_post_id: 0,
     searched_post_active: false,
     new_searched_post_active: false,
-    dark_mode: false
+    dark_mode: false,
+    is_snowing: false
 
   }),
   mutations: {
@@ -117,6 +118,10 @@ export default new Vuex.Store({
       state.dark_mode = value
       console.log(state);
       localStorage.setItem("darkMode", JSON.stringify(value));
+    },
+
+    SET_IS_SNOWING: (state, value) => {
+      state.is_snowing = value
     }
 
   },
@@ -208,6 +213,19 @@ export default new Vuex.Store({
       if(darkMode){
         context.commit("SET_DARK_MODE", JSON.parse(darkMode));
       }
+    },
+
+    isSnowing: (context) => {
+
+      var d = new Date();
+      var month = d.getMonth();
+      var date = d.getDate();
+
+      if((month === 11 && date === 25) ||
+          (month === 0 && date === 1)){
+        context.commit("SET_IS_SNOWING", true)
+      }
+
     }
   },
   getters: {

@@ -6,6 +6,8 @@ import AppBull from "./AppBull";
 import AppBullLabel from "./AppBullLabel";
 import AppQuiz  from "./AppQuiz";
 import SearchBar from "./components/SearchBar.vue";
+import Snows from './components/Snows.vue';
+
 import store from "./store";
 
 var app = document.getElementById("app");
@@ -13,6 +15,7 @@ var appbull = document.getElementById("app-bull");
 var appbulllabel = document.getElementById("app-bull-label");
 var appquiz = document.getElementById("app-quiz");
 var navapp = document.getElementById("nav-app");
+
 
 import { mapState , mapMutations , mapActions } from 'vuex';
 
@@ -33,7 +36,7 @@ if(navapp)
   new Vue({
     el: '#nav-app',
     store: store,
-    components: { SearchBar },
+    components: { SearchBar , Snows },
     data(){
       return {
         isActive: false
@@ -43,7 +46,8 @@ if(navapp)
     computed: {
       ...mapState([
         "post_ids",
-        "dark_mode"
+        "dark_mode",
+        "is_snowing"
       ]),
       showLoupe: function(){
         return this.post_ids.length > 0
@@ -53,7 +57,8 @@ if(navapp)
     methods: {
       ...mapActions([
         "toggleSearchBar",
-        "getDarkMode"
+        "getDarkMode",
+        "isSnowing"
       ]),
       ...mapMutations([
         "SET_DARK_MODE"
@@ -78,6 +83,8 @@ if(navapp)
         console.log("preload")
         document.documentElement.classList.remove("preload");
       }, 1000);
+
+      this.isSnowing();
     },
 
     watch: {

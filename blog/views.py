@@ -28,7 +28,7 @@ def get_main_context(tag_title, tag_desc, tag_url, tag_image="/images/moisiometr
         'url': 'https://%s%s' % (Site.objects.get_current().domain, tag_url)
     }
 
-    context = {'tag': tag}
+    context = {'debug': settings.DEBUG, 'tag': tag}
 
     return context
 

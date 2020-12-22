@@ -21,20 +21,23 @@
     <meta property="og:site_name" content="Moisi-O-Metre">
     <meta name="twitter:image:alt" content="Alt text for image">
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B944J55XNM"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    {% if not debug %}
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-B944J55XNM"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-      gtag('config', 'G-B944J55XNM');
-    </script>
+        gtag('config', 'G-B944J55XNM');
+      </script>
+    {% endif %}
 
   </head>
   <body>
 
   <div id="nav-app">
+    <snows v-if="is_snowing" snowflake_img="{% static '/images/neige.png' %}"></snows>
     <nav class="navbar is-fixed-top is-transparent" role="navigation" aria-label="main navigation">
       <div class="container">
         <div class="navbar-brand">
@@ -60,7 +63,7 @@
         <div :class="{'is-active': isActive}" id="navbarBasic" class="navbar-menu">
           <div class="navbar-end is-size-7">
             <a class="navbar-item" href="{% url 'bullshit' %}">B*llshit O Mètre</a>
-            <a class="navbar-item" href="{% url 'quiz' %}">Jeux et Quiz</a> 
+            <a class="navbar-item" href="{% url 'quiz' %}">Jeux et Quiz</a>
             <a class="navbar-item" href="{% url 'references' %}">Références</a>
             <a class="navbar-item" href="{% url 'about' %}">À propos</a>
             <a class="navbar-item" href="{% url 'contact' %}">Contact</a>
