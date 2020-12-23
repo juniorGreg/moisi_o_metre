@@ -7,6 +7,7 @@ import AppBullLabel from "./AppBullLabel";
 import AppQuiz  from "./AppQuiz";
 import SearchBar from "./components/SearchBar.vue";
 import Snows from './components/Snows.vue';
+import AppStore from './AppStore';
 
 import store from "./store";
 
@@ -15,6 +16,7 @@ var appbull = document.getElementById("app-bull");
 var appbulllabel = document.getElementById("app-bull-label");
 var appquiz = document.getElementById("app-quiz");
 var navapp = document.getElementById("nav-app");
+var appstore = document.getElementById("app-store")
 
 
 import { mapState , mapMutations , mapActions } from 'vuex';
@@ -127,5 +129,12 @@ if(appquiz){
   new Vue({
     el: "#app-quiz",
     components: {AppQuiz},
+  })
+}
+
+if(appstore){
+  new Vue({
+    el: '#app-store',
+    components: {AppStore}
   })
 }

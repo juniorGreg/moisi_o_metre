@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import django_heroku
+import base64
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,6 +31,13 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "moisi-o-metre.herokuapp.com"]
 
 BULLSHIT_O_METRE_API = os.environ['BULLSHIT_O_METRE_API']
 
+#Encode printful api key in base64
+data = os.environ['PRINTFUL_API_KEY']
+urlSafeEncodedBytes = base64.urlsafe_b64encode(data.encode("utf-8"))
+urlSafeEncodedStr = str(urlSafeEncodedBytes, "utf-8")
+
+
+PRINTFUL_API_KEY = urlSafeEncodedStr
 
 # Application definition
 

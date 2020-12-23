@@ -20,5 +20,7 @@ urlpatterns = [
     path('support', views.support, name="support"),
     path('bullshit', views. bullshit_o_metre, name="bullshit"),
     path("quiz", views.quiz, name="quiz"),
+    path("store", views.store, name="store"),
+    path("store_products", views.store_products, name="store_products"),
     path("search/<str:word>", views.search, name="search")
 ]

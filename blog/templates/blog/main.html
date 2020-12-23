@@ -68,7 +68,7 @@
             <a class="navbar-item" href="{% url 'about' %}">À propos</a>
             <a class="navbar-item" href="{% url 'contact' %}">Contact</a>
             <a class="navbar-item" href="{% url 'support' %}">Supportez le blog</a>
-            <a class="navbar-item" href="https://www.redbubble.com/fr/people/moisiometre/shop?asc=u" target="_blank">Boutique</a>
+            <a class="navbar-item" href="{% url 'store' %}" >Boutique</a>
             <a class="navbar-item" role="button" @click="toggleDarkMode">
               <img src="{% static '/images/dark_mode_icon.svg' %}" alt="icon mode sombre">
             </a>
