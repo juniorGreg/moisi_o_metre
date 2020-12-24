@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "blog.apps.BlogConfig",
     "bullshit_o_metre.apps.BullshitOMetreConfig",
+    "store.apps.StoreConfig",
     "storages",
     'django.contrib.sites',
     'django.contrib.sitemaps'

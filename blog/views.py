@@ -114,9 +114,7 @@ def quiz(request):
     context = get_main_context("Quiz", 'Les quiz du MoisiOMètre', "/quiz")
     return render(request, "blog/quiz.html", context)
 
-def store(request):
-    context = get_main_context("Boutique", "La boutique du MoisiOMètre", "/store")
-    return render(request, "blog/store.html", context)
+
 
 
 
@@ -139,14 +137,3 @@ def search(request, word):
         posts = Post.objects.filter(admin_only=False).filter(Q(content__icontains=word) | Q(title__icontains=word))
     serializer = SearchedPostSerializer(posts[:5], many=True)
     return Response(serializer.data)
-
-
-#API STORE
-import requests
-API_PRINTFUL = "https://api.printful.com/%s"
-HEADERS = {'Authorization': 'Basic %s' % settings.PRINTFUL_API_KEY}
-
-@api_view(['GET'])
-def store_products(request):
-    r = requests.get(API_PRINTFUL % "store/products", headers=HEADERS)
-    return Response(r.json())
