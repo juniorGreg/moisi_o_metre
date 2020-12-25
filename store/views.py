@@ -26,5 +26,5 @@ HEADERS = {'Authorization': 'Basic %s' % settings.PRINTFUL_API_KEY }
 
 @api_view(['GET'])
 def products(request):
-    r = requests.get(API_PRINTFUL % "store/products", headers=HEADERS)
+    r = requests.get(API_PRINTFUL % "sync/products", headers=HEADERS)
     return Response(r.json())
