@@ -115,20 +115,34 @@ def update_store_products(new_data):
 
 
                 for variant in sync_variants:
-                    print(variant["id"])
+
                     reg_variant, created = Variant.objects.get_or_create(id = variant["id"])
                     reg_variant.name = variant["name"]
                     reg_variant.price = variant["retail_price"]
                     reg_variant.product = reg_product
 
+                    #Parse color and size of the variant by the name
+                    p1 = re.compile(" - ([A-Za-z ]*) / ([0-9 XSML]{1,3})$")
+                    m1 = p1.search(reg_variant.name)
+
+                    p2 = re.compile(" - ([A-Za-z ]*)$")
+                    m2 = p2.search(reg_variant.name)
+
+                    if m1:
+                        reg_variant.color = m1.group(1).lower()
+                        reg_variant.size = m1.group(2)
+                    elif m2:
+                        reg_variant.color = m2.group(1).lower()
+
                     if created:
+                        
                         reg_variant.variant_id = variant["variant_id"]
                         reg_variant.external_id = variant["external_id"]
 
                         #Parse color and size of the variant by the name
                         p = re.compile(" - ([A-Za-z ]*) / ([0-9 XSML]{1,3})$")
 
-                        m = p.match(req_variant.name)
+                        m = p.search(reg_variant.name)
 
                         if m:
                             reg_variant.color = m.group(1).lower()
@@ -141,11 +155,11 @@ def update_store_products(new_data):
 
                         for file in files:
                             if file["type"] == "preview":
-                                upload_image_to_model(req_variant.thumbnail, file["thumbnail_url"])
-                                upload_image_to_model(req_variants.preview, file["preview_url"])
+                                upload_image_to_model(reg_variant.thumbnail, file["thumbnail_url"])
+                                upload_image_to_model(reg_variant.preview, file["preview_url"])
                                 break
 
-                    req_variant.save()
+                    reg_variant.save()
 
 
 

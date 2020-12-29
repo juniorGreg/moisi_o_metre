@@ -27,15 +27,18 @@ class Variant(models.Model):
         ('5XL', '5X Large')
     )
     id = models.PositiveBigIntegerField(primary_key=True)
-    variant_id = models.PositiveBigIntegerField()
+    variant_id = models.PositiveBigIntegerField(null=True)
     external_id = models.CharField(max_length=26)
     name = models.CharField(max_length=200)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     color = models.CharField(max_length=50)
     size = models.CharField(max_length=3, choices=SIZE_TYPE)
     thumbnail = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)
     preview = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)
-    price = models.FloatField()
+    price = models.FloatField(null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Order(models.Model):
