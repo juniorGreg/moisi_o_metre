@@ -17,7 +17,7 @@ from .serializers import PostSerializer, SearchedPostSerializer
 
 
 
-def get_main_context(tag_title, tag_desc, tag_url, tag_image="/images/moisiometre.png"):
+def get_main_context(tag_title, tag_desc, tag_url, tag_image="/images/moisiometre.png", main_title=None):
     if "http" not in tag_image:
         tag_image = static(tag_image)
 
@@ -28,7 +28,10 @@ def get_main_context(tag_title, tag_desc, tag_url, tag_image="/images/moisiometr
         'url': 'https://%s%s' % (Site.objects.get_current().domain, tag_url)
     }
 
-    context = {'debug': settings.DEBUG, 'tag': tag}
+    if main_title is None:
+        main_title = tag_title
+
+    context = {'debug': settings.DEBUG, 'tag': tag, 'main_title': main_title}
 
     return context
 
@@ -53,9 +56,9 @@ def index(request, id=-1):
     post = Post.objects.get(id=post_ids[0])
 
     if post.image:
-        context = get_main_context(post.title[0:70], post.content[:200], post.get_absolute_url(),  post.image.url)
+        context = get_main_context(post.title[0:70], post.content[:200], post.get_absolute_url(),  post.image.url, main_title="Blog")
     else:
-        context = get_main_context(post.title[0:70], post.content[:200], post.get_absolute_url())
+        context = get_main_context(post.title[0:70], post.content[:200], post.get_absolute_url(), main_title="Blog")
 
     context["post_ids"] = post_ids
 
@@ -106,7 +109,7 @@ def contact(request):
 
 def bullshit_o_metre(request):
 
-    context = get_main_context("Bullshit O Mètre", "Évaluateur expérimental de bullshit", "/bullshit")
+    context = get_main_context("B*llshit O Mètre", "Évaluateur expérimental de bullshit", "/bullshit")
 
     return render(request, "blog/bullshit_o_metre.html", context)
 

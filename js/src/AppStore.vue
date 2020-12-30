@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="container">
-    <h1 class="title is-size-6-mobile">La boutique du MoisiOMètre</h1>
+  
 
       <div v-for="index in lines_number" :key="index" class="tile is-ancestor">
 

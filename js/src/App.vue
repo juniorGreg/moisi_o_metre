@@ -20,7 +20,7 @@
             <br>
         </div>
 
-        <div v-else>
+        <div class="post-content" v-else>
           <div v-if="post.image && !post.hidden_image" class="no-dark-mode">
             <img class="image-post is-hidden-mobile no-dark-mode" :src="post.image" alt="imâge">
             <img class="image-post-mobile is-hidden-tablet no-dark-mode" :src="post.image" alt="imâge">

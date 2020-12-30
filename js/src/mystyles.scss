@@ -6,8 +6,10 @@ html.preload, .preload * {
 
 
 @font-face {
-  font-family: "Josefin";
-  src: url('./fonts/JosefinSans-VariableFont_wght.ttf') format('truetype');
+  font-family: "Josefin Sans";
+  src: url('./fonts/JosefinSans-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 1 999;
+  //font-style: normal;
 }
 
 $navbar-item-color: lightgrey;
@@ -28,7 +30,7 @@ $box-padding: 1rem;
 
 $notification-padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 
-$navbar-breakpoint: 1026px;
+$navbar-breakpoint: 1400px;
 
 $dark-mode-transition-time: 1s;
 
@@ -39,7 +41,7 @@ html, section * {
 }
 
 
-
+//Dark Mode style
 section.dark-mode {
     p, h1, h2, h3, h4, h5, .text, img:not(.no-dark-mode),
 
@@ -78,6 +80,8 @@ article.panel.dark-mode {
     filter: invert(1) hue-rotate(3.1416rad);
   }
 }
+
+// End DarkMode Style
 
 html {
   height: 100%;
@@ -123,7 +127,7 @@ a {
   width: 20%;
 }
 
-$body-family: "Josefin";
+$body-family: "Josefin Sans";
 
 @import "~bulma/bulma";
 @import "~@creativebulma/bulma-tooltip";
@@ -155,8 +159,30 @@ p {
 }
 
 .supertitle{
-  padding-top:2rem;
+  padding-top:1.5rem;
+
+  h2 {
+    padding-top: 0.2rem;
+    //padding-bottom: -0.1rem;
+  }
 }
+
+.subtitle .main-title {
+  font-weight: 300;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.navbar-item.banner {
+  padding-right: 0.05rem;
+}
+
+.post-content h2 {
+  padding-top: 0.5rem;
+}
+
+
+
 
 @media screen and (max-width:768px){
   .navbar-item img {
@@ -164,13 +190,20 @@ p {
   }
 
   .hero-body img{
-    height: 3rem;
-    width:3rem;
+    margin-top: 0.2rem;
+    height: 4rem;
+    width: 4rem;
     margin-right:1rem;
   }
 
   .supertitle{
-    padding-top:0.2rem;
+    padding-top:0.3rem;
+  }
+
+  .subtitle .main-title {
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 0.5rem;
   }
 }
 

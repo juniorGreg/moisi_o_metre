@@ -41,7 +41,7 @@
     <nav class="navbar is-fixed-top is-transparent" role="navigation" aria-label="main navigation">
       <div class="container">
         <div class="navbar-brand">
-            <a class="navbar-item" href="{% url 'index' %}">
+            <a class="navbar-item banner" href="{% url 'index' %}">
               <img src="{% static '/images/moisibanner.svg' %}">
             </a>
 
@@ -85,13 +85,17 @@
     </div>
 
   </div>
-    <section class="hero is-dark is-bold">
+    <section class="hero is-dark is-bold is-small">
       <div class="hero-body">
         <div class="container">
             <img src="{% static '/images/moisiometre.svg' %}" alt="moisimetre">
             <div class="supertitle">
               <h1 class="title is-size-6-mobile">Moisi O Mètre</h1>
-              <h2 class="subtitle is-size-7-mobile">Le baromètre des arguments moisis</h2>
+              <h2 class="subtitle is-size-7-mobile">Le baromètre des arguments moisis
+                <br>
+                <span class="main-title">{{ main_title }}</span>
+              </h2>
+
             </div>
           </div>
       </div>

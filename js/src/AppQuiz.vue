@@ -1,7 +1,6 @@
 <template lang="html">
   <div class="container">
-    <h1 class="title is-size-6-mobile">Les quiz de MoisiOMètre</h1>
-
+    
   <!-- <quiz-bayes></quiz-bayes> -->
   <make-dilution></make-dilution>
 
