@@ -2,42 +2,97 @@
   <div class="container">
     <h1 class="title is-size-6-mobile">La boutique du MoisiOMètre</h1>
 
-    <div class="tile is-ancestor">
+      <div v-for="index in lines_number" :key="index" class="tile is-ancestor">
 
-        <div class="tile is-parent">
-          <div class="tile is-child box">
-            <p class="title">One</p>
-          </div>
-        </div>
+        <div v-for="product in getSliceProducts(index)" class="tile is-parent">
+          <div class="tile is-child box" @click="showVariants">
+            <p class="title is-size-6">{{product.name}}</p>
 
-        <div class="tile is-parent">
-          <div class="tile is-child box">
-            <p class="title">Two</p>
-          </div>
-        </div>
-
-        <div class="tile is-parent">
-          <div class="tile is-child box">
-            <p class="title">Three</p>
-          </div>
-        </div>
-
-        <div class="tile is-parent">
-          <div class="tile is-child box">
-            <p class="title">Three</p>
+            <figure class="image ">
+              <img class="no-dark-mode" :src="product.thumbnail" alt="product image">
+            </figure>
+            <br>
+            <p>{{product.variant_set[0].price}} $ CAD</p>
           </div>
         </div>
 
       </div>
-    </div>
 
   </div>
+
 </template>
 
 <script>
+
+import { mapState , mapMutations , mapActions } from 'vuex';
+import Variants from './components/Variants.vue'
+
 export default {
+  components: {
+      Variants
+  },
+
+  data: function(){
+    return {
+        columns_number: 3
+    }
+
+  },
+  computed: {
+    ...mapState([
+      "products"
+    ]),
+
+    lines_number: function() {
+
+      return Math.ceil(this.products.length / this.columns_number);
+    }
+  },
+
+  methods: {
+    ...mapActions([
+      "getProducts"
+    ]),
+
+    ...mapMutations([
+      "SET_IS_STORE"
+    ]),
+
+    getSliceProducts: function(index){
+
+      var index0 = (index - 1) * this.columns_number;
+      var index1 = index0 + this.columns_number;
+
+      if (index1 > this.products.length) {
+        index1 = this.products.length;
+      }
+
+      console.log(index1)
+
+      return this.products.slice(index0, index1)
+
+    },
+
+    showVariants: function() {
+      console.log("variants");
+    }
+  },
+
+  mounted: function(){
+    this.getProducts();
+    this.SET_IS_STORE(true);
+  }
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+  .tile.is-child.box {
+
+    cursor: pointer;
+    filter: grayscale(100%);
+    &:hover {
+      filter: grayscale(0%);
+
+    }
+  }
 </style>

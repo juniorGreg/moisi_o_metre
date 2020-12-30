@@ -49,7 +49,8 @@ if(navapp)
       ...mapState([
         "post_ids",
         "dark_mode",
-        "is_snowing"
+        "is_snowing",
+        "is_store"
       ]),
       showLoupe: function(){
         return this.post_ids.length > 0
@@ -135,6 +136,7 @@ if(appquiz){
 if(appstore){
   new Vue({
     el: '#app-store',
-    components: {AppStore}
+    components: {AppStore},
+    store: store
   })
 }

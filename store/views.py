@@ -135,7 +135,7 @@ def update_store_products(new_data):
                         reg_variant.color = m2.group(1).lower()
 
                     if created:
-                        
+
                         reg_variant.variant_id = variant["variant_id"]
                         reg_variant.external_id = variant["external_id"]
 
@@ -160,13 +160,6 @@ def update_store_products(new_data):
                                 break
 
                     reg_variant.save()
-
-
-
-
-
-
-
 
     print("update_ products")
 

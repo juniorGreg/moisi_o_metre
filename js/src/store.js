@@ -21,7 +21,10 @@ export default new Vuex.Store({
     searched_post_active: false,
     new_searched_post_active: false,
     dark_mode: false,
-    is_snowing: false
+    is_snowing: false,
+    is_store: false,
+    products: [],
+    basket: []
 
   }),
   mutations: {
@@ -122,7 +125,28 @@ export default new Vuex.Store({
 
     SET_IS_SNOWING: (state, value) => {
       state.is_snowing = value
+    },
+
+    ADD_PRODUCTS: (state, value) => {
+      state.products = state.products.concat(value)
+      //remove duplicates
+
+      state.products = [...new Set(state.products)]
+    },
+
+    SET_IS_STORE: (state, value) => {
+      state.is_store = value
+    },
+
+    ADD_PRODUCT_TO_BASKET: (state, value) => {
+      state.basket.push(value);
+    },
+
+    REMOVE_PRODUCT_FROM_BASKET: (state, value) => {
+
     }
+
+
 
   },
   actions: {
@@ -225,7 +249,12 @@ export default new Vuex.Store({
           (month === 0 && date === 1)){
         context.commit("SET_IS_SNOWING", true)
       }
+    },
 
+    getProducts: (context) => {
+      axios.get("/store/products").then(response => {
+        context.commit("ADD_PRODUCTS", response.data)
+      })
     }
   },
   getters: {

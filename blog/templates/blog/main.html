@@ -50,6 +50,10 @@
                 <img src="{% static '/images/loupe.svg' %}" alt="loupe de recherche">
               </a>
 
+              <a  v-if="is_store" class="navbar-item" role="button" @click="toggleSearchBar">
+                <img src="{% static '/images/loupe.svg' %}" alt="loupe de recherche">
+              </a>
+
 
 
             <a role="button" :class="{'is-active': isActive}" @click="toggleMenu()" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
