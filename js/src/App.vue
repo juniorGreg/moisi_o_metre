@@ -219,8 +219,8 @@ export default {
      scrollToPost: function(){
         var postElement = document.getElementById(this.searched_post_id);
         if(postElement){
-          postElement.scrollIntoView();
-          window.scrollBy(0, -80);
+          postElement.scrollIntoView({behavior: "smooth"});
+          window.scrollBy(0, -100);
         }
       },
 

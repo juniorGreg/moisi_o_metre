@@ -1,11 +1,11 @@
 <template lang="html">
   <div class="container">
-  
+    <variants></variants>
 
       <div v-for="index in lines_number" :key="index" class="tile is-ancestor">
 
         <div v-for="product in getSliceProducts(index)" class="tile is-parent">
-          <div class="tile is-child box" @click="showVariants">
+          <div class="tile is-child box" @click="toggleVariantModal">
             <p class="title is-size-6">{{product.name}}</p>
 
             <figure class="image ">
@@ -51,7 +51,8 @@ export default {
 
   methods: {
     ...mapActions([
-      "getProducts"
+      "getProducts",
+      "toggleVariantModal"
     ]),
 
     ...mapMutations([

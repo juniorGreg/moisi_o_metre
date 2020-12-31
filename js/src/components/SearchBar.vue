@@ -1,6 +1,6 @@
 <template lang="html">
 
-    <div class="modal" :class="{'is-active': isSearchBarVisible}">
+    <div class="modal is-active" :style="{ 'opacity': opacity , 'pointer-events': pointer_events }" >
         <div class="modal-background" @click="toggleSearchBar"></div>
         <div class="modal-content">
           <article class="panel is-dark" :class="{'dark-mode': dark_mode}">
@@ -31,16 +31,12 @@
 
 <script>
 
-import axios from 'axios'
-
-axios.defaults.xsrfHeaderName = "X-CSRFToken"
-axios.defaults.xsrfCookieName = 'csrftoken'
 
 import { mapState , mapMutations , mapActions } from 'vuex';
 
 
 export default {
-  emits: ['searchedpostidevent'],
+
 
   data() {
     return {
@@ -52,7 +48,7 @@ export default {
   },
   computed: {
       ...mapState([
-        'isSearchBarVisible',
+        'is_search_bar_visible',
         'searched_posts',
         'dark_mode'
       ]),
@@ -66,7 +62,24 @@ export default {
 
             this.$store.commit("SET_SEARCHED_WORD", value)
           }
+      },
+
+      opacity: function(){
+        if(this.is_search_bar_visible){
+          return 1.0
+        }else{
+          return 0.0
+        }
+      },
+      pointer_events: function(){
+        if(this.is_search_bar_visible){
+            return 'auto';
+        }else {
+          return 'none'
+        }
       }
+
+
   },
   methods: {
       ...mapActions([
@@ -79,10 +92,14 @@ export default {
     searched_word: function(){
       this.fetchSearchedPosts();
     },
+
+    is_search_bar_visible: function(){
+
+    }
   },
   updated: function(){
 
-    if(this.isSearchBarVisible){
+    if(this.is_search_bar_visible){
         //console.log("updated");
         var searchBarInput = document.getElementById("searchBarInput");
         searchBarInput.focus();
@@ -96,6 +113,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
+  .modal {
+    transition: opacity 1s;
+  }
+
   .panel {
     background-color: white
   }

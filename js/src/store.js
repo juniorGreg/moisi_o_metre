@@ -14,7 +14,7 @@ export default new Vuex.Store({
     post_ids: [],
     post_index: 0,
     query_active: false,
-    isSearchBarVisible: false,
+    is_search_bar_visible: false,
     searched_posts: [],
     searched_word: "",
     searched_post_id: 0,
@@ -22,7 +22,9 @@ export default new Vuex.Store({
     new_searched_post_active: false,
     dark_mode: false,
     is_snowing: false,
+    //store states
     is_store: false,
+    is_variant_visible: false,
     products: [],
     basket: []
 
@@ -90,7 +92,7 @@ export default new Vuex.Store({
     },
 
     SET_IS_SEARCH_BAR_VISIBLE: (state, value) => {
-      state.isSearchBarVisible = value
+      state.is_search_bar_visible = value
     },
 
     SET_QUERY_ACTIVE: (state, value) => {
@@ -144,6 +146,10 @@ export default new Vuex.Store({
 
     REMOVE_PRODUCT_FROM_BASKET: (state, value) => {
 
+    },
+
+    SET_IS_VARIANT_VISIBLE: (state, value) => {
+      state.is_variant_visible = value
     }
 
 
@@ -228,7 +234,8 @@ export default new Vuex.Store({
 
     toggleSearchBar: (context) => {
 
-      var newState = !context.state.isSearchBarVisible;
+      var newState = !context.state.is_search_bar_visible;
+      console.log(newState);
       context.commit("SET_IS_SEARCH_BAR_VISIBLE", newState);
     },
 
@@ -255,6 +262,11 @@ export default new Vuex.Store({
       axios.get("/store/products").then(response => {
         context.commit("ADD_PRODUCTS", response.data)
       })
+    },
+
+    toggleVariantModal: (context) => {
+      var newState = !context.state.is_variant_visible
+      context.commit("SET_IS_VARIANT_VISIBLE", newState)
     }
   },
   getters: {
