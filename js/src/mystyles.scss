@@ -25,7 +25,8 @@ $navbar-background-color: black;
 
 $dimensions: 16 24 32 48 64 96 128 256;
 
-$section-padding: 3rem 1rem;
+$section-padding: 1rem 1rem;
+
 $box-padding: 1rem;
 
 $notification-padding: 0.5rem 0.5rem 0.5rem 0.5rem;
@@ -40,6 +41,10 @@ html, section * {
   filter $dark-mode-transition-time;
 }
 
+.box {
+  max-width: 1200px;
+  margin: auto;
+}
 
 //Dark Mode style
 section.dark-mode {

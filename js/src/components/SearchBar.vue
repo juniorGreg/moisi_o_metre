@@ -1,7 +1,7 @@
 <template lang="html">
 
     <div class="modal is-active" :style="{ 'opacity': opacity , 'pointer-events': pointer_events }" >
-        <div class="modal-background" @click="toggleSearchBar"></div>
+        <div class="modal-background" @click="hideSearchBar"></div>
         <div class="modal-content">
           <article class="panel is-dark" :class="{'dark-mode': dark_mode}">
             <p class="panel-heading">
@@ -24,7 +24,7 @@
           </article>
         </div>
 
-        <button class="modal-close is-large" aria-label="close"  @click="toggleSearchBar"></button>
+        <button :style="{'pointer-events': pointer_events}" class="modal-close is-large" aria-label="close"  @click="hideSearchBar"></button>
     </div>
 
 </template>
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
       ...mapActions([
-        'toggleSearchBar',
+        'hideSearchBar',
         'fetchSearchedPosts',
         'getSearchedPost'
       ]),
@@ -91,10 +91,6 @@ export default {
   watch: {
     searched_word: function(){
       this.fetchSearchedPosts();
-    },
-
-    is_search_bar_visible: function(){
-
     }
   },
   updated: function(){
@@ -104,8 +100,6 @@ export default {
         var searchBarInput = document.getElementById("searchBarInput");
         searchBarInput.focus();
 
-    }else{
-        //this.$emit("searchedpostidevent", 1);
     }
   }
 

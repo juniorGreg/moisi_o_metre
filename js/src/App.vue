@@ -219,8 +219,10 @@ export default {
      scrollToPost: function(){
         var postElement = document.getElementById(this.searched_post_id);
         if(postElement){
-          postElement.scrollIntoView({behavior: "smooth"});
-          window.scrollBy(0, -100);
+          var postRect = postElement.getBoundingClientRect();
+          var scrollTop = postRect.top + window.scrollY - 50;
+          console.log(scrollTop);
+          window.scrollTo({ top: scrollTop, left: 0, behavior: 'smooth'});
         }
       },
 

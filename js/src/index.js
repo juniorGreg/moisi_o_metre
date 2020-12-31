@@ -59,7 +59,7 @@ if(navapp)
 
     methods: {
       ...mapActions([
-        "toggleSearchBar",
+        "showSearchBar",
         "getDarkMode",
         "isSnowing"
       ]),

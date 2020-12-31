@@ -232,11 +232,12 @@ export default new Vuex.Store({
       }
     },
 
-    toggleSearchBar: (context) => {
+    showSearchBar: (context) => {
+      context.commit("SET_IS_SEARCH_BAR_VISIBLE", true);
+    },
 
-      var newState = !context.state.is_search_bar_visible;
-      console.log(newState);
-      context.commit("SET_IS_SEARCH_BAR_VISIBLE", newState);
+    hideSearchBar: (context) => {
+      context.commit("SET_IS_SEARCH_BAR_VISIBLE", false);
     },
 
     getDarkMode: (context) => {
