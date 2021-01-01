@@ -48,20 +48,24 @@ html, section * {
 
 //Dark Mode style
 section.dark-mode {
-    p:not(.no-dark-mode), div, h1, h2, h3, h4, h5, img:not(.no-dark-mode), button:not(.no-dark-mode),
-
-    label, input, textarea{
+    * :not(a){
     //  background: black;
 
-      filter: invert(1) hue-rotate(3.1416rad);
+      //filter: invert(1) hue-rotate(3.1416rad);
+      color: invert(#4a4a4a);
 
     }
+
+    img:not(.no-dark-mode){
+      filter: invert(1) hue-rotate(3.1416rad);
+    }
+
 
     $dark-mode-background-color: #171717;
 
-    button {
-      background-color: $dark-mode-background-color;
-    }
+      button, input, textarea{
+        background-color: $dark-mode-background-color;
+      }
 
     .box {
       //filter: invert(1) hue-rotate(3.1416rad);
