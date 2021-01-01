@@ -5,13 +5,14 @@
       <div v-for="index in lines_number" :key="index" class="tile is-ancestor">
 
         <div v-for="product in getSliceProducts(index)" class="tile is-parent">
-          <div class="tile is-child box" @click="toggleVariantModal">
+          <div class="tile is-child box" @click="showVariants(product)">
             <p class="title is-size-6">{{product.name}}</p>
 
             <figure class="image ">
               <img class="no-dark-mode" :src="product.thumbnail" alt="product image">
             </figure>
             <br>
+          
             <p>{{product.variant_set[0].price}} $ CAD</p>
           </div>
         </div>
@@ -52,7 +53,7 @@ export default {
   methods: {
     ...mapActions([
       "getProducts",
-      "toggleVariantModal"
+      "showVariantModal"
     ]),
 
     ...mapMutations([
@@ -74,7 +75,8 @@ export default {
 
     },
 
-    showVariants: function() {
+    showVariants: function(product) {
+      this.showVariantModal(product)
       console.log("variants");
     }
   },

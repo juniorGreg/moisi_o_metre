@@ -48,7 +48,7 @@ html, section * {
 
 //Dark Mode style
 section.dark-mode {
-    p, h1, h2, h3, h4, h5, .text, img:not(.no-dark-mode),
+    p:not(.no-dark-mode), div, h1, h2, h3, h4, h5, img:not(.no-dark-mode), button:not(.no-dark-mode),
 
     label, input, textarea{
     //  background: black;

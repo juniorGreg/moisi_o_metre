@@ -25,7 +25,9 @@ export default new Vuex.Store({
     //store states
     is_store: false,
     is_variant_visible: false,
+    selected_product: null,
     products: [],
+
     basket: []
 
   }),
@@ -134,6 +136,10 @@ export default new Vuex.Store({
       //remove duplicates
 
       state.products = [...new Set(state.products)]
+    },
+
+    SET_SELECTED_PRODUCT: (state, value) => {
+      state.selected_product = value;
     },
 
     SET_IS_STORE: (state, value) => {
@@ -265,12 +271,45 @@ export default new Vuex.Store({
       })
     },
 
-    toggleVariantModal: (context) => {
-      var newState = !context.state.is_variant_visible
-      context.commit("SET_IS_VARIANT_VISIBLE", newState)
+    showVariantModal: (context, product) => {
+      context.commit("SET_SELECTED_PRODUCT", product)
+      context.commit("SET_IS_VARIANT_VISIBLE", true)
+    },
+
+    hideVariantModal: (context) => {
+      context.commit("SET_IS_VARIANT_VISIBLE", false)
     }
   },
   getters: {
+      variant_colors: state => {
+        if(state.selected_product){
+          return [ ...new Set(state.selected_product.variant_set.map((variant) => {
 
+            return variant.color;
+          }))]
+        }
+
+        return []
+      },
+
+      variant_sizes: state => {
+        if(state.selected_product){
+          return [ ...new Set(state.selected_product.variant_set.map((variant) => {
+
+            return variant.size;
+          }))].sort((a, b) => {
+            var sizes_order = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
+
+            var orderA = sizes_order.indexOf(a)
+            var orderB = sizes_order.indexOf(b)
+
+            return orderA > orderB;
+
+
+          })
+        }
+
+        return []
+      }
   }
 });

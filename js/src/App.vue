@@ -83,13 +83,13 @@
         </div>
         <br>
 
-        <div class="text is-size-7">Créer le {{post.date_created}}</div>
+        <div class="is-size-7">Créer le {{post.date_created}}</div>
         <div v-if="post.show_modified_date">
-          <div class="text is-size-7">Modifier le {{post.date_modified}}</div>
+          <div class="is-size-7">Modifier le {{post.date_modified}}</div>
         </div>
 
         <div class="buttons has-addons">
-          <div class="text is-shared is-size-6 is-size-7-mobile">
+          <div class="is-shared is-size-6 is-size-7-mobile">
             Partagez:
           </div>
 
