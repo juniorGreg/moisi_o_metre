@@ -286,7 +286,7 @@ export default new Vuex.Store({
       context.commit("SET_IS_VARIANT_VISIBLE", false)
     },
 
-    getVariantBySizeAndColor: (context,size, color) => {
+    getVariantBySizeAndColor: (context, {size, color}) => {
       function isSizeAndColor(variant){
         return variant.size === size && variant.color === color
       }
