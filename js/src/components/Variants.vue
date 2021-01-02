@@ -3,17 +3,21 @@
     <div class="modal-background"></div>
       <div class="modal-content">
         <!-- Any other Bulma elements you want -->
-        <div class="box" v-if="selected_product">
+        <div class="box" v-if="selected_variant">
             <p>{{ selected_product.name }}</p>
             <figure class="image">
-                <img class="no-dark-mode" :src="selected_product.variant_set[variant_index].preview" alt="product image">
+                <img class="no-dark-mode" :src="selected_variant.preview" alt="product image">
             </figure>
             <br>
             <div class="buttons">
               <div class="text is-shared is-size-6 is-size-7-mobile">
                 Couleurs disponibles:
               </div>
-                <button v-for="color in variant_colors" class="button is-small button-color no-dark-mode is-text" :style="{'background-color': getHexColor(color)}">
+                <button v-for="color in variant_colors"
+                        class="button is-small button-color no-dark-mode is-text"
+                        :class="{'is-selected': isColorSelected(color)}"
+                        :style="{'background-color': getHexColor(color)}"
+                        @click="getVariantByColor(color)">
 
                 </button>
 
@@ -22,12 +26,16 @@
               <div class="text is-shared is-size-6 is-size-7-mobile">
                 Grandeur disponibles:
               </div>
-                <button v-for="size in variant_sizes" class="button is-small is-text" >
-                    {{size}}
-                </button>
+              <div class="control is-size-7">
+                  <label v-for="size in variant_sizes" class="radio">
+                      <input type="radio" name="size" :value="size" v-model="selected_size">
+                      {{ size }}
+                  </label>
+              </div>
+
 
             </div>
-            <p>{{ selected_product.variant_set[variant_index].price}}</p>
+            <p>{{ selected_variant.price }}</p>
             <button class="button no-dark-mode is-small is-info">Ajouter au panier</button>
         </div>
 
@@ -41,26 +49,44 @@ import { mapState , mapMutations , mapActions , mapGetters} from 'vuex';
 export default {
   data: function(){
     return {
-      variant_index: 0,
+
       colors: [],
-      sizes: []
+      sizes: [],
+
     }
   },
 
   computed: {
     ...mapState([
       'is_variant_visible',
-      "selected_product"
+      "selected_product",
+      "selected_variant"
     ]),
     ...mapGetters([
       "variant_colors",
       "variant_sizes"
-    ])
+    ]),
+
+    selected_size: {
+      get() {
+
+        return this.selected_variant.size
+
+      },
+      set(size) {
+        //console.log(size)
+        const color = this.selected_variant.color;
+        this.getVariantBySizeAndColor(size, color);
+      }
+    },
+
+
   },
 
   methods: {
     ...mapActions([
-      'hideVariantModal'
+      'hideVariantModal',
+      "getVariantBySizeAndColor"
     ]),
 
     getHexColor: function(color) {
@@ -72,8 +98,20 @@ export default {
       }
 
       return colormap[color];
+    },
+
+    isColorSelected: function(color) {
+      return color === this.selected_variant.color;
+    },
+
+    getVariantByColor: function(color) {
+      const size = this.selected_variant.size;
+      console.log(color)
+      this.getVariantBySizeAndColor(size, color);
     }
-  },
+  }
+
+
 
 }
 </script>
@@ -85,5 +123,21 @@ export default {
     border-radius: 50%;
     background-color: blue;
     border-color: grey;
+    border-width: 2px;
+
+    &:hover, &.is-selected {
+      height: 30px;
+      width: 30px;
+
+    }
+  }
+
+  .button-size {
+    padding: 0.3rem;
+    height: 1.3rem;
+
+    &:hover {
+      padding: 0.4rem;
+    }
   }
 </style>

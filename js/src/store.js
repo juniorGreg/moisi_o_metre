@@ -26,6 +26,7 @@ export default new Vuex.Store({
     is_store: false,
     is_variant_visible: false,
     selected_product: null,
+    selected_variant: null,
     products: [],
 
     basket: []
@@ -140,6 +141,10 @@ export default new Vuex.Store({
 
     SET_SELECTED_PRODUCT: (state, value) => {
       state.selected_product = value;
+    },
+
+    SET_SELECTED_VARIANT: (state, value) => {
+      state.selected_variant = value;
     },
 
     SET_IS_STORE: (state, value) => {
@@ -273,11 +278,22 @@ export default new Vuex.Store({
 
     showVariantModal: (context, product) => {
       context.commit("SET_SELECTED_PRODUCT", product)
+      context.commit("SET_SELECTED_VARIANT", product.variant_set[0])
       context.commit("SET_IS_VARIANT_VISIBLE", true)
     },
 
     hideVariantModal: (context) => {
       context.commit("SET_IS_VARIANT_VISIBLE", false)
+    },
+
+    getVariantBySizeAndColor: (context,size, color) => {
+      function isSizeAndColor(variant){
+        return variant.size === size && variant.color === color
+      }
+
+      const variant = context.state.selected_product.variant_set.find(isSizeAndColor);
+      console.log(color);
+      context.commit("SET_SELECTED_VARIANT", variant)
     }
   },
   getters: {
@@ -298,7 +314,7 @@ export default new Vuex.Store({
 
             return variant.size;
           }))].sort((a, b) => {
-            var sizes_order = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
+            var sizes_order = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', 'N']
 
             var orderA = sizes_order.indexOf(a)
             var orderB = sizes_order.indexOf(b)
@@ -310,6 +326,8 @@ export default new Vuex.Store({
         }
 
         return []
-      }
+      },
+
+
   }
 });
