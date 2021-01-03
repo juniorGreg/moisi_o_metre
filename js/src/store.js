@@ -292,7 +292,7 @@ export default new Vuex.Store({
       }
 
       const variant = context.state.selected_product.variant_set.find(isSizeAndColor);
-      console.log(color);
+
       context.commit("SET_SELECTED_VARIANT", variant)
     }
   },
@@ -327,6 +327,11 @@ export default new Vuex.Store({
 
         return []
       },
+
+      basket_items_count: (state) => {
+        console.log("basket length: "+state.basket.length);
+        return state.basket.length
+      }
 
 
   }

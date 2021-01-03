@@ -37,55 +37,25 @@
   <body>
 
   <div id="nav-app">
-    <snows v-if="is_snowing" snowflake_img="{% static '/images/neige.png' %}"></snows>
-    <nav class="navbar is-fixed-top is-transparent" role="navigation" aria-label="main navigation">
-      <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item banner" href="{% url 'index' %}">
-              <img src="{% static '/images/moisibanner.svg' %}">
-            </a>
-
-
-              <a  v-if="showLoupe" class="navbar-item" role="button" @click="showSearchBar">
-                <img src="{% static '/images/loupe.svg' %}" alt="loupe de recherche">
-              </a>
-
-              <a  v-if="is_store" class="navbar-item" role="button" >
-                <img src="{% static '/images/loupe.svg' %}" alt="loupe de recherche">
-              </a>
-
-
-
-            <a role="button" :class="{'is-active': isActive}" @click="toggleMenu()" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
-             <span aria-hidden="true"></span>
-             <span aria-hidden="true"></span>
-             <span aria-hidden="true"></span>
-           </a>
-        </div>
-
-
-        <div :class="{'is-active': isActive}" id="navbarBasic" class="navbar-menu">
-          <div class="navbar-end is-size-7">
-            <a class="navbar-item" href="{% url 'bullshit' %}">B*llshit O Mètre</a>
-            <a class="navbar-item" href="{% url 'quiz' %}">Jeux et Quiz</a>
-            <a class="navbar-item" href="{% url 'references' %}">Références</a>
-            <a class="navbar-item" href="{% url 'about' %}">À propos</a>
-            <a class="navbar-item" href="{% url 'contact' %}">Contact</a>
-            <a class="navbar-item" href="{% url 'support' %}">Supportez le blog</a>
-            <a class="navbar-item" href="{% url 'store_index' %}" >Boutique</a>
-            <a class="navbar-item" role="button" @click="toggleDarkMode">
-              <img src="{% static '/images/dark_mode_icon.svg' %}" alt="icon mode sombre">
-            </a>
-          </div>
-        </div>
-      </div>
-    </nav>
-    <div v-if="showLoupe">
-        <search-bar />
-    </div>
+    <nav-bar
+      snow_img_url="{% static '/images/neige.png' %}"
+      loupe_img_src="{% static '/images/loupe.svg' %}"
+      moisibanner_img="{% static '/images/moisibanner.svg' %}"
+      basket_img_src="{% static '/images/basket.svg' %}"
+      dark_mode_icon_src="{% static '/images/dark_mode_icon.svg' %}"
+      index_href="{% url 'index' %}"
+      bullshit_href="{% url 'bullshit' %}"
+      quiz_href="{% url 'quiz' %}"
+      references_href="{% url 'references' %}"
+      about_href="{% url 'about' %}"
+      contact_href="{% url 'contact' %}"
+      support_href="{% url 'support' %}"
+      store_index_href="{% url 'store_index' %}"
+      ></nav-bar>
 
   </div>
-    <section class="hero is-dark is-bold is-small">
+
+  <section class="hero is-dark is-bold is-small">
       <div class="hero-body">
         <div class="container">
             <img src="{% static '/images/moisiometre.svg' %}" alt="moisimetre">
