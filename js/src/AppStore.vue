@@ -1,6 +1,7 @@
 <template lang="html">
   <div class="container">
     <variants></variants>
+    <basket></basket>
 
       <div v-for="index in lines_number" :key="index" class="tile is-ancestor">
 
@@ -12,7 +13,7 @@
               <img class="no-dark-mode" :src="product.thumbnail" alt="product image">
             </figure>
             <br>
-          
+
             <p>{{product.variant_set[0].price}} $ CAD</p>
           </div>
         </div>
@@ -26,11 +27,13 @@
 <script>
 
 import { mapState , mapMutations , mapActions } from 'vuex';
-import Variants from './components/Variants.vue'
+import Variants from './components/Variants.vue';
+import Basket from './components/Basket.vue'
 
 export default {
   components: {
-      Variants
+      Variants,
+      Basket
   },
 
   data: function(){

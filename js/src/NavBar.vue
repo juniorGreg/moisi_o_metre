@@ -13,7 +13,7 @@
                 <img :src="loupe_img_src" alt="loupe de recherche">
               </a>
 
-              <a  v-if="is_store" class="navbar-item" role="button" >
+              <a  v-if="is_store" class="navbar-item" role="button" @click="showBasketModal">
                  <span title="Badge right" class="badge is-right is-danger">{{ basket_items_count }}</span>
                  <img :src="basket_img_src" alt="panier d'achats">
               </a>
@@ -86,7 +86,8 @@ export default {
       "post_ids",
       "dark_mode",
       "is_snowing",
-      "is_store"
+      "is_store",
+      'is_basket_visible'
     ]),
     ...mapGetters([
       "basket_items_count"
@@ -101,7 +102,8 @@ export default {
     ...mapActions([
       "showSearchBar",
       "getDarkMode",
-      "isSnowing"
+      "isSnowing",
+      'showBasketModal'
     ]),
     ...mapMutations([
       "SET_DARK_MODE"

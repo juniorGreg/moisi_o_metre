@@ -36,7 +36,7 @@
 
             </div>
             <p>{{ selected_variant.price }}</p>
-            <button class="button no-dark-mode is-small is-info">Ajouter au panier</button>
+            <button class="button no-dark-mode is-small is-info" @click="addItemToBasket">Ajouter au panier</button>
         </div>
 
       </div>
@@ -47,14 +47,7 @@
 <script>
 import { mapState , mapMutations , mapActions , mapGetters} from 'vuex';
 export default {
-  data: function(){
-    return {
 
-      colors: [],
-      sizes: [],
-
-    }
-  },
 
   computed: {
     ...mapState([
@@ -88,6 +81,9 @@ export default {
       'hideVariantModal',
       "getVariantBySizeAndColor"
     ]),
+    ...mapMutations([
+      'ADD_VARIANT_TO_BASKET'
+    ]),
 
     getHexColor: function(color) {
       var colormap = {
@@ -108,6 +104,11 @@ export default {
       const size = this.selected_variant.size;
       console.log(color)
       this.getVariantBySizeAndColor({ size, color });
+    },
+
+    addItemToBasket: function() {
+      this.ADD_VARIANT_TO_BASKET(this.selected_variant);
+      this.hideVariantModal()
     }
   }
 

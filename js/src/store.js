@@ -25,11 +25,14 @@ export default new Vuex.Store({
     //store states
     is_store: false,
     is_variant_visible: false,
+    is_basket_visible: false,
     selected_product: null,
     selected_variant: null,
     products: [],
 
-    basket: []
+    basket: [],
+
+    shipping_cost: 0
 
   }),
   mutations: {
@@ -132,6 +135,10 @@ export default new Vuex.Store({
       state.is_snowing = value
     },
 
+    SET_IS_BASKET_VISIBLE: (state, value) => {
+      state.is_basket_visible = value
+    },
+
     ADD_PRODUCTS: (state, value) => {
       state.products = state.products.concat(value)
       //remove duplicates
@@ -151,16 +158,22 @@ export default new Vuex.Store({
       state.is_store = value
     },
 
-    ADD_PRODUCT_TO_BASKET: (state, value) => {
-      state.basket.push(value);
+    ADD_VARIANT_TO_BASKET: (state, variant) => {
+      state.basket.push(variant);
     },
 
-    REMOVE_PRODUCT_FROM_BASKET: (state, value) => {
-
+    REMOVE_VARIANT_FROM_BASKET: (state, deleted_variant) => {
+        state.basket = state.basket.filter(function(variant){
+            return variant.id !== deleted_variant.id;
+        })
     },
 
     SET_IS_VARIANT_VISIBLE: (state, value) => {
       state.is_variant_visible = value
+    },
+
+    SET_SHIPPING_COST: (state, value) => {
+      state.shipping_cost = value
     }
 
 
@@ -251,6 +264,14 @@ export default new Vuex.Store({
       context.commit("SET_IS_SEARCH_BAR_VISIBLE", false);
     },
 
+    showBasketModal: (context) => {
+      context.commit("SET_IS_BASKET_VISIBLE", true);
+    },
+
+    hideBasketModal: (context) => {
+      context.commit("SET_IS_BASKET_VISIBLE", false);
+    },
+
     getDarkMode: (context) => {
       var darkMode = localStorage.getItem("darkMode");
       if(darkMode){
@@ -294,6 +315,10 @@ export default new Vuex.Store({
       const variant = context.state.selected_product.variant_set.find(isSizeAndColor);
 
       context.commit("SET_SELECTED_VARIANT", variant)
+    },
+
+    getShippingCost: (context) => {
+      context.commit("SET_SHIPPING_COST", 15);
     }
   },
   getters: {
@@ -331,6 +356,10 @@ export default new Vuex.Store({
       basket_items_count: (state) => {
         console.log("basket length: "+state.basket.length);
         return state.basket.length
+      },
+
+      basket_total_price: state => {
+        return state.basket.reduce(( total, { price }) => total + price, state.shipping_cost)
       }
 
 
