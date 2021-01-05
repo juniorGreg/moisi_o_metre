@@ -29,9 +29,10 @@
   },
   "dependencies": {
     "@creativebulma/bulma-badge": "^1.0.1",
+    "@fortawesome/fontawesome-free": "^5.15.1",
     "@vue/compiler-sfc": "^3.0.0",
     "animejs": "^3.2.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bulma": "^0.9.1",
     "chart": "^0.1.2",
     "chart.js": "^2.9.3",

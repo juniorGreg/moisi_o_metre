@@ -8,6 +8,7 @@ from django.core.files.temp import NamedTemporaryFile
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 
 from blog.views import get_main_context
 
@@ -170,3 +171,44 @@ def products(request):
     serializer = ProductSerializer(products, many=True)
 
     return Response(serializer.data)
+
+@api_view(['POST'])
+def shipping_cost(request):
+
+    print(request.data)
+
+    ip_address = request.META.get("HTTP_X_FORWARDED_FOR") or request.META.get("REMOTE_ADDR")
+    print(ip_address)
+    if ip_address == '127.0.0.1':
+        ip_address =  "173.176.163.196"
+
+    params = {}
+
+    req_location = requests.get("https://freegeoip.app/json/%s" % ip_address)
+    if req_location.status_code == 200:
+        location = req_location.json()
+        recipient = { "country_code" : location["country_code"],
+                      "city": location["city"],
+                      "state_code": location["region_code"],
+                      "zip": location["zip_code"]}
+        params["recipient"] = recipient
+
+    params["items"] = request.data
+
+    print(params)
+
+
+    req = requests.post(API_PRINTFUL % "shipping/rates", headers=HEADERS, json=params)
+    if req.status_code == 200:
+        response = req.json()
+        return Response(response["result"])
+
+    return Response({'error': 'shipping cost api failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def create_order(request):
+    pass
+
+@api_view(['POST'])
+def fullfill_order(request):
+    pass

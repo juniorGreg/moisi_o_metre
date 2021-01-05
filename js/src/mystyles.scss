@@ -48,7 +48,7 @@ html, section * {
 
 //Dark Mode style
 section.dark-mode {
-    * :not(a){
+    * :not(a) {
     //  background: black;
 
       //filter: invert(1) hue-rotate(3.1416rad);
@@ -56,8 +56,27 @@ section.dark-mode {
 
     }
 
+    ::placeholder, .icon{
+        color: invert(#4a4a4a);
+        opacity: 0.3;
+
+        &:focus {
+          color: blue;
+        }
+
+
+    }
+
+    input:focus * {
+      color: blue;
+    }
+
+
+
     img:not(.no-dark-mode){
       filter: invert(1) hue-rotate(3.1416rad);
+
+
     }
 
 
@@ -70,6 +89,7 @@ section.dark-mode {
     .box {
       //filter: invert(1) hue-rotate(3.1416rad);
       background-color: $dark-mode-background-color;
+
       box-shadow: 0 0.5em 1em -0.125em invert(rgba(10, 10, 10, 0.1)), 0 0px 0 1px invert(rgba(10, 10, 10, 0.02));
     }
 
@@ -142,6 +162,11 @@ $body-family: "Josefin Sans";
 @import "~bulma/bulma";
 @import "~@creativebulma/bulma-tooltip";
 @import "~@creativebulma/bulma-badge";
+
+//import font-awesome
+$fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts" !default;
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
 
 p {
   margin-bottom: 1.5rem;

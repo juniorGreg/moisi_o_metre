@@ -79,7 +79,8 @@ export default {
   methods: {
     ...mapActions([
       'hideVariantModal',
-      "getVariantBySizeAndColor"
+      "getVariantBySizeAndColor",
+      "getShippingCost"
     ]),
     ...mapMutations([
       'ADD_VARIANT_TO_BASKET'
@@ -108,6 +109,7 @@ export default {
 
     addItemToBasket: function() {
       this.ADD_VARIANT_TO_BASKET(this.selected_variant);
+      this.getShippingCost()
       this.hideVariantModal()
     }
   }

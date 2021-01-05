@@ -156,16 +156,27 @@ export default new Vuex.Store({
 
     SET_IS_STORE: (state, value) => {
       state.is_store = value
+      if(value)
+      {
+          var basket = localStorage.getItem("basketMoisi");
+          if(basket){
+            state.basket = JSON.parse(basket);
+          }
+      }
+
     },
 
     ADD_VARIANT_TO_BASKET: (state, variant) => {
       state.basket.push(variant);
+      localStorage.setItem("basketMoisi", JSON.stringify(state.basket));
     },
 
     REMOVE_VARIANT_FROM_BASKET: (state, deleted_variant) => {
         state.basket = state.basket.filter(function(variant){
             return variant.id !== deleted_variant.id;
         })
+
+        localStorage.setItem("basketMoisi", JSON.stringify(state.basket));
     },
 
     SET_IS_VARIANT_VISIBLE: (state, value) => {
@@ -318,7 +329,33 @@ export default new Vuex.Store({
     },
 
     getShippingCost: (context) => {
-      context.commit("SET_SHIPPING_COST", 15);
+      let itemsSet = new Map()
+      let items = []
+
+      context.state.basket.forEach((variant) => {
+        const variant_id = variant.variant_id;
+        if(itemsSet.has(variant_id)){
+          itemsSet.set(variant_id, itemsSet.get(variant_id) + 1)
+        }else {
+          itemsSet.set(variant_id, 1)
+        }
+      })
+
+      itemsSet.forEach((quantity, variant_id) => {
+          const item = { variant_id: variant_id, quantity: quantity}
+          items.push(item);
+      });
+
+
+      console.log(items);
+
+
+      axios.post("/store/shipping_cost", items).then(response => {
+        const shipping_rates = response.data
+        console.log(shipping_rates)
+        context.commit("SET_SHIPPING_COST", Number(response.data[0].rate));
+      })
+
     }
   },
   getters: {
@@ -359,7 +396,7 @@ export default new Vuex.Store({
       },
 
       basket_total_price: state => {
-        return state.basket.reduce(( total, { price }) => total + price, state.shipping_cost)
+        return state.basket.reduce(( total, { price }) => total + price, 0)
       }
 
 
