@@ -10,7 +10,7 @@
             <p class="title is-size-6">{{product.name}}</p>
 
             <figure class="image ">
-              <img class="no-dark-mode" :src="product.thumbnail" alt="product image">
+              <img class="no-dark-mode" :src="product.variant_set[0].preview" alt="product image">
             </figure>
             <br>
 
@@ -56,11 +56,8 @@ export default {
   methods: {
     ...mapActions([
       "getProducts",
-      "showVariantModal"
-    ]),
-
-    ...mapMutations([
-      "SET_IS_STORE"
+      "showVariantModal",
+      "setUpStore"
     ]),
 
     getSliceProducts: function(index){
@@ -86,7 +83,7 @@ export default {
 
   mounted: function(){
     this.getProducts();
-    this.SET_IS_STORE(true);
+    this.setUpStore();
   }
 }
 </script>

@@ -328,9 +328,9 @@ export default new Vuex.Store({
       context.commit("SET_SELECTED_VARIANT", variant)
     },
 
-    getShippingCost: (context) => {
-      let itemsSet = new Map()
-      let items = []
+    getShippingCost: (context, location = {}) => {
+      const itemsSet = new Map()
+      const items = []
 
       context.state.basket.forEach((variant) => {
         const variant_id = variant.variant_id;
@@ -346,16 +346,27 @@ export default new Vuex.Store({
           items.push(item);
       });
 
+      const request = {
+        recipient: location,
+        items: items
+      }
 
-      console.log(items);
 
+      console.log(request);
 
-      axios.post("/store/shipping_cost", items).then(response => {
+      return axios.post("/store/shipping_cost", request).then(response => {
         const shipping_rates = response.data
-        console.log(shipping_rates)
+
+        const standard_shipping_rate = shipping_rates.filter(shipping_rate => shipping_rate.id == "STANDARD")
+        console.log(standard_shipping_rate)
         context.commit("SET_SHIPPING_COST", Number(response.data[0].rate));
       })
 
+    },
+
+    setUpStore: (context) => {
+      context.commit("SET_IS_STORE", true);
+      context.dispatch("getShippingCost");
     }
   },
   getters: {

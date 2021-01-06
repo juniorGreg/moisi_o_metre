@@ -127,6 +127,7 @@ export default {
       this.getShippingCost();
     },
 
+
     setLoaded: function() {
       this.loaded=true;
       window.paypal.Buttons({
@@ -135,15 +136,71 @@ export default {
           return actions.order.create({
             purchase_units: [{
               amount: {
-                value: this.basket_total_price + this.shipping_cost
+                currency_code: 'CAD',
+                value: this.basket_total_price + this.shipping_cost,
+                breakdown: {
+                  item_total: {
+                    currency_code: 'CAD',
+                    value: this.basket_total_price
+                  },
+                  shipping: {
+                    currency_code: 'CAD',
+                    value: this.shipping_cost
+                  }
+                }
+
               }
             }]
           });
         },
 
-        onShippingChange: function(data, actions) {
-          console.log(data);
+        onShippingChange: (data, actions) => {
+          const shipping_address = data.shipping_address
+          const location = {
+            city: shipping_address.city,
+            state: shipping_address.state,
+            country_code: shipping_address.country_code,
+            zip: shipping_address.postal_code
+          }
+
+          const current_shipping_cost = this.shipping_cost;
+          console.log(current_shipping_cost);
+
+          this.getShippingCost(location).then(() => {
+            if(current_shipping_cost !== this.shipping_cost){
+              console.log("new shipping cost")
+              return actions.order.patch([
+                {
+                  op: 'replace',
+                  path: '/purchase_units/@reference_id==\'default\'/amount',
+                  value: {
+                    currency_code: 'CAD',
+                    value: this.basket_total_price + this.shipping_cost,
+                    breakdown: {
+                      item_total: {
+                        currency_code: 'CAD',
+                        value: this.basket_total_price
+                      },
+                      shipping: {
+                        currency_code: 'CAD',
+                        value: this.shipping_cost
+                      }
+                    }
+                  }
+                }
+              ])
+            }
+          })
+
+
+          console.log(location);
+        },
+
+        onApprouve: (data, actions) => {
+
         }
+
+
       }).render(this.$refs.paypal)
     }
   },
@@ -151,15 +208,16 @@ export default {
   mounted: function() {
     const script = document.createElement("script")
     script.src =
-      "https://www.paypal.com/sdk/js?client-id=AbsjOVQ_dAtj3iG38tPjeASTnduZr3dzwpMA5KH2oxkAGax9rYmp-vCeGac6dtmZbid2v3GSIWUHQXmS"
+      "https://www.paypal.com/sdk/js?currency=CAD&intent=authorize&client-id=AbsjOVQ_dAtj3iG38tPjeASTnduZr3dzwpMA5KH2oxkAGax9rYmp-vCeGac6dtmZbid2v3GSIWUHQXmS"
       script.addEventListener("load", this.setLoaded);
       document.body.appendChild(script);
-  },
-
-  updated: function() {
-
-    console.log("updated")
+      console.log("basket: "+this.basket.length);
+      if(this.basket.length > 0){
+        this.getShippingCost();
+      }
   }
+
+
 }
 </script>
 

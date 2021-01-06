@@ -7,38 +7,28 @@ class Product(models.Model):
     id = models.PositiveBigIntegerField(primary_key=True)
     external_id = models.CharField(max_length=26)
     name = models.CharField(max_length=200)
-    thumbnail = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)
 
     def __str__(self):
         return self.name
 
 
 class Variant(models.Model):
-    SIZE_TYPE = (
-        ('N', 'None'),
-        ('XS', 'X Small'),
-        ('S', 'Small'),
-        ('M', 'Medium'),
-        ('L', 'Large'),
-        ('XL', 'X Large'),
-        ('2XL', 'XX Large'),
-        ('3XL', '3X Large'),
-        ('4XL', '4X Large'),
-        ('5XL', '5X Large')
-    )
+
     id = models.PositiveBigIntegerField(primary_key=True)
     variant_id = models.PositiveBigIntegerField(null=True)
     external_id = models.CharField(max_length=26)
     name = models.CharField(max_length=200)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     color = models.CharField(max_length=50)
-    size = models.CharField(max_length=3, choices=SIZE_TYPE)
+    size = models.CharField(max_length=10)
     thumbnail = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)
     preview = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)
     price = models.FloatField(null=True)
 
     def __str__(self):
         return self.name
+
+
 
 
 class Order(models.Model):
@@ -53,12 +43,27 @@ class Order(models.Model):
         ('fulfilled', 'fulfilled')
     )
     id = models.PositiveIntegerField(primary_key=True)
+    paypal_id = models.CharField(max_length=20)
     external_id = models.CharField(max_length=26, null=True, blank=True)
     status = models.CharField(max_length=10, choices=STATUS_TYPE)
+    date_modified = models.DateTimeField(auto_now=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+class Customer(models.Model):
+    fullname = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
+    country_code = models.CharField(max_length=3)
+    state_code = models.CharField(max_length=3)
+    zip_code = models.CharField(max_length=10)
     email = models.EmailField()
+
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+
+
 
 
 class OrderItem(models.Model):
     variant = models.ForeignKey(Variant, on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(default=1)
+    quantity_shipped = models.PositiveSmallIntegerField(default=0)

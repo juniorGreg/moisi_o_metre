@@ -123,7 +123,7 @@ def update_store_products(new_data):
                     reg_variant.product = reg_product
 
                     #Parse color and size of the variant by the name
-                    p1 = re.compile(" - ([A-Za-z ]*) / ([0-9 XSML]{1,3})$")
+                    p1 = re.compile(" - ([A-Za-z ]*) / ([0-9 xXSML]{1,5})$")
                     m1 = p1.search(reg_variant.name)
 
                     p2 = re.compile(" - ([A-Za-z ]*)$")
@@ -177,23 +177,32 @@ def shipping_cost(request):
 
     print(request.data)
 
-    ip_address = request.META.get("HTTP_X_FORWARDED_FOR") or request.META.get("REMOTE_ADDR")
-    print(ip_address)
-    if ip_address == '127.0.0.1':
-        ip_address =  "173.176.163.196"
+    params = request.data;
+    params['currency'] = 'CAD'
 
-    params = {}
+    if not params['recipient']:
+        ip_address = request.META.get("HTTP_X_FORWARDED_FOR") or request.META.get("REMOTE_ADDR")
+        print(ip_address)
+        if ip_address == '127.0.0.1':
+            ip_address =  "173.176.163.196"
 
-    req_location = requests.get("https://freegeoip.app/json/%s" % ip_address)
-    if req_location.status_code == 200:
-        location = req_location.json()
-        recipient = { "country_code" : location["country_code"],
-                      "city": location["city"],
-                      "state_code": location["region_code"],
-                      "zip": location["zip_code"]}
-        params["recipient"] = recipient
 
-    params["items"] = request.data
+
+        req_location = requests.get("https://freegeoip.app/json/%s" % ip_address)
+        if req_location.status_code == 200:
+            location = req_location.json()
+            recipient = { "country_code" : location["country_code"],
+                          "city": location["city"],
+                          "state_code": location["region_code"],
+                          "zip": location["zip_code"]}
+            params["recipient"] = recipient
+        else:
+            recipient = { "country_code" : "CA",
+                          "city": "Montreal",
+                          "state_code": "QC",
+                          "zip": "H3G"}
+            params["recipient"] = recipient
+
 
     print(params)
 
