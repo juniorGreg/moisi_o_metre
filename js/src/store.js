@@ -179,6 +179,14 @@ export default new Vuex.Store({
         localStorage.setItem("basketMoisi", JSON.stringify(state.basket));
     },
 
+    CLEAR_BASKET: (state) => {
+      while(state.basket.length > 0){
+        state.basket.pop();
+      }
+
+      state.shipping_cost = 0;
+    },
+
     SET_IS_VARIANT_VISIBLE: (state, value) => {
       state.is_variant_visible = value
     },
@@ -367,7 +375,33 @@ export default new Vuex.Store({
     setUpStore: (context) => {
       context.commit("SET_IS_STORE", true);
       context.dispatch("getShippingCost");
-    }
+    },
+
+    createOrder: (context, order) => {
+      const itemsSet = new Map()
+      const items = []
+
+      context.state.basket.forEach((variant) => {
+        const id = variant.id;
+        if(itemsSet.has(id)){
+          itemsSet.set(id, itemsSet.get(id) + 1)
+        }else {
+          itemsSet.set(id, 1)
+        }
+      })
+
+      itemsSet.forEach((quantity, id) => {
+          const item = { sync_variant_id: id, quantity: quantity}
+          items.push(item);
+      });
+
+      order.order.items = items;
+
+      return axios.post('/store/order', order)
+
+    },
+
+
   },
   getters: {
       variant_colors: state => {

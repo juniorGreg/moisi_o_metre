@@ -1,11 +1,12 @@
 <template lang="html">
   <div class="modal" :class="{'is-active': is_basket_visible}">
     <div class="modal-background"></div>
-      <div class="modal-content">
+    <div class="modal-content">
         <!-- Any other Bulma elements you want -->
         <div class="box">
 
-          <div>
+          <div v-show="order_process">
+
             <h1 class="title">Votre panier</h1>
             <article v-for="item in basket" class="media">
 
@@ -67,19 +68,47 @@
                   </div>
               </div>
             </nav>
+
+            <div ref="paypal"></div>
+
+
+          </div> <!-- End div order processed -->
+
+
+          <div v-if="order_success">
+            <p>
+              La commande a bien été reçu ! D'ici quelques minutes,
+              vous devriez recevoir un courriel de confirmation.
+            </p>
+            <p>
+              Merci d'avoir magasiner sur la boutique du MoisiOMètre. :)
+            </p>
           </div>
-        <br>
 
 
-          <div ref="paypal">
+          <div v-if="order_failed">
+            <p>
+              Désolé, une erreur s'est produite durant l'envoie de votre commande.
+              Vous n'avez pas été débité. L'administrateur a été informé de l'accident.
+            </p>
+            <p>
+              SVP, revenez plus tard, le problème devrait être corrigé dans un future très proche.
+            </p>
 
           </div>
 
-        </div>
-      </div>
-      <button class="modal-close is-large" aria-label="close" @click="hideBasketModal"></button>
+        </div><!-- End div box -->
 
+      </div><!-- End -div modal content-->
+
+
+
+
+    <button class="modal-close is-large" aria-label="close" @click="hideBasket"></button>
   </div>
+
+
+
 </template>
 
 <script>
@@ -90,6 +119,8 @@ export default {
     return {
       loaded: false,
       paidFor: false,
+      order_success: false,
+      order_failed: false,
     }
   },
   computed: {
@@ -109,17 +140,23 @@ export default {
       } else {
         return "Retour au panier";
       }
+    },
+
+    order_process: function(){
+      return !this.order_success && !this.order_failed;
     }
   },
 
   methods: {
     ...mapMutations([
-      'REMOVE_VARIANT_FROM_BASKET'
+      'REMOVE_VARIANT_FROM_BASKET',
+      'CLEAR_BASKET'
     ]),
 
     ...mapActions([
       'hideBasketModal',
-      'getShippingCost'
+      'getShippingCost',
+      'createOrder',
     ]),
 
     removeItem: function(item){
@@ -127,6 +164,11 @@ export default {
       this.getShippingCost();
     },
 
+    hideBasket:  function() {
+      this.hideBasketModal();
+      this.order_failed = false;
+      this.order_success = false;
+    },
 
     setLoaded: function() {
       this.loaded=true;
@@ -196,10 +238,42 @@ export default {
           console.log(location);
         },
 
-        onApprouve: (data, actions) => {
+        onApprove: (data, actions) => {
+          console.log("Approuve")
+          console.log(actions)
+          return actions.order.get().then((details) => {
+            console.log(details);
+            const shipping = details.purchase_units[0].shipping;
+              const order = {
+                paypal_id: details.id,
+                total_cost: details.purchase_units[0].amount.value,
+                order: {
+                  recipient: {
+                    name: shipping.name.full_name,
+                    address1: shipping.address.address_line_1,
+                    address2: shipping.address.address_line_2,
+                    city: shipping.address.admin_area_2,
+                    state_code: shipping.address.admin_area_1,
+                    country_code: shipping.address.country_code,
+                    zip: shipping.address.postal_code,
+                    email: details.payer.email_address
 
-        }
+                  },
+                  items: []
+                }
+              }
 
+              return this.createOrder(order).then(() => {
+                return actions.order.capture().then((details) => {
+                  console.log(details);
+                  this.order_success = true;
+                  this.CLEAR_BASKET();
+                })
+              }).catch(() => {
+                this.order_failed = true;
+              });
+        });
+      }
 
       }).render(this.$refs.paypal)
     }
@@ -208,7 +282,7 @@ export default {
   mounted: function() {
     const script = document.createElement("script")
     script.src =
-      "https://www.paypal.com/sdk/js?currency=CAD&intent=authorize&client-id=AbsjOVQ_dAtj3iG38tPjeASTnduZr3dzwpMA5KH2oxkAGax9rYmp-vCeGac6dtmZbid2v3GSIWUHQXmS"
+      "https://www.paypal.com/sdk/js?currency=CAD&client-id=AbsjOVQ_dAtj3iG38tPjeASTnduZr3dzwpMA5KH2oxkAGax9rYmp-vCeGac6dtmZbid2v3GSIWUHQXmS"
       script.addEventListener("load", this.setLoaded);
       document.body.appendChild(script);
       console.log("basket: "+this.basket.length);

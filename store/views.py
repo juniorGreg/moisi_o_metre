@@ -215,9 +215,53 @@ def shipping_cost(request):
     return Response({'error': 'shipping cost api failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
-def create_order(request):
-    pass
+def order(request):
+    print(request.data)
 
-@api_view(['POST'])
-def fullfill_order(request):
-    pass
+    #validation
+    for item in request.data["order"]["items"]:
+        variant = Variant.objects.get(id=item["sync_variant_id"])
+        item["retail_price"] = variant.price
+
+    req_order = requests.post(API_PRINTFUL % "orders/estimate-costs", headers=HEADERS, json=request.data["order"])
+    printful_order = {}
+    if req_order.status_code == 200:
+        printful_order = req_order.json()["result"]
+        total_cost =float(printful_order["retail_costs"]["total"]) + float(printful_order["costs"]["shipping"])
+        if total_cost == request.data["total_cost"]:
+            print("validated total_cost: %s" % total_cost)
+            print("received total_cost: %s" % request.data["total_cost"])
+            return Response({"error": "validation failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        print(req_order.text)
+        Response({"error": "extimation costs failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    if settings.DEBUG:
+
+
+        order = Order.objects.create(id=1000,
+                                     external_id="@1000",
+                                     paypal_id=request.data["paypal_id"],
+                                     total_cost=float(printful_order["retail_costs"]["total"]),
+                                     shipping_cost=float(printful_order["costs"]["shipping"]),
+                                     status="draft")
+        order.save()
+        req_custumer = request.data["order"]["recipient"]
+        customer = Customer.objects.create(fullname = req_custumer["name"],
+                                           address= req_custumer["address1"],
+                                           country_code=req_custumer["country_code"],
+                                           state_code= req_custumer["state_code"],
+                                           zip_code=req_custumer["zip"],
+                                           email = req_custumer["email"],
+                                           order=order)
+        customer.save()
+        for req_item in request.data["order"]["items"]:
+            variant = Variant.objects.get(id=req_item["sync_variant_id"])
+            order_item = OrderItem.objects.create(variant=variant, order=order, quantity=int(req_item["quantity"]))
+            order_item.save()
+        return Response({"message": "order has been created"})
+
+
+
+    else:
+        return Response({'error': 'not implemented'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
