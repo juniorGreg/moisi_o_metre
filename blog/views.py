@@ -99,7 +99,7 @@ def contact(request):
                 form.cleaned_data['subject'],
                 form.cleaned_data['message'],
                 settings.DEFAULT_FROM_EMAIL,
-                ['junior.gregoire@gmail.com']
+                [settings.EMAIL_ADMIN]
             )
             return redirect('index')
 

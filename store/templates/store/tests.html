@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Tests Email Notifications</title>
+  </head>
+  <body>
+    <h1>Tests Email Notifications</h1>
+
+    <form action="" method="post">
+         {% csrf_token %}
+        <input type="radio" name="notification" value="confirm_order" checked>
+        <label for="confirm_order">Commande confirmée</label><br>
+        <input type="radio" name="notification" value="package_shipped">
+        <label for="shipping">Shipping</label><br>
+        <input type="radio" name="notification" value="package_returned" checked>
+        <label for="confirm_order">Commande retournée</label><br>
+        <input type="radio" name="notification" value="order_failed">
+        <label for="shipping">Commande échouée</label><br>
+        <input type="radio" name="notification" value="order_canceled" checked>
+        <label for="confirm_order">Commande annulée</label><br>
+        <input type="radio" name="notification" value="order_put_hold">
+        <label for="shipping">Commande en attente</label><br>
+        <input type="radio" name="notification" value="order_remove_hold">
+        <label for="shipping">Commande plus en attente</label><br>
+        <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>

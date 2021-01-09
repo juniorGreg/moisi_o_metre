@@ -1,0 +1,64 @@
+
+
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ msg.subject }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      img { display:block; }
+      p { margin: 0 0 1.6em 0; color: #000000}
+      h4 {color: #000000 }
+      li { color: #000000; list-style-type: circle; }
+      body { font-family: Arial Black, sans-serif, 'Open Sans'; }
+    </style>
+  </head>
+  <body>
+    <table cellspacing="0" cellpadding="0" border="0" width="100%">
+
+    <tr>
+
+      <td bgcolor=”#000000”>
+
+        <img src="cid:moisiometre_email.gif" width="80" height="80" alt="Le MoisiOMètre">
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+
+        <h4>
+
+          Bonjour, M/Mme {{ order.customer_set.all.0.fullname }}, 
+        </h4>
+        <p>
+          Ceci est un courriel pour vous informer que {{ msg.message }}
+        </p>
+
+        {% if order.shipment_set.all.length == 1 %}
+        <p>
+          Votre paquet sera livré par {{ order.shipment_set.all.0.carrier }} <br>
+          Votre numéro de suivi est le {{ order.shipment_set.all.0.tracking_number }}. <br>
+          Voici le lien pour le suivi est <a href="{{ order.shipment_set.all.0.tracking_url }}">{{ order.shipment_set.0.tracking_url }}</a>
+        </p>
+        {% endif %}
+
+        <p>
+          Les items de votre commande sont les suivantes:
+          <ul>
+            {% for item in order.orderitem_set.all %}
+              <li>{{ item.variant.name }}, quantité: {{ item.quantity }}</li>
+            {% endfor %}
+          </ul>
+        </p>
+        <p>Merci, d'avoir magasiner sur la boutique du MoisiOMètre. :)</p>
+      </td>
+
+    </tr>
+
+    </table>
+  </body>
+</html>

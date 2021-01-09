@@ -65,6 +65,17 @@ class Customer(models.Model):
     def __str__(self):
         return self.fullname
 
+class Shipment(models.Model):
+    id = models.CharField(max_length=12, primary_key=True)
+    carrier = models.CharField(max_length=20)
+    service = models.CharField(max_length=20)
+    tracking_number = models.CharField(max_length=100)
+    tracking_url = models.URLField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
+
+
+
 
 
 

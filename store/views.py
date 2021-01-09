@@ -17,10 +17,8 @@ import requests
 import os
 import re
 
-
-
-
 from .serializers import *
+from .email_notifications import *
 
 # Create your views here.
 
@@ -30,31 +28,60 @@ def index(request):
     context = get_main_context("Boutique", "La boutique du MoisiOMètre", "/store")
     return render(request, "store/index.html", context)
 
+def tests(request):
+    if not settings.DEBUG:
+        raise Http404
+
+    if request.method == "POST":
+        notification = request.POST["notification"]
+        print(notification)
+        order = Order.objects.get(id=1000)
+        if notification == "confirm_order":
+            EmailNotifications(order).confirm_order()
+        elif notification == "package_shipped":
+            EmailNotifications(order).shipping()
+        elif notification == "package_returned":
+            EmailNotifications(order).package_returned()
+        elif notification == "order_failed":
+            EmailNotifications(order).order_failed()
+        elif notification == "order_canceled":
+            EmailNotifications(order).order_canceled()
+        elif notification == "order_put_hold":
+            EmailNotifications(order).order_on_hold()
+        elif notification == "order_remove_hold":
+            EmailNotifications(order).order_on_hold_removed()
+
+        else:
+            print("notification invalid!")
+
+    return render(request, "store/tests.html")
+
 @csrf_exempt
-@require_POST
+@api_view(['POST'])
 def webhook(request):
-    data = json.loads(request.body.decode("utf-8"))
+    data = request.data
 
     event_type = data["type"]
 
 
 
     if event_type == "package_shipped":
-        print("package shipped")
+        shipping_notification(data["data"])
     elif event_type == "package_returned":
-        print("package returned")
+        package_returned_notification(data["data"])
     elif event_type == "order_failed":
-        print("order failed")
+        order_failed_notification(data["data"])
     elif event_type == "order_canceled":
-        print("order canceled")
+        order_canceled_notification(data["data"])
     elif event_type == "product_synced" or event_type == "product_updated" \
             or event_type == "stock_updated":
         update_store_products(data["data"])
 
     elif event_type == "order_put_hold":
-        print("order put hold")
+        order_on_hold_notification(data["data"])
     elif event_type == "order_remove_hold":
-        print("order remove holf")
+        order_on_hold_removed_notification(data["data"])
+
     else:
         print("event type unknown")
         print(event_type)
@@ -237,31 +264,31 @@ def order(request):
         Response({"error": "extimation costs failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     if settings.DEBUG:
-
-
-        order = Order.objects.create(id=1000,
-                                     external_id="@1000",
-                                     paypal_id=request.data["paypal_id"],
-                                     total_cost=float(printful_order["retail_costs"]["total"]),
-                                     shipping_cost=float(printful_order["costs"]["shipping"]),
-                                     status="draft")
-        order.save()
-        req_custumer = request.data["order"]["recipient"]
-        customer = Customer.objects.create(fullname = req_custumer["name"],
-                                           address= req_custumer["address1"],
-                                           country_code=req_custumer["country_code"],
-                                           state_code= req_custumer["state_code"],
-                                           zip_code=req_custumer["zip"],
-                                           email = req_custumer["email"],
-                                           order=order)
-        customer.save()
-        for req_item in request.data["order"]["items"]:
-            variant = Variant.objects.get(id=req_item["sync_variant_id"])
-            order_item = OrderItem.objects.create(variant=variant, order=order, quantity=int(req_item["quantity"]))
-            order_item.save()
-        return Response({"message": "order has been created"})
-
-
-
+        printful_order['id'] = 1000
+        printful_order['external_id'] = "@1000"
     else:
         return Response({'error': 'not implemented'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    order = Order.objects.create(id=printful_order["id"],
+                                 external_id=printful_order["external_id"],
+                                 paypal_id=request.data["paypal_id"],
+                                 total_cost=float(printful_order["retail_costs"]["total"]),
+                                 shipping_cost=float(printful_order["costs"]["shipping"]),
+                                 status="draft")
+    order.save()
+    req_customer = request.data["order"]["recipient"]
+    customer = Customer.objects.create(fullname = req_customer["name"],
+                                       address= req_customer["address1"],
+                                       country_code=req_customer["country_code"],
+                                       state_code= req_customer["state_code"],
+                                       zip_code=req_customer["zip"],
+                                       email = req_customer["email"],
+                                       order=order)
+    customer.save()
+    for req_item in request.data["order"]["items"]:
+        variant = Variant.objects.get(id=req_item["sync_variant_id"])
+        order_item = OrderItem.objects.create(variant=variant, order=order, quantity=int(req_item["quantity"]))
+        order_item.save()
+
+    EmailNotifications(order).confirm_order()
+    return Response({"message": "order has been created"})

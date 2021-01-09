@@ -46,7 +46,19 @@ class InlineCustomer(admin.StackedInline):
     model = Customer
     extra = 0
 
-    readonly_fields = ["fullname", "address", 'country_code', "state_code", 'zip_code', "email"]
+    readonly_fields = ["fullname", "address", 'country_code', "state_code", 'zip_code']
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+class InlineShipment(admin.StackedInline):
+    model = Shipment
+    extra = 0
+
+    readonly_fields = ["id", "carrier", "service", "tracking_number", "tracking_url", "date_created"]
 
     def has_add_permission(self, request, obj=None):
         return False
@@ -58,7 +70,7 @@ class InlineCustomer(admin.StackedInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ["id", 'external_id', "paypal_id", "status", "total_cost", "shipping_cost"]
-    inlines = [InlineCustomer, InlineOrderItem]
+    inlines = [InlineCustomer, InlineOrderItem, InlineShipment]
     list_display = ("id", "status", "total_cost", "shipping_cost", "date_created", "date_modified")
 
     def has_add_permission(self, request):

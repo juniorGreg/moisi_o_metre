@@ -6,6 +6,7 @@ urlpatterns = [
     path("products", views.products, name="store_products"),
     path("webhook", views.webhook, name="store_webhook"),
     path("shipping_cost", views.shipping_cost, name="store_shipping_cost"),
-    path("order", views.order, name="order")
+    path("order", views.order, name="order"),
+    path("tests/", views.tests, name="tests")
 
 ]
