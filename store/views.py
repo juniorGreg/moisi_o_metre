@@ -3,8 +3,10 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.conf import settings
-from django.core.files import File
-from django.core.files.temp import NamedTemporaryFile
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
+
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -16,6 +18,8 @@ import json
 import requests
 import os
 import re
+import hashlib
+
 
 from .serializers import *
 from .email_notifications import *
@@ -25,7 +29,13 @@ from .email_notifications import *
 
 
 def index(request):
+
     context = get_main_context("Boutique", "La boutique du MoisiOMètre", "/store")
+    if settings.DEBUG:
+        context["paypal_client_id"] = settings.PAYPAL_SANDBOX_CLIENT_ID
+    else:
+        context["paypal_client_id"] = settings.PAYPAL_LIVE_CLIENT_ID
+
     return render(request, "store/index.html", context)
 
 def tests(request):
@@ -94,18 +104,35 @@ def webhook(request):
 API_PRINTFUL = "https://api.printful.com/%s"
 HEADERS = {'Authorization': 'Basic %s' % settings.PRINTFUL_API_KEY }
 
-def upload_image_to_model(image, url):
+def upload_image_to_model(variant, url):
     req_img = requests.get(url, stream=True)
 
     if req_img.status_code == 200:
-        tmp_file = NamedTemporaryFile(delete=True)
-        file_name = os.path.basename(url)
-        tmp_file.write(req_img.raw.read())
-        tmp_file.flush()
+        path = BytesIO(req_img.raw.read())
+        img_preview = Image.open(path)
 
-        image.save(file_name, File(tmp_file), save=True)
+        md5hash = hashlib.md5(img_preview.tobytes()).hexdigest()
 
-        tmp_file.close()
+        variant_image = VariantImage.objects.filter(hash=md5hash).first()
+
+        if not variant_image:
+            file_name = os.path.basename(url)
+
+
+            variant_image = VariantImage()
+
+            variant_image.preview.save(file_name,
+                             ContentFile(path.getvalue()),
+                             save=False)
+            variant_image.save()
+
+        variant.variant_image = variant_image
+
+
+
+
+
+
 
 
 def update_store_products(new_data):
@@ -128,7 +155,6 @@ def update_store_products(new_data):
             if created :
                 reg_product.external_id = product["external_id"]
 
-                upload_image_to_model(reg_product.image, product["thumbnail_url"])
 
 
             reg_product.save()
@@ -145,46 +171,44 @@ def update_store_products(new_data):
                 for variant in sync_variants:
 
                     reg_variant, created = Variant.objects.get_or_create(id = variant["id"])
+
                     reg_variant.name = variant["name"]
                     reg_variant.price = variant["retail_price"]
                     reg_variant.product = reg_product
 
                     #Parse color and size of the variant by the name
-                    p1 = re.compile(" - ([A-Za-z ]*) / ([0-9 xXSML]{1,5})$")
-                    m1 = p1.search(reg_variant.name)
+                    p_size_color = re.compile(" - ([A-Za-z ]*) / ([0-9 xXSML]{1,5})$")
+                    m_size_color = p_size_color.search(reg_variant.name)
 
-                    p2 = re.compile(" - ([A-Za-z ]*)$")
-                    m2 = p2.search(reg_variant.name)
+                    p_color = re.compile(" - ([A-Za-z ]*)$")
+                    m_color = p_color.search(reg_variant.name)
 
-                    if m1:
-                        reg_variant.color = m1.group(1).lower()
-                        reg_variant.size = m1.group(2)
-                    elif m2:
-                        reg_variant.color = m2.group(1).lower()
+                    p_size = re.compile(" - ([0-9 xXSML]{1,5})$$")
+                    m_size = p_size.search(reg_variant.name)
+
+                    if m_size_color:
+                        reg_variant.color = m_size_color.group(1).lower()
+                        reg_variant.size = m_size_color.group(2)
+                    elif m_color:
+                        reg_variant.color = m_color.group(1).lower()
+                    elif m_size:
+                        reg_variant.size = m_size.group(1).lower()
+
+
+
 
                     if created:
 
                         reg_variant.variant_id = variant["variant_id"]
                         reg_variant.external_id = variant["external_id"]
 
-                        #Parse color and size of the variant by the name
-                        p = re.compile(" - ([A-Za-z ]*) / ([0-9 XSML]{1,3})$")
 
-                        m = p.search(reg_variant.name)
-
-                        if m:
-                            reg_variant.color = m.group(1).lower()
-                            reg_variant.size = m.group(2)
-                        else:
-                            reg_variant.color = "undefined"
-                            reg_variant.size = 'N'
 
                         files = variant["files"]
-
+                        
                         for file in files:
                             if file["type"] == "preview":
-                                upload_image_to_model(reg_variant.thumbnail, file["thumbnail_url"])
-                                upload_image_to_model(reg_variant.preview, file["preview_url"])
+                                upload_image_to_model(reg_variant, file["preview_url"])
                                 break
 
                     reg_variant.save()
@@ -210,7 +234,7 @@ def shipping_cost(request):
     if not params['recipient']:
         ip_address = request.META.get("HTTP_X_FORWARDED_FOR") or request.META.get("REMOTE_ADDR")
         print(ip_address)
-        if ip_address == '127.0.0.1':
+        if ip_address == '127.0.0.1' or ip_address == '192.168.1.1':
             ip_address =  "173.176.163.196"
 
 

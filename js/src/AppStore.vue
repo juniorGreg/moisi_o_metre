@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="container">
     <variants></variants>
-    <basket></basket>
+    <basket :paypal_client_id="paypal_client_id"></basket>
 
       <div v-for="index in lines_number" :key="index" class="tile is-ancestor">
 
@@ -10,7 +10,7 @@
             <p class="title is-size-6">{{product.name}}</p>
 
             <figure class="image ">
-              <img class="no-dark-mode" :src="product.variant_set[0].preview" alt="product image">
+              <img class="no-dark-mode" :src="product.variant_set[0].variant_image.resized_preview" alt="product image">
             </figure>
             <br>
 
@@ -31,6 +31,7 @@ import Variants from './components/Variants.vue';
 import Basket from './components/Basket.vue'
 
 export default {
+  props: ["paypal_client_id"],
   components: {
       Variants,
       Basket

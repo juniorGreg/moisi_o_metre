@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from .models import *
 
 # Register your models here.
+admin.site.register(VariantImage)
 
 
 
@@ -27,8 +28,7 @@ class ProductAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
-    def has_delete_permission(self, request, obj=None):
-        return False
+
 
 class InlineOrderItem(admin.StackedInline):
     model = OrderItem

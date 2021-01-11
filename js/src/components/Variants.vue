@@ -6,7 +6,7 @@
         <div class="box" v-if="selected_variant">
             <p>{{ selected_product.name }}</p>
             <figure class="image">
-                <img class="no-dark-mode" :src="selected_variant.preview" alt="product image">
+                <img class="no-dark-mode" :src="selected_variant.variant_image.resized_preview" alt="product image">
             </figure>
             <br>
             <div class="buttons">

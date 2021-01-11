@@ -36,6 +36,9 @@ data = os.environ['PRINTFUL_API_KEY']
 urlSafeEncodedBytes = base64.urlsafe_b64encode(data.encode("utf-8"))
 urlSafeEncodedStr = str(urlSafeEncodedBytes, "utf-8")
 
+PAYPAL_SANDBOX_CLIENT_ID=os.environ["PAYPAL_SANDBOX_CLIENT_ID"]
+PAYPAL_LIVE_CLIENT_ID=os.environ["PAYPAL_LIVE_CLIENT_ID"]
+
 
 PRINTFUL_API_KEY = urlSafeEncodedStr
 
@@ -90,6 +93,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'moisi_o_metre.wsgi.application'
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#SECURE_SSL_REDIRECT = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
 
 
 # Database

@@ -54,7 +54,7 @@ class EmailNotifications:
             "message": "votre commande a échouée"
         }
 
-        self._send_mail_notification(msg, admin_only=True)
+        self._send_mail_notification(msg)
 
     def order_canceled(self):
         msg = {

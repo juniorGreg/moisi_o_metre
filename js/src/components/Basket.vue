@@ -12,7 +12,7 @@
 
               <figure class="media-left">
                 <p class="image is-64x64">
-                  <img class="no-dark-mode" :src="item.thumbnail" alt="image item">
+                  <img class="no-dark-mode" :src="item.variant_image.thumbnail" alt="image item">
                 </p>
               </figure>
 
@@ -115,6 +115,7 @@
 import { mapState , mapMutations , mapActions , mapGetters} from 'vuex';
 
 export default {
+  props: ["paypal_client_id"],
   data: function() {
     return {
       loaded: false,
@@ -134,13 +135,6 @@ export default {
       "basket_total_price"
     ]),
 
-    checkout_button_msg: function(){
-      if(!this.is_checkout){
-        return "Passer à la caisse";
-      } else {
-        return "Retour au panier";
-      }
-    },
 
     order_process: function(){
       return !this.order_success && !this.order_failed;
@@ -281,14 +275,15 @@ export default {
 
   mounted: function() {
     const script = document.createElement("script")
-    script.src =
-      "https://www.paypal.com/sdk/js?currency=CAD&client-id=AbsjOVQ_dAtj3iG38tPjeASTnduZr3dzwpMA5KH2oxkAGax9rYmp-vCeGac6dtmZbid2v3GSIWUHQXmS"
-      script.addEventListener("load", this.setLoaded);
-      document.body.appendChild(script);
-      console.log("basket: "+this.basket.length);
-      if(this.basket.length > 0){
-        this.getShippingCost();
-      }
+    const paypal_src_url="https://www.paypal.com/sdk/js?currency=CAD&client-id="+this.paypal_client_id;
+    script.src = paypal_src_url;
+
+    script.addEventListener("load", this.setLoaded);
+    document.body.appendChild(script);
+    console.log("basket: "+this.basket.length);
+    if(this.basket.length > 0){
+      this.getShippingCost();
+    }
   }
 
 

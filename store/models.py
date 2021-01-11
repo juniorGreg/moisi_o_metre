@@ -1,5 +1,10 @@
 from django.db import models
-
+import requests
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
+import hashlib
+import os
 STORE_UPLOAD_FOLDER = "store/"
 
 # Create your models here.
@@ -12,6 +17,61 @@ class Product(models.Model):
         return self.name
 
 
+
+
+
+class VariantImage(models.Model):
+
+    thumbnail = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)
+    preview = models.ImageField(upload_to=STORE_UPLOAD_FOLDER)
+    resized_preview = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)
+    hash = models.CharField(max_length=100, unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+
+
+        if "http" in self.preview.url:
+            req_img = requests.get(self.preview.url, stream=True)
+        else:
+            req_img = requests.get("https://moisidev.xyz%s" % self.preview.url, stream=True)
+
+        if req_img.status_code == 200:
+            path = BytesIO(req_img.raw.read())
+            img_preview = Image.open(path)
+
+            md5hash = hashlib.md5(img_preview.tobytes()).hexdigest()
+
+            if self.hash == md5hash:
+                print("duplicate")
+                return
+
+            self.hash = md5hash
+
+
+            img_resized_preview = img_preview.resize((450,450))
+            img_thumbnail = img_preview.resize((60,60))
+
+            def save_pil_img_to_imagefield(filename, pil_img, image_field):
+                print(filename)
+                buffer = BytesIO()
+
+                pil_img.save(buffer, img_preview.format)
+
+                image_field.save(filename,
+                                 ContentFile(buffer.getvalue()),
+                                 save=False)
+
+            base_filename = os.path.basename(self.preview.url)
+            save_pil_img_to_imagefield("preview_%s" % base_filename, img_resized_preview, self.resized_preview)
+            save_pil_img_to_imagefield("thumb_%s" % base_filename, img_thumbnail, self.thumbnail)
+
+            super(VariantImage, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.preview.name
+
+
+
 class Variant(models.Model):
 
 
@@ -22,13 +82,13 @@ class Variant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     color = models.CharField(max_length=50)
     size = models.CharField(max_length=10)
-    thumbnail = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)
-    preview = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)
-    price = models.FloatField(null=True)
+
+    price = models.FloatField(default=0)
+
+    variant_image = models.ForeignKey(VariantImage, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
-
 
 
 
