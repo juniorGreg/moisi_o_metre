@@ -32,17 +32,17 @@
 
         <h4>
 
-          Bonjour, M/Mme {{ order.customer_set.all.0.fullname }}, 
+          Bonjour, M/Mme {{ order.customer_set.all.0.fullname }},
         </h4>
         <p>
           Ceci est un courriel pour vous informer que {{ msg.message }}
         </p>
 
-        {% if order.shipment_set.all.length == 1 %}
+        {% if order.shipment_set.all.0 %}
         <p>
           Votre paquet sera livré par {{ order.shipment_set.all.0.carrier }} <br>
           Votre numéro de suivi est le {{ order.shipment_set.all.0.tracking_number }}. <br>
-          Voici le lien pour le suivi est <a href="{{ order.shipment_set.all.0.tracking_url }}">{{ order.shipment_set.0.tracking_url }}</a>
+          Voici le lien pour le suivi est <a href="{{ order.shipment_set.all.0.tracking_url }}">{{ order.shipment_set.all.0.tracking_url }}</a>
         </p>
         {% endif %}
 

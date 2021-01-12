@@ -146,4 +146,7 @@ class OrderItem(models.Model):
     quantity_shipped = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
-        return self.variant.name +":"+str(self.quantity)
+        if self.variant:
+            return self.variant.name +":"+str(self.quantity)
+        else:
+            return str(self.quantity)

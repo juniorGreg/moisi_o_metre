@@ -111,7 +111,10 @@ class EmailNotifications:
 
 def _get_and_update_order(data):
     printful_order = data["order"]
-    order = Order.objects.get(id= printful_order["id"])
+    if settings.DEBUG:
+        order = Order.objects.get(id='1000')
+    else:
+        order = Order.objects.get(id= printful_order["id"])
     order.status = printful_order["status"]
     order.save()
     return order
@@ -122,11 +125,11 @@ def shipping_notification(data):
     printful_shipment = data["shipment"]
 
     order = _get_and_update_order(data)
-    shipment = Shipment.create(id=printful_shipment["id"],
-                               carrier=printful_order["carrier"],
-                               service=printful_order["service"],
-                               tracking_number=printful_order["tracking_number"],
-                               tracking_url=printful_order["tracking_url"],
+    shipment = Shipment.objects.create(id=printful_shipment["id"],
+                               carrier=printful_shipment["carrier"],
+                               service=printful_shipment["service"],
+                               tracking_number=printful_shipment["tracking_number"],
+                               tracking_url=printful_shipment["tracking_url"],
                                order=order)
 
     shipment.save()
