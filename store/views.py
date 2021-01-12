@@ -104,7 +104,7 @@ def webhook(request):
 API_PRINTFUL = "https://api.printful.com/%s"
 HEADERS = {'Authorization': 'Basic %s' % settings.PRINTFUL_API_KEY }
 
-def upload_image_to_model(variant, url):
+def upload_image_to_model(product, variant, url):
     req_img = requests.get(url, stream=True)
 
     if req_img.status_code == 200:
@@ -120,6 +120,7 @@ def upload_image_to_model(variant, url):
 
 
             variant_image = VariantImage()
+            variant_image.product = product
 
             variant_image.preview.save(file_name,
                              ContentFile(path.getvalue()),
@@ -127,11 +128,6 @@ def upload_image_to_model(variant, url):
             variant_image.save()
 
         variant.variant_image = variant_image
-
-
-
-
-
 
 
 
@@ -147,15 +143,33 @@ def update_store_products(new_data):
 
         data = r.json()
 
-        for product in data["result"]:
-            reg_product, created = Product.objects.get_or_create(id = product["id"])
+        if "sync_product" in new_data:
+            updated_product_id = str(new_data["sync_product"]["id"])
+        else:
+            updated_product_id = str(new_data["product_id"])
 
-            reg_product.name = product["name"]
+        printful_products_ids = set(list(map(lambda product: str(product["id"]), data["result"])))
+        local_products_ids = set(list(Product.objects.values_list('id', flat=True)))
+
+        deleted_products_ids = list(local_products_ids - printful_products_ids)
+        new_products_ids = list(printful_products_ids - local_products_ids)
+
+        if updated_product_id in printful_products_ids \
+            and updated_product_id not in new_products_ids:
+            new_products_ids.append(updated_product_id)
+
+        if len(deleted_products_ids) > 0:
+            Product.objects.filter(pk__in=deleted_products_ids).delete()
+
+        product_map = { str(product["id"]): {"name": product["name"], "external_id": product["external_id"]} for product in data["result"]}
+
+        for product_id in new_products_ids:
+            reg_product, created = Product.objects.get_or_create(id = product_id)
+
+            reg_product.name = product_map[product_id]["name"]
 
             if created :
-                reg_product.external_id = product["external_id"]
-
-
+                reg_product.external_id = product_map[product_id]["external_id"]
 
             reg_product.save()
 
@@ -166,8 +180,6 @@ def update_store_products(new_data):
                 response_req_variants = req_variants.json()
                 sync_variants = response_req_variants["result"]["sync_variants"]
 
-
-
                 for variant in sync_variants:
 
                     reg_variant, created = Variant.objects.get_or_create(id = variant["id"])
@@ -177,13 +189,13 @@ def update_store_products(new_data):
                     reg_variant.product = reg_product
 
                     #Parse color and size of the variant by the name
-                    p_size_color = re.compile(" - ([A-Za-z ]*) / ([0-9 xXSML]{1,5})$")
+                    p_size_color = re.compile(" - ([A-Za-z ]*) / ([0-9 ×XSML]{1,5})$")
                     m_size_color = p_size_color.search(reg_variant.name)
 
                     p_color = re.compile(" - ([A-Za-z ]*)$")
                     m_color = p_color.search(reg_variant.name)
 
-                    p_size = re.compile(" - ([0-9 xXSML]{1,5})$$")
+                    p_size = re.compile(" - ([0-9 ×XSML]{1,5})$")
                     m_size = p_size.search(reg_variant.name)
 
                     if m_size_color:
@@ -194,21 +206,16 @@ def update_store_products(new_data):
                     elif m_size:
                         reg_variant.size = m_size.group(1).lower()
 
-
-
-
                     if created:
 
                         reg_variant.variant_id = variant["variant_id"]
                         reg_variant.external_id = variant["external_id"]
 
-
-
                         files = variant["files"]
-                        
+
                         for file in files:
                             if file["type"] == "preview":
-                                upload_image_to_model(reg_variant, file["preview_url"])
+                                upload_image_to_model(reg_product, reg_variant, file["preview_url"])
                                 break
 
                     reg_variant.save()

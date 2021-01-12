@@ -158,7 +158,8 @@ a {
 }
 
 $body-family: "Josefin Sans";
-
+$badge-height: 16px;
+$badge-padding: .15rem .15rem;
 @import "~bulma/bulma";
 @import "~@creativebulma/bulma-tooltip";
 @import "~@creativebulma/bulma-badge";

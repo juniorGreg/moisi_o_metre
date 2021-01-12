@@ -1,6 +1,7 @@
 <template lang="html">
   <div class="container">
     <variants></variants>
+    <size-table></size-table>
     <basket :paypal_client_id="paypal_client_id"></basket>
 
       <div v-for="index in lines_number" :key="index" class="tile is-ancestor">
@@ -28,13 +29,15 @@
 
 import { mapState , mapMutations , mapActions } from 'vuex';
 import Variants from './components/Variants.vue';
-import Basket from './components/Basket.vue'
+import Basket from './components/Basket.vue';
+import SizeTable from './components/SizeTable.vue';
 
 export default {
   props: ["paypal_client_id"],
   components: {
       Variants,
-      Basket
+      Basket,
+      SizeTable
   },
 
   data: function(){

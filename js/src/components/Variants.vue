@@ -2,14 +2,14 @@
   <div class="modal" :class="{'is-active': is_variant_visible}">
     <div class="modal-background"></div>
       <div class="modal-content">
-        <!-- Any other Bulma elements you want -->
-        <div class="box" v-if="selected_variant">
+        
+        <div class="box box-variant" v-if="selected_variant">
             <p>{{ selected_product.name }}</p>
-            <figure class="image">
-                <img class="no-dark-mode" :src="selected_variant.variant_image.resized_preview" alt="product image">
+            <figure class="image is-square">
+                <img class="no-dark-mode" height="450" width="450" :src="selected_variant.variant_image.resized_preview" alt="product image">
             </figure>
             <br>
-            <div class="buttons">
+            <div class="buttons" v-if="is_color">
               <div class="text is-shared is-size-6 is-size-7-mobile">
                 Couleurs disponibles:
               </div>
@@ -22,7 +22,7 @@
                 </button>
 
             </div>
-            <div class="buttons">
+            <div v-if="is_size" class="buttons">
               <div class="text is-shared is-size-6 is-size-7-mobile">
                 Grandeur disponibles:
               </div>
@@ -30,7 +30,9 @@
                   <label v-for="size in variant_sizes" class="radio">
                       <input type="radio" name="size" :value="size" v-model="selected_size">
                       {{ size }}
-                  </label>
+                    </input>
+                  </label><br>
+                  <button class="button is-text is-small" type="button" name="button" @click="showSizeTableModal">Guide des grandeurs</button>
               </div>
 
 
@@ -73,6 +75,14 @@ export default {
       }
     },
 
+    is_size: function(){
+
+      return this.variant_sizes[0] !== '';
+    },
+    is_color: function(){
+
+      return this.variant_colors[0] !== '';
+    }
 
   },
 
@@ -80,7 +90,8 @@ export default {
     ...mapActions([
       'hideVariantModal',
       "getVariantBySizeAndColor",
-      "getShippingCost"
+      "getShippingCost",
+      "showSizeTableModal"
     ]),
     ...mapMutations([
       'ADD_VARIANT_TO_BASKET'
@@ -120,6 +131,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .box-variant {
+      max-width: 500px;
+    }
+
   .button-color {
     height: 25px;
     width: 25px;

@@ -21,7 +21,7 @@ class Product(models.Model):
 
 
 class VariantImage(models.Model):
-
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     thumbnail = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)
     preview = models.ImageField(upload_to=STORE_UPLOAD_FOLDER)
     resized_preview = models.ImageField(upload_to=STORE_UPLOAD_FOLDER, blank=True)

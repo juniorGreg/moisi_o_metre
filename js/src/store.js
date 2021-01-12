@@ -26,6 +26,7 @@ export default new Vuex.Store({
     is_store: false,
     is_variant_visible: false,
     is_basket_visible: false,
+    is_size_table_visible: false,
     selected_product: null,
     selected_variant: null,
     products: [],
@@ -99,6 +100,11 @@ export default new Vuex.Store({
 
     SET_IS_SEARCH_BAR_VISIBLE: (state, value) => {
       state.is_search_bar_visible = value
+    },
+
+
+    SET_IS_SIZE_TABLE_VISIBLE: (state, value) => {
+      state.is_size_table_visible = value
     },
 
     SET_QUERY_ACTIVE: (state, value) => {
@@ -177,6 +183,8 @@ export default new Vuex.Store({
         })
 
         localStorage.setItem("basketMoisi", JSON.stringify(state.basket));
+
+
     },
 
     CLEAR_BASKET: (state) => {
@@ -326,6 +334,14 @@ export default new Vuex.Store({
       context.commit("SET_IS_VARIANT_VISIBLE", false)
     },
 
+    showSizeTableModal: (context) => {
+      context.commit("SET_IS_SIZE_TABLE_VISIBLE", true)
+    },
+
+    hideSizeTableModal: (context) => {
+      context.commit("SET_IS_SIZE_TABLE_VISIBLE", false)
+    },
+
     getVariantBySizeAndColor: (context, {size, color}) => {
       function isSizeAndColor(variant){
         return variant.size === size && variant.color === color
@@ -339,6 +355,11 @@ export default new Vuex.Store({
     getShippingCost: (context, location = {}) => {
       const itemsSet = new Map()
       const items = []
+
+      if(context.state.basket.length === 0){
+        context.commit("SET_SHIPPING_COST", 0.0);
+        return;
+      }
 
       context.state.basket.forEach((variant) => {
         const variant_id = variant.variant_id;
@@ -412,6 +433,7 @@ export default new Vuex.Store({
           }))]
         }
 
+        
         return []
       },
 

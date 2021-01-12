@@ -7,26 +7,26 @@
 
           <div v-show="order_process">
 
-            <h1 class="title">Votre panier</h1>
+            <h1 class="subtitle">Votre panier</h1>
             <article v-for="item in basket" class="media">
 
               <figure class="media-left">
-                <p class="image is-64x64">
+                <p class="image is-48x48">
                   <img class="no-dark-mode" :src="item.variant_image.thumbnail" alt="image item">
                 </p>
               </figure>
 
               <div class="media-content">
                 <div class="content is-size-7">
-                  <nav class="level">
+                  <nav class="level is-mobile">
                     <div class="level-left">
-                      <div class="level-item">
+                      <div class="level-item variant-item">
                           {{ item.name }}
                       </div>
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        {{ item.price }}
+                        ${{ item.price }}
                       </div>
                     </div>
                   </nav>
@@ -36,12 +36,12 @@
               </div>
 
               <div class="media-right">
-                  <button class="delete" @click="removeItem(item)"></button>
+                  <button class="delete is-warning" @click="removeItem(item)"></button>
               </div>
 
             </article>
 
-            <nav class="level">
+            <nav class="level is-mobile">
               <div class="level-left">
                 <div class="level-item">
                     livraison (estimation):
@@ -50,12 +50,12 @@
 
               <div class="level-right">
                   <div class="level-item">
-                    {{ shipping_cost }}
+                    ${{ shipping_cost }}
                   </div>
               </div>
             </nav>
 
-            <nav class="level">
+            <nav class="level is-mobile">
               <div class="level-left">
                 <div class="level-item">
                     coût total:
@@ -64,7 +64,7 @@
 
               <div class="level-right">
                   <div class="level-item">
-                    {{ basket_total_price + shipping_cost}}
+                    ${{ basket_total_price + shipping_cost}}
                   </div>
               </div>
             </nav>
@@ -291,4 +291,12 @@ export default {
 </script>
 
 <style lang="css" scoped>
+@media screen and (max-width:600px){
+  .variant-item{
+    width: 50vw;
+    overflow-wrap: break-work;
+  }
+}
+
+
 </style>
