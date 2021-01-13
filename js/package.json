@@ -34,6 +34,7 @@
     "animejs": "^3.2.0",
     "axios": "^0.21.1",
     "bulma": "^0.9.1",
+    "bulma-pageloader": "^0.3.0",
     "chart": "^0.1.2",
     "chart.js": "^2.9.3",
     "vue": "^2.6.12",

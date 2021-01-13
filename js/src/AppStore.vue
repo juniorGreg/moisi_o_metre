@@ -19,6 +19,10 @@
           </div>
         </div>
 
+        <div v-for=" padding in getPaddingTilesNumber(index)" class="tile is-parent">
+
+        </div>
+
       </div>
 
   </div>
@@ -77,6 +81,17 @@ export default {
 
       return this.products.slice(index0, index1)
 
+    },
+
+    getPaddingTilesNumber: function(index){
+      var index0 = (index - 1) * this.columns_number;
+      var index1 = index0 + this.columns_number;
+
+      if (index1 > this.products.length) {
+        return index1 - this.products.length;
+      }
+
+      return 0;
     },
 
     showVariants: function(product) {

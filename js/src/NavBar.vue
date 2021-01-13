@@ -1,5 +1,6 @@
 <template lang="html">
   <div>
+    <div class="pageloader is-black" :class="{'is-active': is_loading}"><span class="title">Un momento, por favor</span></div>
     <snows v-if="is_snowing" :snowflake_img="snow_img_url"></snows>
     <nav class="navbar is-fixed-top is-transparent" role="navigation" aria-label="main navigation">
       <div class="container">
@@ -62,7 +63,7 @@ export default {
   components: { SearchBar , Snows },
   data(){
     return {
-      isActive: false
+      isActive: false,
     }
   },
 
@@ -87,7 +88,8 @@ export default {
       "dark_mode",
       "is_snowing",
       "is_store",
-      'is_basket_visible'
+      'is_basket_visible',
+      'is_loading'
     ]),
     ...mapGetters([
       "basket_items_count"
@@ -103,10 +105,11 @@ export default {
       "showSearchBar",
       "getDarkMode",
       "isSnowing",
-      'showBasketModal'
+      'showBasketModal'    
     ]),
     ...mapMutations([
-      "SET_DARK_MODE"
+      "SET_DARK_MODE",
+      "SET_IS_LOADING"
     ]),
     toggleMenu: function(){
       this.isActive = !this.isActive
@@ -124,12 +127,9 @@ export default {
   },
 
   mounted: function(){
-    setTimeout(() => {
-      console.log("preload")
-      document.documentElement.classList.remove("preload");
-    }, 1000);
 
     this.isSnowing();
+    setTimeout(() => {this.SET_IS_LOADING(false)}, 1000)
   },
 
   watch: {

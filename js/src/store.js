@@ -27,6 +27,7 @@ export default new Vuex.Store({
     is_variant_visible: false,
     is_basket_visible: false,
     is_size_table_visible: false,
+    is_loading: true,
     selected_product: null,
     selected_variant: null,
     products: [],
@@ -139,6 +140,10 @@ export default new Vuex.Store({
 
     SET_IS_SNOWING: (state, value) => {
       state.is_snowing = value
+    },
+
+    SET_IS_LOADING: (state, value) => {
+      state.is_loading = value;
     },
 
     SET_IS_BASKET_VISIBLE: (state, value) => {
@@ -433,7 +438,7 @@ export default new Vuex.Store({
           }))]
         }
 
-        
+
         return []
       },
 
@@ -463,7 +468,7 @@ export default new Vuex.Store({
       },
 
       basket_total_price: state => {
-        return state.basket.reduce(( total, { price }) => total + price, 0)
+        return state.basket.reduce(( total, { price }) => total + price, 0);
       }
 
 

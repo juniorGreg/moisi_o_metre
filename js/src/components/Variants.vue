@@ -2,7 +2,7 @@
   <div class="modal" :class="{'is-active': is_variant_visible}">
     <div class="modal-background"></div>
       <div class="modal-content">
-        
+
         <div class="box box-variant" v-if="selected_variant">
             <p>{{ selected_product.name }}</p>
             <figure class="image is-square">
@@ -102,7 +102,11 @@ export default {
         "black": "#14191e",
         "navy": "#191c25",
         "dark heather": "#37363b",
-        "red": "#a2312b"
+        "red": "#a2312b",
+        "sport grey": "#9b969c",
+        "white": "#f1f0f5",
+        "heather grey": "#a6a5a0",
+        "spruce": "#263d2d"
       }
 
       return colormap[color];

@@ -1,9 +1,5 @@
 @charset "utf-8";
 
-html.preload, .preload * {
-  transition: none !important;
-}
-
 
 @font-face {
   font-family: "Josefin Sans";
@@ -33,84 +29,11 @@ $notification-padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 
 $navbar-breakpoint: 1400px;
 
-$dark-mode-transition-time: 1s;
-
-html, section * {
-  transition: color $dark-mode-transition-time,
-  background-color $dark-mode-transition-time,
-  filter $dark-mode-transition-time;
-}
-
-.box {
-  max-width: 1200px;
-  margin: auto;
-}
-
-//Dark Mode style
-section.dark-mode {
-    * :not(a) {
-    //  background: black;
-
-      //filter: invert(1) hue-rotate(3.1416rad);
-      color: invert(#4a4a4a);
-
-    }
-
-    ::placeholder, .icon{
-        color: invert(#4a4a4a);
-        opacity: 0.3;
-
-        &:focus {
-          color: blue;
-        }
-
-
-    }
-
-    input:focus * {
-      color: blue;
-    }
 
 
 
-    img:not(.no-dark-mode){
-      filter: invert(1) hue-rotate(3.1416rad);
 
 
-    }
-
-
-    $dark-mode-background-color: #171717;
-
-      button, input, textarea{
-        background-color: $dark-mode-background-color;
-      }
-
-    .box {
-      //filter: invert(1) hue-rotate(3.1416rad);
-      background-color: $dark-mode-background-color;
-
-      box-shadow: 0 0.5em 1em -0.125em invert(rgba(10, 10, 10, 0.1)), 0 0px 0 1px invert(rgba(10, 10, 10, 0.02));
-    }
-
-
-}
-
-$dark-mode-background-color-html: #1F1F1F;
-
-.dark-mode-html{
-  //transition: color 3s, background-color 3s;
-  background: $dark-mode-background-color-html;
-}
-
-article.panel.dark-mode {
-  background-color: $dark-mode-background-color-html;
-  .panel-body{
-    filter: invert(1) hue-rotate(3.1416rad);
-  }
-}
-
-// End DarkMode Style
 
 html {
   height: 100%;
@@ -163,6 +86,7 @@ $badge-padding: .15rem .15rem;
 @import "~bulma/bulma";
 @import "~@creativebulma/bulma-tooltip";
 @import "~@creativebulma/bulma-badge";
+@import "~bulma-pageloader";
 
 //import font-awesome
 $fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts" !default;
@@ -255,3 +179,89 @@ p {
   margin-left: auto;
   margin-right: auto;
 }
+
+.box {
+  max-width: 1200px;
+  margin: auto;
+}
+
+//Dark Mode style
+
+$dark-mode-transition-time: 1s;
+
+html, section * {
+  transition: color $dark-mode-transition-time,
+  background-color $dark-mode-transition-time,
+  filter $dark-mode-transition-time;
+}
+
+section.dark-mode {
+    * :not(a) {
+    //  background: black;
+
+      //filter: invert(1) hue-rotate(3.1416rad);
+      color: invert(#4a4a4a);
+
+    }
+
+    .button.is-text {
+      color: invert(#4a4a4a);
+    }
+
+    ::placeholder, .icon{
+        color: invert(#4a4a4a);
+        opacity: 0.3;
+
+        &:focus {
+          color: blue;
+        }
+
+
+    }
+
+    input:focus * {
+      color: blue;
+    }
+
+
+
+    img:not(.no-dark-mode){
+      filter: invert(1) hue-rotate(3.1416rad);
+
+
+    }
+
+
+
+
+    $dark-mode-background-color: #171717;
+
+      button, input, textarea, table{
+        background-color: $dark-mode-background-color;
+      }
+
+    .box{
+      //filter: invert(1) hue-rotate(3.1416rad);
+      background-color: $dark-mode-background-color;
+
+      box-shadow: 0 0.5em 1em -0.125em invert(rgba(10, 10, 10, 0.1)), 0 0px 0 1px invert(rgba(10, 10, 10, 0.02));
+    }
+
+
+}
+
+$dark-mode-background-color-html: #1F1F1F;
+
+.dark-mode-html{
+  //transition: color 3s, background-color 3s;
+  background: $dark-mode-background-color-html;
+}
+
+article.panel.dark-mode {
+  background-color: $dark-mode-background-color-html;
+  .panel-body{
+    filter: invert(1) hue-rotate(3.1416rad);
+  }
+}
+
+// End DarkMode Style

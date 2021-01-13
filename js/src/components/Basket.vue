@@ -97,6 +97,8 @@
 
           </div>
 
+
+
         </div><!-- End div box -->
 
       </div><!-- End -div modal content-->
@@ -144,7 +146,8 @@ export default {
   methods: {
     ...mapMutations([
       'REMOVE_VARIANT_FROM_BASKET',
-      'CLEAR_BASKET'
+      'CLEAR_BASKET',
+      "SET_IS_LOADING"
     ]),
 
     ...mapActions([
@@ -168,6 +171,7 @@ export default {
       this.loaded=true;
       window.paypal.Buttons({
         createOrder: (data, actions) => {
+
 
           return actions.order.create({
             purchase_units: [{
@@ -233,8 +237,8 @@ export default {
         },
 
         onApprove: (data, actions) => {
-          console.log("Approuve")
-          console.log(actions)
+
+          this.SET_IS_LOADING(true);
           return actions.order.get().then((details) => {
             console.log(details);
             const shipping = details.purchase_units[0].shipping;
@@ -265,6 +269,8 @@ export default {
                 })
               }).catch(() => {
                 this.order_failed = true;
+              }).finally(() => {
+                this.SET_IS_LOADING(false);
               });
         });
       }

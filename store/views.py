@@ -7,6 +7,7 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
 
+from django.db.models import Prefetch
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -115,7 +116,7 @@ def upload_image_to_model(product, variant, url):
 
         variant_image = VariantImage.objects.filter(hash=md5hash).first()
 
-        if not variant_image:
+        if variant_image is None:
             file_name = os.path.basename(url)
 
 
@@ -171,7 +172,7 @@ def update_store_products(new_data):
             if created :
                 reg_product.external_id = product_map[product_id]["external_id"]
 
-            reg_product.save()
+
 
             #get variants
             req_variants = requests.get(API_PRINTFUL % "sync/products/%s" % reg_product.id, headers=HEADERS)
@@ -179,6 +180,12 @@ def update_store_products(new_data):
             if req_variants.status_code == 200:
                 response_req_variants = req_variants.json()
                 sync_variants = response_req_variants["result"]["sync_variants"]
+                local_sync_variant_id = set(reg_product.variant_set.values_list('id', flat=True))
+                printful_sync_variant_id = set(map(lambda variant: str(variant["id"]), sync_variants))
+
+                deleted_variants_id = list(local_sync_variant_id - printful_sync_variant_id)
+                if len(deleted_variants_id) > 0:
+                    Variant.objects.filter(pk__in=deleted_variants_id).delete()
 
                 for variant in sync_variants:
 
@@ -219,12 +226,14 @@ def update_store_products(new_data):
                                 break
 
                     reg_variant.save()
+            reg_product.save()
 
     print("update_ products")
 
 @api_view(['GET'])
 def products(request):
-    products = Product.objects.all()
+    products = Product.objects.prefetch_related(
+        Prefetch('variant_set', queryset=Variant.objects.select_related("variant_image")))
 
     serializer = ProductSerializer(products, many=True)
 
@@ -286,7 +295,7 @@ def order(request):
     if req_order.status_code == 200:
         printful_order = req_order.json()["result"]
         total_cost =float(printful_order["retail_costs"]["total"]) + float(printful_order["costs"]["shipping"])
-        if total_cost == request.data["total_cost"]:
+        if abs(total_cost - request.data["total_cost"]) > 0.001:
             print("validated total_cost: %s" % total_cost)
             print("received total_cost: %s" % request.data["total_cost"])
             return Response({"error": "validation failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -306,15 +315,23 @@ def order(request):
         else:
             return Response({'error': 'order failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    order = Order.objects.create(id=printful_order["id"],
-                                 external_id=printful_order["external_id"],
-                                 paypal_id=request.data["paypal_id"],
-                                 total_cost=float(printful_order["retail_costs"]["total"]),
-                                 shipping_cost=float(printful_order["costs"]["shipping"]),
-                                 status="draft")
+    order = Order.objects.filter(id=printful_order["id"]).first()
+    if order:
+        order.paypal_id=request.data["paypal_id"]
+        order.total_cost=float(printful_order["retail_costs"]["total"])
+        order.shipping_cost=float(printful_order["costs"]["shipping"])
+        order.status="draft"
+        order.shipment_set.all().delete()
+    else:
+        order = Order.objects.create(id=printful_order["id"],
+                                     external_id=printful_order["external_id"],
+                                     paypal_id=request.data["paypal_id"],
+                                     total_cost=float(printful_order["retail_costs"]["total"]),
+                                     shipping_cost=float(printful_order["costs"]["shipping"]),
+                                     status="draft")
     order.save()
     req_customer = request.data["order"]["recipient"]
-    customer = Customer.objects.create(fullname = req_customer["name"],
+    customer, created = Customer.objects.update_or_create(fullname = req_customer["name"],
                                        address= req_customer["address1"],
                                        country_code=req_customer["country_code"],
                                        state_code= req_customer["state_code"],

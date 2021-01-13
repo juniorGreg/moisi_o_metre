@@ -13,4 +13,4 @@ beautifulsoup4 == 4.9.1
 requests== 2.24.0
 pytube3 == 9.6.4
 langdetect == 1.0.8
-lxml == 4.6.2
+django-extensions==3.0.8
