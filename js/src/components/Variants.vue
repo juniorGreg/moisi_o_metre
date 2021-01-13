@@ -37,7 +37,7 @@
 
 
             </div>
-            <p>{{ selected_variant.price }}</p>
+            <p>${{ selected_variant.price }} CAD</p>
             <button class="button no-dark-mode is-small is-info" @click="addItemToBasket">Ajouter au panier</button>
         </div>
 
@@ -135,6 +135,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    p {
+      margin-bottom: 0.75rem;
+    }
     .box-variant {
       max-width: 500px;
     }

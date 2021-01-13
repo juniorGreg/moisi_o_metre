@@ -108,6 +108,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  p {
+    margin-bottom: 0rem;
+  }
   .tile.is-child.box {
 
     cursor: pointer;
