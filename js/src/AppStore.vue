@@ -15,7 +15,7 @@
             </figure>
             <br>
 
-            <p>{{product.variant_set[0].price}} $ CAD</p>
+            <p>{{product.variant_set[0].price}} CDN$</p>
           </div>
         </div>
 
@@ -37,7 +37,7 @@ import Basket from './components/Basket.vue';
 import SizeTable from './components/SizeTable.vue';
 
 export default {
-  props: ["paypal_client_id"],
+  props: ["paypal_client_id", "products_count"],
   components: {
       Variants,
       Basket,
@@ -46,7 +46,7 @@ export default {
 
   data: function(){
     return {
-        columns_number: 3
+        columns_number: 5,
     }
 
   },
@@ -66,6 +66,10 @@ export default {
       "getProducts",
       "showVariantModal",
       "setUpStore"
+    ]),
+
+    ...mapMutations([
+      "SET_PRODUCTS_COUNT"
     ]),
 
     getSliceProducts: function(index){
@@ -96,11 +100,34 @@ export default {
 
     showVariants: function(product) {
       this.showVariantModal(product)
-      console.log("variants");
+    },
+
+    checkProducts: function(ev){
+      if ((window.innerHeight + window.scrollY + 50) >= document.body.offsetHeight) {
+        console.log("get products scroll")
+          this.getProducts();
+      }
+    },
+
+    checkWindowSize: function(ev) {
+      if(window.innerWidth > 1300){
+        this.columns_number = 5;
+      }
+
+      else if(window.innerWidth < 1300 && window.innerWidth > 800 ){
+        this.columns_number = 3;
+      }
     }
   },
 
+  created: function(){
+    window.addEventListener('scroll', this.checkProducts);
+    window.addEventListener("resize", this.checkWindowSize)
+    this.SET_PRODUCTS_COUNT(this.products_count)
+  },
+
   mounted: function(){
+    this.checkWindowSize()
     this.getProducts();
     this.setUpStore();
   }

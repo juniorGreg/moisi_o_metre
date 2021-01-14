@@ -37,7 +37,7 @@
 
 
             </div>
-            <p>${{ selected_variant.price }} CAD</p>
+            <p> {{ selected_variant.price }} CDN$</p>
             <button class="button no-dark-mode is-small is-info" @click="addItemToBasket">Ajouter au panier</button>
         </div>
 

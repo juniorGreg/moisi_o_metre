@@ -26,7 +26,7 @@
                     </div>
                     <div class="level-right">
                       <div class="level-item">
-                        ${{ item.price }}
+                        {{ item.price }} $
                       </div>
                     </div>
                   </nav>
@@ -50,7 +50,7 @@
 
               <div class="level-right">
                   <div class="level-item">
-                    ${{ shipping_cost }}
+                    {{ shipping_cost }} CDN$
                   </div>
               </div>
             </nav>
@@ -64,7 +64,7 @@
 
               <div class="level-right">
                   <div class="level-item">
-                    ${{ basket_total_price + shipping_cost}}
+                    {{ basket_total_price + shipping_cost}} CDN$
                   </div>
               </div>
             </nav>

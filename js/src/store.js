@@ -31,6 +31,7 @@ export default new Vuex.Store({
     selected_product: null,
     selected_variant: null,
     products: [],
+    products_count: 0,
 
     basket: [],
 
@@ -155,6 +156,10 @@ export default new Vuex.Store({
       //remove duplicates
 
       state.products = [...new Set(state.products)]
+    },
+
+    SET_PRODUCTS_COUNT: (state, value) => {
+      state.products_count = value;
     },
 
     SET_SELECTED_PRODUCT: (state, value) => {
@@ -324,9 +329,26 @@ export default new Vuex.Store({
     },
 
     getProducts: (context) => {
-      axios.get("/store/products").then(response => {
-        context.commit("ADD_PRODUCTS", response.data)
-      })
+      if(context.state.query_active)
+        return;
+
+      context.commit("SET_QUERY_ACTIVE", true);
+
+      if(context.state.products.length < context.state.products_count){
+        const request_index = context.state.products.length;
+        const request_length = 6;
+        const request = "/store/products/"+request_index+"/"+request_length;
+        axios.get(request).then(response => {
+          console.log("get products")
+          context.commit("ADD_PRODUCTS", response.data)
+        }).finally(() => {
+          setTimeout(() => {
+              context.commit("SET_QUERY_ACTIVE", false);
+          }, 1000)
+
+        })
+      }
+
     },
 
     showVariantModal: (context, product) => {

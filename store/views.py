@@ -32,6 +32,10 @@ from .email_notifications import *
 def index(request):
 
     context = get_main_context("Boutique", "La boutique du MoisiOMètre", "/store")
+
+    products_count = Product.objects.count()
+    context["products_count"] = products_count
+
     if settings.DEBUG:
         context["paypal_client_id"] = settings.PAYPAL_SANDBOX_CLIENT_ID
     else:
@@ -231,9 +235,9 @@ def update_store_products(new_data):
     print("update_ products")
 
 @api_view(['GET'])
-def products(request):
+def products(request, start_index=0, length=6):
     products = Product.objects.prefetch_related(
-        Prefetch('variant_set', queryset=Variant.objects.select_related("variant_image")))
+        Prefetch('variant_set', queryset=Variant.objects.select_related("variant_image")))[start_index: start_index+length]
 
     serializer = ProductSerializer(products, many=True)
 
