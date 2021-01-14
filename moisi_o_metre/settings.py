@@ -164,13 +164,10 @@ REST_FRAMEWORK = {
 
 
 
-MEDIA_URL = '/images/'
-MEDIA_ROOT= os.path.join(BASE_DIR, 'static/images')
 
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+
+
 
 #Email settings
 DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
@@ -194,10 +191,22 @@ if not DEBUG:
     # Tell django-storages the domain to use to refer to static files.
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+
+    DEFAULT_FILE_STORAGE = 'moisi_o_metre.storage_backends.PublicMediaStorage'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/images/'
 else:
     STATIC_URL = '/static/'
+    MEDIA_URL = '/images/'
+    MEDIA_ROOT= os.path.join(BASE_DIR, 'static/images')
+
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+
 
 django_heroku.settings(locals(), staticfiles=False)
