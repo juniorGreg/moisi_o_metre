@@ -20,9 +20,6 @@ class EmailNotifications:
         self.order = order
 
         self.email_address = order.customer_set.all()[0].email
-        self.static_url = settings.STATIC_URL
-        if self.static_url == "/static/":
-            self.static_url =  "http://localhost:8000"+self.static_url
 
     def confirm_order(self):
         msg = {
@@ -99,12 +96,12 @@ class EmailNotifications:
         email.mixed_subtype = "related"
         email.attach_alternative(html_content, "text/html")
 
-        req_image = requests.get(self.static_url+"images/moisiometre_email.gif", stream=True)
-
-        image = MIMEImage(req_image.raw.read(), "gif")
-        image.add_header('Content-ID', '<moisiometre_email.gif>')
-        image.add_header("Content-Disposition", "inline", filename="moisiometre_email.gif")
-        email.attach(image)
+        req_image = requests.get("https://moisi-bucket.s3.us-east-2.amazonaws.com/images/moisiometre_email.gif", stream=True)
+        if req_image.status_code == 200:
+            image = MIMEImage(req_image.raw.read(), "gif")
+            image.add_header('Content-ID', '<moisiometre_email.gif>')
+            image.add_header("Content-Disposition", "inline", filename="moisiometre_email.gif")
+            email.attach(image)
 
         email.send()
 

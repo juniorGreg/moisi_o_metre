@@ -343,35 +343,38 @@ def order(request):
         else:
             print(req_order.text)
             return Response({'error': 'order failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    try:
+        order = Order.objects.filter(id=printful_order["id"]).first()
+        if order:
+            order.paypal_id=request.data["paypal_id"]
+            order.total_cost=float(printful_order["retail_costs"]["total"])
+            order.shipping_cost=float(printful_order["costs"]["shipping"])
+            order.status="draft"
+            order.shipment_set.all().delete()
+        else:
+            order = Order.objects.create(id=printful_order["id"],
+                                         external_id=printful_order["external_id"],
+                                         paypal_id=request.data["paypal_id"],
+                                         total_cost=float(printful_order["retail_costs"]["total"]),
+                                         shipping_cost=float(printful_order["costs"]["shipping"]),
+                                         status="draft")
+        order.save()
+        req_customer = request.data["order"]["recipient"]
+        customer, created = Customer.objects.update_or_create(fullname = req_customer["name"],
+                                           address= req_customer["address1"],
+                                           country_code=req_customer["country_code"],
+                                           state_code= req_customer["state_code"],
+                                           zip_code=req_customer["zip"],
+                                           email = req_customer["email"],
+                                           order=order)
+        customer.save()
+        for req_item in request.data["order"]["items"]:
+            variant = Variant.objects.get(id=req_item["sync_variant_id"])
+            order_item = OrderItem.objects.create(variant=variant, order=order, quantity=int(req_item["quantity"]))
+            order_item.save()
 
-    order = Order.objects.filter(id=printful_order["id"]).first()
-    if order:
-        order.paypal_id=request.data["paypal_id"]
-        order.total_cost=float(printful_order["retail_costs"]["total"])
-        order.shipping_cost=float(printful_order["costs"]["shipping"])
-        order.status="draft"
-        order.shipment_set.all().delete()
-    else:
-        order = Order.objects.create(id=printful_order["id"],
-                                     external_id=printful_order["external_id"],
-                                     paypal_id=request.data["paypal_id"],
-                                     total_cost=float(printful_order["retail_costs"]["total"]),
-                                     shipping_cost=float(printful_order["costs"]["shipping"]),
-                                     status="draft")
-    order.save()
-    req_customer = request.data["order"]["recipient"]
-    customer, created = Customer.objects.update_or_create(fullname = req_customer["name"],
-                                       address= req_customer["address1"],
-                                       country_code=req_customer["country_code"],
-                                       state_code= req_customer["state_code"],
-                                       zip_code=req_customer["zip"],
-                                       email = req_customer["email"],
-                                       order=order)
-    customer.save()
-    for req_item in request.data["order"]["items"]:
-        variant = Variant.objects.get(id=req_item["sync_variant_id"])
-        order_item = OrderItem.objects.create(variant=variant, order=order, quantity=int(req_item["quantity"]))
-        order_item.save()
+        EmailNotifications(order).confirm_order()
+    except Exception as e:
+        print(e)
 
-    EmailNotifications(order).confirm_order()
     return Response({"message": "order has been created"})
