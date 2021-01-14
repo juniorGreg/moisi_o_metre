@@ -204,11 +204,11 @@ export default {
           }
 
           const current_shipping_cost = this.shipping_cost;
-          console.log(current_shipping_cost);
+
 
           this.getShippingCost(location).then(() => {
             if(current_shipping_cost !== this.shipping_cost){
-              console.log("new shipping cost")
+
               return actions.order.patch([
                 {
                   op: 'replace',
@@ -232,15 +232,13 @@ export default {
             }
           })
 
-
-          console.log(location);
         },
 
         onApprove: (data, actions) => {
 
           this.SET_IS_LOADING(true);
           return actions.order.get().then((details) => {
-            console.log(details);
+
             const shipping = details.purchase_units[0].shipping;
               const order = {
                 paypal_id: details.id,
@@ -263,7 +261,7 @@ export default {
 
               return this.createOrder(order).then(() => {
                 return actions.order.capture().then((details) => {
-                  console.log(details);
+                  
                   this.order_success = true;
                   this.CLEAR_BASKET();
                 })
@@ -286,7 +284,7 @@ export default {
 
     script.addEventListener("load", this.setLoaded);
     document.body.appendChild(script);
-    console.log("basket: "+this.basket.length);
+
     if(this.basket.length > 0){
       this.getShippingCost();
     }

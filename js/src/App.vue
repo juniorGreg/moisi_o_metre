@@ -221,7 +221,7 @@ export default {
         if(postElement){
           var postRect = postElement.getBoundingClientRect();
           var scrollTop = postRect.top + window.scrollY - 50;
-          console.log(scrollTop);
+
           window.scrollTo({ top: scrollTop, left: 0, behavior: 'smooth'});
         }
       },
@@ -234,12 +234,11 @@ export default {
 
       showSources: function(el){
         el.style.maxHeight = el.scrollHeight + "px";
-        console.log(el.style.maxHeight);
+
       },
 
       hideSources: function (el){
-        console.log("leave");
-        el.style.maxHeight = 0;
+          el.style.maxHeight = 0;
       },
 
 

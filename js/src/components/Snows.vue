@@ -33,8 +33,7 @@ export default {
     var height = screen.height + 100;
     var width = screen.width;
 
-    console.log("screen height: "+height);
-
+  
     Array.from(snowflakes).forEach(function(snowflake, index)
     {
       snowflake.style.left =(-25 + (50 * index) % width)+"px";

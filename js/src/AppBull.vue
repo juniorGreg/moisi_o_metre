@@ -60,11 +60,11 @@ export default {
         this.loading_eval = true;
         this.error = null;
         axios.get("/bullshit_o_metre/website/?url="+url_escaped).then(response => {
-          console.log(response);
+
           this.website = response.data
 
         }).catch(api_error => {
-          console.log(api_error);
+        
           this.error = api_error.response.data.message;
           this.website = null;
         }).then(()=>{

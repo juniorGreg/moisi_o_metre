@@ -32,7 +32,7 @@ export default {
     },
     url: function(){
 
-        //console.log(local_url);
+
         return this.shared_url.replace("(link)", encodeURI(this.clean_local_url)).replace("(text)", encodeURI(this.text));
     }
   },
@@ -47,7 +47,7 @@ export default {
         var temp = document.createElement("input");
 
         this.$el.appendChild(temp);
-        //console.log(temp);
+      
 
         temp.setAttribute("value", this.url);
         temp.focus();

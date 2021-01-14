@@ -135,7 +135,6 @@ export default new Vuex.Store({
 
     SET_DARK_MODE: (state, value) => {
       state.dark_mode = value
-      console.log(state);
       localStorage.setItem("darkMode", JSON.stringify(value));
     },
 
@@ -219,8 +218,6 @@ export default new Vuex.Store({
   actions: {
     getPost: (context, id) => {
 
-
-      console.log("next post: "+id)
       axios.get("/posts/"+id).then(
         response => {
           context.commit("ADD_POST", response.data);
@@ -339,7 +336,6 @@ export default new Vuex.Store({
         const request_length = 10;
         const request = "/store/products/"+request_index+"/"+request_length;
         axios.get(request).then(response => {
-          console.log("get products")
           context.commit("ADD_PRODUCTS", response.data)
         }).finally(() => {
           setTimeout(() => {
@@ -408,13 +404,11 @@ export default new Vuex.Store({
       }
 
 
-      console.log(request);
-
       return axios.post("/store/shipping_cost", request).then(response => {
         const shipping_rates = response.data
 
         const standard_shipping_rate = shipping_rates.filter(shipping_rate => shipping_rate.id == "STANDARD")
-        console.log(standard_shipping_rate)
+      
         context.commit("SET_SHIPPING_COST", Number(response.data[0].rate));
       })
 
@@ -495,7 +489,6 @@ export default new Vuex.Store({
       },
 
       basket_items_count: (state) => {
-        console.log("basket length: "+state.basket.length);
         return state.basket.length
       },
 

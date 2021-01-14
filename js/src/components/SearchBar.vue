@@ -96,7 +96,7 @@ export default {
   updated: function(){
 
     if(this.is_search_bar_visible){
-        //console.log("updated");
+
         var searchBarInput = document.getElementById("searchBarInput");
         searchBarInput.focus();
 

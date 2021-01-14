@@ -104,7 +104,7 @@ export default {
 
         return key
       })
-      console.log(sizes)
+  
       return sizes;
     },
 

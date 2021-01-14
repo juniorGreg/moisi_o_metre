@@ -81,7 +81,6 @@ export default {
         index1 = this.products.length;
       }
 
-      console.log(index1)
 
       return this.products.slice(index0, index1)
 
@@ -104,7 +103,6 @@ export default {
 
     checkProducts: function(ev){
       if ((window.innerHeight + window.scrollY + 50) >= document.body.offsetHeight) {
-        console.log("get products scroll")
           this.getProducts();
       }
     },

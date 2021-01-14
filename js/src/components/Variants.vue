@@ -71,7 +71,7 @@ export default {
 
       },
       set(size) {
-        //console.log(size)
+
         const color = this.selected_variant.color;
         this.getVariantBySizeAndColor({ size, color });
       }
@@ -124,7 +124,7 @@ export default {
 
     getVariantByColor: function(color) {
       const size = this.selected_variant.size;
-      console.log(color)
+    
       this.getVariantBySizeAndColor({ size, color });
     },
 
