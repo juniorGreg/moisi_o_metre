@@ -119,20 +119,52 @@ def _get_and_update_order(data):
     order.save()
     return order
 
+def _update_order_items(data, db_order):
+    shipment_items = data["shipment"]["items"]
+    order_items = data["order"]["items"]
+    #print(order_items)
+    try:
+        order_items_by_id = { order_item["id"] : order_item["sync_variant_id"] for order_item in order_items}
+    except KeyError as e:
+        print(e)
+        return
+
+    #print(order_items_by_id)
+    #print(shipment_items)
+
+    for shipment_item in shipment_items:
+        if shipment_item["item_id"] in order_items_by_id:
+            sync_variant_id = order_items_by_id[shipment_item["item_id"]]
+            db_variant = Variant.objects.filter(id = sync_variant_id).first()
+            if db_variant is not None:
+                db_order_item = OrderItem.objects.filter(order = db_order, variant=db_variant).first()
+                if db_order_item is not None:
+                    db_order_item.quantity_shipped = shipment_item["quantity"]
+                    db_order_item.save()
+
+
+
+
 
 def shipping_notification(data):
-    print(data)
+
     printful_shipment = data["shipment"]
+    print(printful_shipment)
 
     order = _get_and_update_order(data)
-    shipment = Shipment.objects.create(id=printful_shipment["id"],
-                               carrier=printful_shipment["carrier"],
-                               service=printful_shipment["service"],
-                               tracking_number=printful_shipment["tracking_number"],
-                               tracking_url=printful_shipment["tracking_url"],
-                               order=order)
+    shipment, created = Shipment.objects.get_or_create(id=printful_shipment["id"])
+
+    shipment.carrier = printful_shipment["carrier"]
+    shipment.service = printful_shipment["service"]
+    shipment.tracking_number = printful_shipment["tracking_number"]
+    shipment.tracking_url = printful_shipment["tracking_url"]
+    shipment.order = order
 
     shipment.save()
+    _update_order_items(data, order)
+
+    #update order items
+
 
     EmailNotifications(order).shipping()
 

@@ -49,7 +49,7 @@
 
         {% for shipment in order.shipment_set.all %}
         <p>
-          Votre paquet sera livré par {{ shipment.carrier }} <br>
+          Votre paquet sera livré par {{ shipment.service }} <br>
           Votre numéro de suivi est le {{ shipment.tracking_number }}. <br>
           Voici le lien pour le suivi est <a href="{{ shipment.tracking_url }}">{{ shipment.tracking_url }}</a>
         </p>
