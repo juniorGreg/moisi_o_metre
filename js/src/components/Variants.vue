@@ -17,12 +17,12 @@
                         class="button is-small button-color no-dark-mode is-text"
                         :class="{'is-selected': isColorSelected(color)}"
                         :style="{'background-color': getHexColor(color)}"
-                        @click="getVariantByColor(color)">
+                        @click="getVariantByColor(color)" :data-tooltip="color">
 
                 </button>
 
             </div>
-            <div v-if="is_size" class="buttons">
+            <div v-if="is_size" >
               <div class="text is-shared is-size-6 is-size-7-mobile">
                 Grandeur disponibles:
               </div>
@@ -31,12 +31,14 @@
                       <input type="radio" name="size" :value="size" v-model="selected_size">
                       {{ size }}
                     </input>
-                  </label><br>
-                  <button class="button is-text is-small" type="button" name="button" @click="showSizeTableModal">Guide des grandeurs</button>
+                  </label>
               </div>
-
-
+              <button class="button is-text is-small" type="button" name="button" @click="showSizeTableModal">Guide des grandeurs</button>
             </div>
+            <br>
+
+
+
             <p> {{ selected_variant.price }} CDN$</p>
             <button class="button no-dark-mode is-small is-info" @click="addItemToBasket">Ajouter au panier</button>
         </div>
@@ -101,12 +103,16 @@ export default {
       var colormap = {
         "black": "#14191e",
         "navy": "#191c25",
+        "dark navy": "#0a1b2b",
         "dark heather": "#37363b",
+        "dark grey": "#666b64",
         "red": "#a2312b",
         "sport grey": "#9b969c",
         "white": "#f1f0f5",
         "heather grey": "#a6a5a0",
-        "spruce": "#263d2d"
+        "spruce": "#263d2d",
+        "royal blue": "#004074",
+        "asphalt": "#353146"
       }
 
       return colormap[color];

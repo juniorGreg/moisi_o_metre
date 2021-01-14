@@ -25,6 +25,9 @@ import hashlib
 from .serializers import *
 from .email_notifications import *
 
+from django.db.utils import IntegrityError
+from time import sleep
+
 # Create your views here.
 
 
@@ -118,7 +121,11 @@ def upload_image_to_model(product, variant, url):
 
         md5hash = hashlib.md5(img_preview.tobytes()).hexdigest()
 
+
+
         variant_image = VariantImage.objects.filter(hash=md5hash).first()
+
+
 
         if variant_image is None:
             file_name = os.path.basename(url)
@@ -127,10 +134,27 @@ def upload_image_to_model(product, variant, url):
             variant_image = VariantImage()
             variant_image.product = product
 
-            variant_image.preview.save(file_name,
-                             ContentFile(path.getvalue()),
-                             save=False)
-            variant_image.save()
+            try:
+                variant_image.preview.save(file_name,
+                                 ContentFile(path.getvalue()),
+                                 save=False)
+                variant_image.save()
+            except IntegrityError as e:
+                print("duplicate error")
+                print("url:" + url)
+                print("hash:" + md5hash)
+                retry_count = 0
+
+                while True:
+                    sleep(1)
+                    variant_image = VariantImage.objects.filter(hash=md5hash).first()
+                    if variant_image is None and retry_count < 6:
+                        print("Ouate de phoque")
+                    else:
+                        break
+                    retry_count += 1
+
+
 
         variant.variant_image = variant_image
 
@@ -141,7 +165,7 @@ def update_store_products(new_data):
     params = {
         "status": 'synced'
     }
-    r = requests.get(API_PRINTFUL % "sync/products", headers=HEADERS, params=params)
+    r = requests.get(API_PRINTFUL % "sync/products?limit=100", headers=HEADERS, params=params)
 
 
     if r.status_code == 200:
@@ -200,13 +224,13 @@ def update_store_products(new_data):
                     reg_variant.product = reg_product
 
                     #Parse color and size of the variant by the name
-                    p_size_color = re.compile(" - ([A-Za-z ]*) / ([0-9 ×XSML]{1,5})$")
+                    p_size_color = re.compile(" - ([A-Za-z ]*) / ([0-9 /XSML]{1,5})$")
                     m_size_color = p_size_color.search(reg_variant.name)
 
                     p_color = re.compile(" - ([A-Za-z ]*)$")
                     m_color = p_color.search(reg_variant.name)
 
-                    p_size = re.compile(" - ([0-9 ×XSML]{1,5})$")
+                    p_size = re.compile(" - ([0-9 \.×xXSML]{1,7})$")
                     m_size = p_size.search(reg_variant.name)
 
                     if m_size_color:
@@ -292,14 +316,14 @@ def order(request):
     #validation
     for item in request.data["order"]["items"]:
         variant = Variant.objects.get(id=item["sync_variant_id"])
-        item["retail_price"] = variant.price
+        item["retail_price"] = float(variant.price)
 
     req_order = requests.post(API_PRINTFUL % "orders/estimate-costs", headers=HEADERS, json=request.data["order"])
     printful_order = {}
     if req_order.status_code == 200:
         printful_order = req_order.json()["result"]
         total_cost =float(printful_order["retail_costs"]["total"]) + float(printful_order["costs"]["shipping"])
-        if abs(total_cost - request.data["total_cost"]) > 0.001:
+        if abs(total_cost - float(request.data["total_cost"])) > 0.001:
             print("validated total_cost: %s" % total_cost)
             print("received total_cost: %s" % request.data["total_cost"])
             return Response({"error": "validation failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

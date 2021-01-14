@@ -28,7 +28,7 @@ class VariantImage(models.Model):
     hash = models.CharField(max_length=100, unique=True, blank=True)
 
     def save(self, *args, **kwargs):
-
+        super(VariantImage, self).save(*args, **kwargs)
 
         if "http" in self.preview.url:
             req_img = requests.get(self.preview.url, stream=True)
@@ -68,7 +68,7 @@ class VariantImage(models.Model):
             super(VariantImage, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.preview.name
+        return self.hash
 
 
 

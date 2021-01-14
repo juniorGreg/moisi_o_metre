@@ -336,7 +336,7 @@ export default new Vuex.Store({
 
       if(context.state.products.length < context.state.products_count){
         const request_index = context.state.products.length;
-        const request_length = 6;
+        const request_length = 10;
         const request = "/store/products/"+request_index+"/"+request_length;
         axios.get(request).then(response => {
           console.log("get products")
@@ -465,12 +465,22 @@ export default new Vuex.Store({
       },
 
       variant_sizes: state => {
-        if(state.selected_product){
-          return [ ...new Set(state.selected_product.variant_set.map((variant) => {
 
-            return variant.size;
+
+        if(state.selected_product){
+          let selected_variant = state.selected_product.variant_set[0]
+          if(state.selected_variant){
+            selected_variant = state.selected_variant;
+          }
+
+          return [ ...new Set(state.selected_product.variant_set.filter((variant) => {
+            return variant.color === selected_variant.color;
+          }).map((variant) => {
+
+              return variant.size;
+
           }))].sort((a, b) => {
-            var sizes_order = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', 'N']
+            var sizes_order = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
 
             var orderA = sizes_order.indexOf(a)
             var orderB = sizes_order.indexOf(b)

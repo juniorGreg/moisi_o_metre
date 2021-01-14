@@ -27,7 +27,7 @@ class EmailNotifications:
     def confirm_order(self):
         msg = {
             "subject": "Confirmation de commande",
-            "message": "votre commande est confirmée"
+            "message": "votre commande est confirmée. D'ici une semaine votre commande devrait être expédiée."
         }
 
         self._send_mail_notification(msg)
@@ -35,7 +35,7 @@ class EmailNotifications:
     def shipping(self):
         msg = {
             "subject": "Livraison de commande",
-            "message": "votre commande a été expédiée"
+            "message": "votre commande a été expédiée. Les détails sont ci-bas."
         }
 
         self._send_mail_notification(msg)
@@ -43,7 +43,7 @@ class EmailNotifications:
     def package_returned(self):
         msg = {
             "subject": "Commande retournée",
-            "message": "votre commande a été retournée"
+            "message": "votre commande a été retournée."
         }
 
         self._send_mail_notification(msg)
@@ -51,7 +51,7 @@ class EmailNotifications:
     def order_failed(self):
         msg = {
             "subject": "Votre commande a échouée",
-            "message": "votre commande a échouée"
+            "message": "votre commande a échouée."
         }
 
         self._send_mail_notification(msg)
@@ -59,7 +59,7 @@ class EmailNotifications:
     def order_canceled(self):
         msg = {
             "subject": "Commande annulée",
-            "message": "votre commande a annulée"
+            "message": "votre commande a annulée."
         }
 
         self._send_mail_notification(msg, admin_only=True)
@@ -67,7 +67,7 @@ class EmailNotifications:
     def order_on_hold(self):
         msg = {
             "subject": "Commande en attente",
-            "message": "votre commande a été mis en attente"
+            "message": "votre commande a été mis en attente."
         }
 
         self._send_mail_notification(msg, admin_only=True)
@@ -75,7 +75,7 @@ class EmailNotifications:
     def order_on_hold_removed(self):
         msg = {
             "subject": "Commande plus en attente",
-            "message": "votre commande n'est plus en attente"
+            "message": "votre commande n'est plus en attente."
         }
 
         self._send_mail_notification(msg, admin_only=True)
