@@ -335,7 +335,7 @@ def order(request):
         printful_order['id'] = 1000
         printful_order['external_id'] = "@1000"
     else:
-        req_order = requests.post(API_PRINTFUL % "orders?confirm=true", headers=HEADERS, json=request.data["order"])
+        req_order = requests.post(API_PRINTFUL % "orders", headers=HEADERS, json=request.data["order"])
         if req_order.status_code == 200:
             result = req_order.json()["result"]
             printful_order["id"] = result["id"]

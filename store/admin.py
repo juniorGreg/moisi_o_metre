@@ -5,6 +5,8 @@ from .models import *
 
 # Register your models here.
 admin.site.register(VariantImage)
+admin.site.register(Customer)
+admin.site.register(OrderItem)
 
 
 
@@ -69,7 +71,7 @@ class InlineShipment(admin.StackedInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    readonly_fields = ["id", 'external_id', "paypal_id", "status", "total_cost", "shipping_cost"]
+    readonly_fields = ['external_id', "paypal_id", "status", "total_cost", "shipping_cost"]
     inlines = [InlineCustomer, InlineOrderItem, InlineShipment]
     list_display = ("id", "status", "total_cost", "shipping_cost", "date_created", "date_modified")
 
