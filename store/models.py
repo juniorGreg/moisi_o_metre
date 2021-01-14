@@ -127,8 +127,8 @@ class Customer(models.Model):
 
 class Shipment(models.Model):
     id = models.CharField(max_length=12, primary_key=True)
-    carrier = models.CharField(max_length=20)
-    service = models.CharField(max_length=20)
+    carrier = models.CharField(max_length=100)
+    service = models.CharField(max_length=100)
     tracking_number = models.CharField(max_length=100)
     tracking_url = models.URLField()
     date_created = models.DateTimeField(auto_now_add=True)
