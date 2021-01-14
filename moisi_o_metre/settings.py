@@ -163,11 +163,11 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 if not DEBUG:
-    REST_FRAMEWORK = {
-        'DEFAULT_RENDERER_CLASSES': (
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES']= (
             'rest_framework.renderers.JSONRenderer',
         )
-    }
+
+
 
 
 

@@ -37,14 +37,23 @@
         <p>
           Ceci est un courriel pour vous informer que {{ msg.message }}
         </p>
-
-        {% if order.shipment_set.all.0 %}
+        {% if order.status == "partial" %}
         <p>
-          Votre paquet sera livré par {{ order.shipment_set.all.0.carrier }} <br>
-          Votre numéro de suivi est le {{ order.shipment_set.all.0.tracking_number }}. <br>
-          Voici le lien pour le suivi est <a href="{{ order.shipment_set.all.0.tracking_url }}">{{ order.shipment_set.all.0.tracking_url }}</a>
+          La commande a été envoyé en partie. Vous allez avoir une autre livraison pour les autres items.
+        </p>
+        {%  elif order == "fulfilled" %}
+        <p>
+          La commande a été envoyé en entier. Vous allez bientôt recevoir tous les items de votre commande.
         </p>
         {% endif %}
+
+        {% for shipment in order.shipment_set.all %}
+        <p>
+          Votre paquet sera livré par {{ shipment.carrier }} <br>
+          Votre numéro de suivi est le {{ shipment.tracking_number }}. <br>
+          Voici le lien pour le suivi est <a href="{{ shipment.tracking_url }}">{{ shipment.tracking_url }}</a>
+        </p>
+        {% endfor %}
 
         <p>
           Les items de votre commande sont les suivantes:
@@ -54,6 +63,17 @@
             {% endfor %}
           </ul>
         </p>
+
+        {% if shipped_items %}
+        <p>
+          Les items de votre commande qui ont été envoyé
+          <ul>
+            {% for item in shipped_items %}
+              <li>{{ item.variant.name }}, quantité envoyée: {{ item.quantity_shipped }}</li>
+            {% endfor %}
+          </ul>
+        </p>
+        {% endif %}
         <p>Merci, d'avoir magasiner sur la boutique du MoisiOMètre. :)</p>
       </td>
 

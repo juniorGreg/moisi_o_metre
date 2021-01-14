@@ -82,7 +82,10 @@ class EmailNotifications:
 
     def _send_mail_notification(self, msg, admin_only=False):
 
-        context = {'msg': msg, 'order': self.order }
+        shipped_items = OrderItem.objects.filter(order=self.order, quantity_shipped__gt=0)
+        print(shipped_items)
+
+        context = {'msg': msg, 'order': self.order, 'shipped_items': shipped_items }
 
         html_content = render_to_string('store/email_notification.html', context=context).strip()
 
