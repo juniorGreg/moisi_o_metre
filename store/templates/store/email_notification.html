@@ -41,7 +41,7 @@
         <p>
           La commande a été envoyé en partie. Vous allez avoir une autre livraison pour les autres items.
         </p>
-        {%  elif order == "fulfilled" %}
+        {%  elif order.status == "fulfilled" %}
         <p>
           La commande a été envoyé en entier. Vous allez bientôt recevoir tous les items de votre commande.
         </p>
@@ -56,7 +56,7 @@
         {% endfor %}
 
         <p>
-          Les items de votre commande sont les suivantes:
+          Les items de votre commande sont les suivants:
           <ul>
             {% for item in order.orderitem_set.all %}
               <li>{{ item.variant.name }}, quantité: {{ item.quantity }}</li>
