@@ -202,6 +202,7 @@ export default new Vuex.Store({
       }
 
       state.shipping_cost = 0;
+      localStorage.setItem("basketMoisi", JSON.stringify(state.basket));
     },
 
     SET_IS_VARIANT_VISIBLE: (state, value) => {
@@ -370,9 +371,23 @@ export default new Vuex.Store({
         return variant.size === size && variant.color === color
       }
 
-      const variant = context.state.selected_product.variant_set.find(isSizeAndColor);
+      function isColor(variant) {
+        return variant.color === color;
+      }
 
-      context.commit("SET_SELECTED_VARIANT", variant)
+      const variant = context.state.selected_product.variant_set.find(isSizeAndColor);
+      if(variant){
+          context.commit("SET_SELECTED_VARIANT", variant)
+      }else {
+        console.log("variant not found")
+        const variant_color = context.state.selected_product.variant_set.find(isColor);
+        console.log(variant_color)
+        context.commit("SET_SELECTED_VARIANT", variant_color);
+      }
+
+
+
+
     },
 
     getShippingCost: (context, location = {}) => {
@@ -408,7 +423,7 @@ export default new Vuex.Store({
         const shipping_rates = response.data
 
         const standard_shipping_rate = shipping_rates.filter(shipping_rate => shipping_rate.id == "STANDARD")
-      
+
         context.commit("SET_SHIPPING_COST", Number(response.data[0].rate));
       })
 
@@ -474,12 +489,35 @@ export default new Vuex.Store({
               return variant.size;
 
           }))].sort((a, b) => {
-            var sizes_order = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
+            var sizes_order = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', 'S/M', 'L/XL']
 
             var orderA = sizes_order.indexOf(a)
             var orderB = sizes_order.indexOf(b)
 
-            return orderA > orderB;
+            //if size on in list sort alphabeticly
+            if(orderA  === -1 && orderB === -1){
+              if(a < b){
+                return -1
+              }
+              else if(a > b){
+                return 1
+              }
+              else {
+                return 0;
+              }
+            }
+
+            if(orderA > orderB) {
+              return 1;
+            }
+
+            else if(orderA < orderB) {
+              return -1;
+            }
+
+            else {
+              return 0
+            }
 
 
           })

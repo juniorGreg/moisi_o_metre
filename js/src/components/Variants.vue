@@ -124,7 +124,7 @@ export default {
 
     getVariantByColor: function(color) {
       const size = this.selected_variant.size;
-    
+
       this.getVariantBySizeAndColor({ size, color });
     },
 
@@ -147,7 +147,7 @@ export default {
     .box-variant {
       max-width: 500px;
     }
-
+  
   .button-color {
     height: 25px;
     width: 25px;
@@ -155,10 +155,12 @@ export default {
     background-color: blue;
     border-color: grey;
     border-width: 2px;
+    margin: 0.1rem;
 
     &:hover, &.is-selected {
       height: 30px;
       width: 30px;
+      margin: calc(0.1rem - 5px);
 
     }
   }
@@ -169,6 +171,7 @@ export default {
 
     &:hover {
       padding: 0.4rem;
+
     }
   }
 </style>

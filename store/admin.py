@@ -7,6 +7,8 @@ from .models import *
 admin.site.register(VariantImage)
 admin.site.register(Customer)
 admin.site.register(OrderItem)
+admin.site.register(Shipment)
+admin.site.register(Variant)
 
 
 

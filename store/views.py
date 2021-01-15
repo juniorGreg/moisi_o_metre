@@ -74,6 +74,8 @@ def tests(request):
 
     return render(request, "store/tests.html")
 
+
+
 @csrf_exempt
 @api_view(['POST'])
 def webhook(request):
@@ -112,6 +114,32 @@ def webhook(request):
 API_PRINTFUL = "https://api.printful.com/%s"
 HEADERS = {'Authorization': 'Basic %s' % settings.PRINTFUL_API_KEY }
 
+@csrf_exempt
+@api_view(["POST"])
+def paypal_webhook(request):
+    data= request.data
+    event_type = data["event_type"]
+    if event_type == "CHECKOUT.ORDER.APPROVED":
+        paypal_id = data["resource"]["id"]
+        order = Order.objects.filter(paypal_id=paypal_id).first()
+        if order is not None:
+            if settings.DEBUG:
+                order.status = "pending"
+                order.save()
+                EmailNotifications(order).confirm_order()
+            else:
+                req_confirm_order = requests.post(API_PRINTFUL % "orders/%s/confirm" % order.id, headers= HEADERS)
+                if req_confirm_order.status_code == 200:
+                    result = req_confirm_order.json()["result"]
+                    order.status = result["status"]
+                    order.save()
+                    EmailNotifications(order).confirm_order()
+                else:
+                    print(req_confirm_order.text)
+
+
+    return HttpResponse("success")
+
 def upload_image_to_model(product, variant, url):
     req_img = requests.get(url, stream=True)
 
@@ -143,22 +171,70 @@ def upload_image_to_model(product, variant, url):
                 print("duplicate error")
                 print("url:" + url)
                 print("hash:" + md5hash)
-                retry_count = 0
-
-                while True:
-                    sleep(1)
-                    variant_image = VariantImage.objects.filter(hash=md5hash).first()
-                    if variant_image is None and retry_count < 6:
-                        print("Ouate de phoque")
-                    else:
-                        break
-                    retry_count += 1
+                return False
 
 
 
         variant.variant_image = variant_image
+        return True
+
+def _get_variants(reg_product):
+    req_variants = requests.get(API_PRINTFUL % "sync/products/%s" % reg_product.id, headers=HEADERS)
+
+    if req_variants.status_code == 200:
+        response_req_variants = req_variants.json()
+        sync_variants = response_req_variants["result"]["sync_variants"]
+        local_sync_variant_id = set(reg_product.variant_set.values_list('id', flat=True))
+        printful_sync_variant_id = set(map(lambda variant: str(variant["id"]), sync_variants))
+
+        deleted_variants_id = list(local_sync_variant_id - printful_sync_variant_id)
+        if len(deleted_variants_id) > 0:
+            Variant.objects.filter(pk__in=deleted_variants_id).delete()
+
+        for variant in sync_variants:
+
+            reg_variant, created = Variant.objects.get_or_create(id = variant["id"])
+
+            reg_variant.name = variant["name"]
+            reg_variant.price = variant["retail_price"]
+            reg_variant.product = reg_product
+
+            #Parse color and size of the variant by the name
+            p_size_color = re.compile(" - ([A-Za-z ]*) / ([0-9 /XSML]{1,5})$")
+            m_size_color = p_size_color.search(reg_variant.name)
+
+            p_color = re.compile(" - ([A-Za-z ]*)$")
+            m_color = p_color.search(reg_variant.name)
+
+            p_size = re.compile(" - ([0-9 \.×xXSML]{1,7})$")
+            m_size = p_size.search(reg_variant.name)
+
+            if m_size_color:
+                reg_variant.color = m_size_color.group(1).lower()
+                reg_variant.size = m_size_color.group(2)
+            elif m_color:
+                reg_variant.color = m_color.group(1).lower()
+            elif m_size:
+                reg_variant.size = m_size.group(1).lower()
+
+            if created:
+
+                reg_variant.variant_id = variant["variant_id"]
+                reg_variant.external_id = variant["external_id"]
 
 
+
+                files = variant["files"]
+
+                for file in files:
+                    if file["type"] == "preview":
+                        if upload_image_to_model(reg_product, reg_variant, file["preview_url"]):
+                            break
+                        else:
+                            reg_variant.delete()
+                            return False
+            reg_variant.save()
+        return True
 
 def update_store_products(new_data):
     #print(new_data)
@@ -200,60 +276,18 @@ def update_store_products(new_data):
             if created :
                 reg_product.external_id = product_map[product_id]["external_id"]
 
+            retry_count = 6
+            while retry_count != 0:
+                #get variants
+
+                if _get_variants(reg_product):
+                    break
+                else:
+                    retry_count -= 1
+                    sleep(5)
+                    print("retry")
 
 
-            #get variants
-            req_variants = requests.get(API_PRINTFUL % "sync/products/%s" % reg_product.id, headers=HEADERS)
-
-            if req_variants.status_code == 200:
-                response_req_variants = req_variants.json()
-                sync_variants = response_req_variants["result"]["sync_variants"]
-                local_sync_variant_id = set(reg_product.variant_set.values_list('id', flat=True))
-                printful_sync_variant_id = set(map(lambda variant: str(variant["id"]), sync_variants))
-
-                deleted_variants_id = list(local_sync_variant_id - printful_sync_variant_id)
-                if len(deleted_variants_id) > 0:
-                    Variant.objects.filter(pk__in=deleted_variants_id).delete()
-
-                for variant in sync_variants:
-
-                    reg_variant, created = Variant.objects.get_or_create(id = variant["id"])
-
-                    reg_variant.name = variant["name"]
-                    reg_variant.price = variant["retail_price"]
-                    reg_variant.product = reg_product
-
-                    #Parse color and size of the variant by the name
-                    p_size_color = re.compile(" - ([A-Za-z ]*) / ([0-9 /XSML]{1,5})$")
-                    m_size_color = p_size_color.search(reg_variant.name)
-
-                    p_color = re.compile(" - ([A-Za-z ]*)$")
-                    m_color = p_color.search(reg_variant.name)
-
-                    p_size = re.compile(" - ([0-9 \.×xXSML]{1,7})$")
-                    m_size = p_size.search(reg_variant.name)
-
-                    if m_size_color:
-                        reg_variant.color = m_size_color.group(1).lower()
-                        reg_variant.size = m_size_color.group(2)
-                    elif m_color:
-                        reg_variant.color = m_color.group(1).lower()
-                    elif m_size:
-                        reg_variant.size = m_size.group(1).lower()
-
-                    if created:
-
-                        reg_variant.variant_id = variant["variant_id"]
-                        reg_variant.external_id = variant["external_id"]
-
-                        files = variant["files"]
-
-                        for file in files:
-                            if file["type"] == "preview":
-                                upload_image_to_model(reg_product, reg_variant, file["preview_url"])
-                                break
-
-                    reg_variant.save()
             reg_product.save()
 
     print("update_ products")
@@ -373,7 +407,7 @@ def order(request):
             order_item = OrderItem.objects.create(variant=variant, order=order, quantity=int(req_item["quantity"]))
             order_item.save()
 
-        EmailNotifications(order).confirm_order()
+
     except Exception as e:
         print(e)
 
