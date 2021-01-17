@@ -41,7 +41,7 @@ PAYPAL_LIVE_CLIENT_ID=os.environ["PAYPAL_LIVE_CLIENT_ID"]
 
 
 PRINTFUL_API_KEY = urlSafeEncodedStr
-
+YOUTUBE_API_KEY = os.environ["YOUTUBE_API_KEY"]
 # Application definition
 
 INSTALLED_APPS = [

@@ -28,32 +28,37 @@ def index(request):
 
 
 
-@api_view(['GET', 'POST'])
+@api_view(['PUT', 'POST'])
 def website(request):
     def get_error_dict(message):
         return {'message': message }
 
-    if request.method == "GET":
-        url = request.GET.get('url')
+    if request.method == "PUT":
+        data = request.data
+        print(data)
 
-        if "http" not in url:
-            return Response(get_error_dict("L'adresse web n'est pas valid"), status=status.HTTP_400_BAD_REQUEST)
+        if data["url"]:
+            url = data["url"]
+            if "http" not in url:
+                return Response(get_error_dict("L'adresse web n'est pas valid"), status=status.HTTP_400_BAD_REQUEST)
 
-        print(url)
+                print(url)
 
-        try:
-            title, score = evaluate_website(url)
-        except TextTooShortException:
-            return Response(get_error_dict("Le texte recupéré est trop court pour être évalué."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except YoutubeNoCaptionException:
-            return Response(get_error_dict("Le vidéo Youtube n'a pas de transcription ou de soutitre en français."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except EncodingNotFoundException:
-            return Response(get_error_dict("L'encodage du site est inconnu."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except InvalidLanguage:
-            return Response(get_error_dict("Le site n'est pas en français."), status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            print(e)
-            return Response(get_error_dict("Une erreur s'est produite."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            try:
+                title, score = evaluate_website(url)
+            except TextTooShortException:
+                return Response(get_error_dict("Le texte recupéré est trop court pour être évalué."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            except YoutubeNoCaptionException:
+                return Response(get_error_dict("Le vidéo Youtube n'a pas de transcription ou de soutitre en français."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            except EncodingNotFoundException:
+                return Response(get_error_dict("L'encodage du site est inconnu."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            except InvalidLanguage:
+                return Response(get_error_dict("Le site n'est pas en français."), status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                print(e)
+                return Response(get_error_dict("Une erreur s'est produite."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        elif data["text"]:
+            title, score = evaluate_text(data["text"])
 
 
         return Response({'title': title, 'score': score})

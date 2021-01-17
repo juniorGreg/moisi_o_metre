@@ -5,7 +5,13 @@
   font-family: "Josefin Sans";
   src: url('./fonts/JosefinSans-VariableFont_wght.ttf') format('truetype-variations');
   font-weight: 1 999;
-  //font-style: normal;
+  speak: none;
+  font-style: normal;
+  //font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+//  -webkit-font-smoothing: antialiased;
 }
 
 $navbar-item-color: lightgrey;
@@ -29,6 +35,8 @@ $notification-padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 
 $navbar-breakpoint: 1400px;
 
+//$weight-normal: 900;
+
 
 
 
@@ -37,7 +45,7 @@ $navbar-breakpoint: 1400px;
 
 html {
   height: 100%;
-  //scroll-behavior: smooth;
+  //-webkit-text-stroke: 0.7px;
 }
 
 
@@ -80,7 +88,7 @@ a {
   width: 20%;
 }
 
-$body-family: "Josefin Sans";
+$body-family: "Josefin Sans", "sans-serif";
 $badge-height: 16px;
 $badge-padding: .15rem .15rem;
 @import "~bulma/bulma";
@@ -88,15 +96,12 @@ $badge-padding: .15rem .15rem;
 @import "~@creativebulma/bulma-badge";
 @import "~bulma-pageloader";
 
-//import font-awesome
-$fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts" !default;
-@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
-@import "~@fortawesome/fontawesome-free/scss/solid.scss";
 
 p {
   margin-bottom: 1.5rem;
   text-align: justify;
   text-justify: inter-word;
+    font-weight: 400;
 }
 
 .button.is-text{

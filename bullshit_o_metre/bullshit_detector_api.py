@@ -8,14 +8,14 @@ from langdetect import detect
 from .models import *
 
 
-from pytube import YouTube
-from pytube import exceptions
-
 import html
 
 from django.conf import settings
+from youtube_transcript_api import YouTubeTranscriptApi
 
 import re
+
+from functools import reduce
 
 
 MAX_TEXT_LENGTH = 25000
@@ -101,41 +101,46 @@ def retrieve_text_from_website(url):
 
 def get_captions_text_from_youtube(url, lang_code='fr'):
 
-    yt = YouTube(url)
+    video_id_re = re.compile("^https?:\/\/([w]{3}\.)?youtube\.com\/watch\?v=(.*)$")
+    short_url_video_id_re = re.compile("^https?:\/\/y(.{2,4}).be\/(.*)$")
+    video_match = video_id_re.search(url)
 
-    if lang_code in yt.captions:
+    video_id = ""
 
-        caption = yt.captions[lang_code]
-
-        #print(yt.captions.keys())
-
-        soup = BeautifulSoup(caption.xml_captions, 'lxml')
-        text = " ".join([tag.text for tag in soup.find_all('text') if '[' not in tag.text])
-
-        text = html.unescape(text)
-
-
-        if len(text) > MAX_TEXT_LENGTH:
-            text = text[:MAX_TEXT_LENGTH]
-
-
-        #print(texts)
-        return yt.title, text
+    if video_match:
+        video_id = video_match.group(2)
     else:
-        raise YoutubeNoCaptionException()
-    #except exceptions.RegexMatchError as e:
-    #    return None, "it's not a youtube url", False, True
+        video_match = short_url_video_id_re.search(url)
+        if video_match:
+            video_id = video_match.group(2)
+        else:
+            return False, "", ""
+
+
+    transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=(lang_code,))
+
+    if transcript:
+        #print(transcript)
+        total_text = reduce(lambda x,y: "{x} {y}".format(x=x, y=y), list(map(lambda x: x["text"], transcript)))
+        r= requests.get(url, headers=http_headers)
+
+
+        soup = BeautifulSoup(r.text, 'lxml')
+
+        title = soup.title.text
+
+        return True, title, total_text
+    else:
+        print(req.text)
+        return False, "", ""
 
 def get_info_from_url(url):
     #print(url)
-    not_youtube_url = False
-    try:
-        title, text = get_captions_text_from_youtube(url)
-    except exceptions.RegexMatchError:
-        print("Not a youtube url")
-        not_youtube_url = True
 
-    if not_youtube_url:
+    youtube_url, title, text = get_captions_text_from_youtube(url)
+
+    if not youtube_url:
+        print("Not a youtube url")
         title, text = retrieve_text_from_website(url)
 
 
@@ -157,6 +162,15 @@ def evaluate_website(url):
 
     if lang != "fr":
         raise InvalidLanguage()
+
+    r = requests.post(settings.BULLSHIT_O_METRE_API, data=text.encode("utf8"))
+    pred = r.text
+
+    return title, pred
+
+def evaluate_text(text):
+
+    title = "%s..." % text[:10]
 
     r = requests.post(settings.BULLSHIT_O_METRE_API, data=text.encode("utf8"))
     pred = r.text
