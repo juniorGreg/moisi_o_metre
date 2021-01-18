@@ -160,6 +160,8 @@ def add_website(website):
 def evaluate_website(url):
     title, text, lang = get_info_from_url(url)
 
+    print(text)
+
     if lang != "fr":
         raise InvalidLanguage()
 

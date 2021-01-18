@@ -3,6 +3,9 @@
 
 {% load static %}
 
+{% load markdown_extras %}
+
+
 {% block content %}
         {{ post_ids|json_script:"post-ids" }}
 
@@ -14,6 +17,70 @@
                support_href="{% url 'support' %}"
                cursor_img="{% static 'images/moisiometre.svg' %}"></App>
         </div>
+        <noscript>
+          <div id="{{ post.id }}" class="box">
+            <h1 class="title is-size-6-mobile">{{ post.title }} </h1>
+
+
+
+            <div class="post-content" v>
+              <div class="no-dark-mode">
+                <img class="image-post is-hidden-mobile no-dark-mode" src="{% get_media_prefix %}{{post.image}}" alt="imâge">
+                <img class="image-post-mobile is-hidden-tablet no-dark-mode" src="{% get_media_prefix %}{{post.image}}" alt="imâge">
+              </div>
+
+              <p>
+                {{ post.content | markdown | safe }}
+              </p>
+
+              {% for point in post.rottenpoint_set.all %}
+
+                    <h2 class="subtitle is-size-6-mobile has-text-weight-bold">{{point.title}}</h2>
+
+                    <p>
+                      {{ point.description | markdown | safe }}
+                    </p>
+              {% endfor %}
+
+
+               {% if post.pub %}
+                <h2 class="subtitle is-size-6-mobile">Le lien affiliate du post</h2>
+                <p>{{ post.pub | markdown | safe }}</p>
+
+                {% endif %}
+
+              <h2 class="subtitle is-size-6-mobile">Les Sources</h2>
+              {% for source in post.sources.all %}
+              <h5>{{ source.title }}</h5>
+                {% if 'http' in source.source %}
+                    <a target='_blank' href="{{source.source}}">{{ source.source }}</a>
+                {% else %}
+                  <p>{{ source }}</p>
+                {% endif %}
+                <br>
+
+
+              {% endfor %}
+
+
+
+
+            </div>
+            <br>
+
+            <div class="is-size-7">Créer le {{post.date_created}}</div>
+            {% if post.date_modified %}
+              <div class="is-size-7">Modifier le {{post.date_modified}}</div>
+            {% endif %}
+
+            {% if next_post_noscript %}
+              <br>
+              <a href="{{ next_post_noscript }}">Le post suivant</a>
+            {% endif %}
+
+
+          </div>
+        </noscript>
 
 
 {% endblock %}

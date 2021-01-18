@@ -27,7 +27,7 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DEBUG'] == 'TRUE'
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "moisi-o-metre.herokuapp.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "moisi-o-metre.herokuapp.com", "moisiometre.xyz"]
 
 BULLSHIT_O_METRE_API = os.environ['BULLSHIT_O_METRE_API']
 
