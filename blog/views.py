@@ -55,16 +55,28 @@ def index(request, id=-1):
 
     post = Post.objects.get(id=post_ids[0])
 
+    def get_post_description(post):
+        content = post.content[:160]
+        if len(content) == 0:
+            content = post.rottenpoint_set.order_by("order")[0].description[:160]
+        return content
+
+    post_description = get_post_description(post)
+
+    print(post_description)
+
     if post.image:
-        context = get_main_context(post.title[0:70], post.content[:160], post.get_absolute_url(),  post.image.url, main_title="Blog")
+        context = get_main_context(post.title[0:70], post_description, post.get_absolute_url(),  post.image.url, main_title="Blog")
     else:
-        context = get_main_context(post.title[0:70], post.content[:160], post.get_absolute_url(), main_title="Blog")
+        context = get_main_context(post.title[0:70], post_description, post.get_absolute_url(), main_title="Blog")
 
     context["post_ids"] = post_ids
     context["post"] = post
     next_post_noscript = post_ids[0] - 1
     if next_post_noscript in post_ids:
         context["next_post_noscript"] = next_post_noscript
+
+    print(context)
 
     return render(request, "blog/index.html", context)
 
