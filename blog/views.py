@@ -63,7 +63,6 @@ def index(request, id=-1):
 
     post_description = get_post_description(post)
 
-    print(post_description)
 
     if post.image:
         context = get_main_context(post.title[0:70], post_description, post.get_absolute_url(),  post.image.url, main_title="Blog")
