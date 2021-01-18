@@ -5,7 +5,7 @@ from django.conf import settings
 API_PRINTFUL_WEBHOOKS = "https://api.printful.com/webhooks"
 HEADERS = {'Authorization': 'Basic %s' % settings.PRINTFUL_API_KEY }
 DEBUG_WEBHOOK = "https://moisidev.xyz/store/webhook"
-PROD_WEBHOOK = "https://moisi-o-metre.herokuapp.com/store/webhook"
+PROD_WEBHOOK = "https://moisiometre.xyz/store/webhook"
 
 def run():
 
