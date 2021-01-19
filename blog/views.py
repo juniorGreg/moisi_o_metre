@@ -71,9 +71,9 @@ def index(request, id=-1):
 
     context["post_ids"] = post_ids
     context["post"] = post
-    next_post_noscript = post_ids[0] - 1
-    if next_post_noscript in post_ids:
-        context["next_post_noscript"] = next_post_noscript
+    next_post_noscript = list(filter(lambda post_id: post_id < post.id, post_ids))
+    if next_post_noscript:
+        context["next_post_noscript"] = next_post_noscript[0]
 
     print(context)
 

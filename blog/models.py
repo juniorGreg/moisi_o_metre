@@ -18,6 +18,15 @@ class PostStatistics(models.Model):
     def __str__(self):
         return str(self.word_count) + " " + str(self.avg_reading_time)
 
+class MediaLink(models.Model):
+    video_link = models.URLField(null=True, blank=True)
+    spotify_link = models.URLField(null=True, blank=True)
+    soundcloud_link = models.URLField(null=True, blank=True)
+    itunes_link = models.URLField(null=True, blank=True)
+    google_podcast_link = models.URLField(null=True, blank=True)
+
+
+
 
 class Post(models.Model):
     POST_TYPE = (
@@ -41,6 +50,7 @@ class Post(models.Model):
     admin_only = models.BooleanField(default=False)
 
     statistics = models.OneToOneField(PostStatistics, null=True, blank=True, on_delete=models.CASCADE)
+    media_link = models.OneToOneField(MediaLink, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -79,6 +89,7 @@ class RottenPoint(models.Model):
 
     def __str__(self):
         return self.title
+
 
 
 

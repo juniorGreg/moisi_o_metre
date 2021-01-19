@@ -35,7 +35,6 @@ def website(request):
 
     if request.method == "PUT":
         data = request.data
-        print(data)
 
         if data["url"]:
             url = data["url"]
