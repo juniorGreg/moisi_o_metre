@@ -15,7 +15,11 @@
                twitter_button_img="{% static 'images/twitter_share_button.png' %}"
                copy_link_button_img="{% static 'images/copy_link_button.png' %}"
                support_href="{% url 'support' %}"
-               cursor_img="{% static 'images/moisiometre.svg' %}"></App>
+               cursor_img="{% static 'images/moisiometre.svg' %}"
+               spotify_img="{% static 'images/spotify_icon.png' %}"
+               soundcloud_img="{% static 'images/soundcloud_icon.png' %}"
+               itunes_img="{% static 'images/itune_podcast_icon.png' %}"
+               google_podcast_img="{% static 'images/itune_podcast_icon.png' %}"></App>
         </div>
         <noscript>
           <div id="{{ post.id }}" class="box">
@@ -48,6 +52,26 @@
                 <p>{{ post.pub | markdown | safe }}</p>
 
                 {% endif %}
+
+              {% if post.media_link %}
+                <h2>Media Link</h2>
+                {% if post.media_link.video_link %}
+                  <a href="{{post.media_link.video_link}}" target="_blank">Lien du vidéo</a><br>
+                {% endif %}
+                {% if post.media_link.spotify_link %}
+                  <a href="{{post.media_link.spotify_link}}" target="_blank">Lien audio spotify</a><br>
+                {% endif %}
+                {% if post.media_link.soundcloud_link %}
+                  <a href="{{post.media_link.soundcloud_link}}" target="_blank">Lien audio soundcloud</a><br>
+                {% endif %}
+                {% if post.media_link.itunes_link %}
+                  <a href="{{post.media_link.itunes_link}}" target="_blank">Lien audio itunes</a><br>
+                {% endif %}
+                {% if post.media_link.google_podcast_link %}
+                  <a href="{{post.media_link.google_podcast_link}}" target="_blank">Lien audio google podcast</a><br>
+                {% endif %}
+              {% endif %}
+
 
               <h2 class="subtitle is-size-6-mobile">Les Sources</h2>
               {% for source in post.sources.all %}

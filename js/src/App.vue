@@ -44,6 +44,11 @@
             </div>
           </div>
 
+          <div v-if="post.media_link">
+            <MediaLink :mediaLink="post.media_link" :spotify_img="spotify_img" :itunes_img="itunes_img"
+              :soundcloud_img="soundcloud_img" :google_podcast_img="google_podcast_img" />
+          </div>
+
           <div v-if="post.post_type == 'CRITIC'">
             <CustomProgress :count="post.rotten_score" :image_src="cursor_img"/>
           </div>
@@ -178,19 +183,23 @@ import CustomProgress from "./components/CustomProgress.vue";
 import SourceUrl from "./components/SourceUrl.vue";
 import SharedButton from "./components/SharedButton.vue";
 import HiddenImage from './components/HiddenImage.vue';
+import MediaLink from './components/MediaLink.vue'
 
 
 
 export default {
   name: 'App',
 
-  props: ['local_url', "facebook_button_img", "twitter_button_img", 'copy_link_button_img' ,"support_href", "cursor_img"],
+  props: ['local_url', "facebook_button_img", "twitter_button_img", 'copy_link_button_img',
+          "support_href", "cursor_img", "spotify_img", "itunes_img", "soundcloud_img",
+          "google_podcast_img"],
 
   components: {
     CustomProgress,
     SourceUrl,
     SharedButton,
-    HiddenImage
+    HiddenImage,
+    MediaLink
   },
 
   computed: {

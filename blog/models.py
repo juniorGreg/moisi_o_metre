@@ -25,6 +25,9 @@ class MediaLink(models.Model):
     itunes_link = models.URLField(null=True, blank=True)
     google_podcast_link = models.URLField(null=True, blank=True)
 
+    def __str__(self):
+        return self.video_link
+
 
 
 
@@ -49,8 +52,8 @@ class Post(models.Model):
 
     admin_only = models.BooleanField(default=False)
 
-    statistics = models.OneToOneField(PostStatistics, null=True, blank=True, on_delete=models.CASCADE)
-    media_link = models.OneToOneField(MediaLink, null=True, blank=True, on_delete=models.CASCADE)
+    statistics = models.OneToOneField(PostStatistics, null=True, blank=True, on_delete=models.SET_NULL)
+    media_link = models.OneToOneField(MediaLink, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.title

@@ -140,9 +140,9 @@ def quiz(request):
 @api_view(['GET'])
 def posts(request, id=-1):
     if id == -1:
-        post = Post.objects.order_by('-date_created')[0]
+        post = Post.objects.prefetch_related('rottenpoint_set').prefetch_related("sources").select_related("statistics").select_related("media_link").order_by('-date_created').first()
     else:
-        post = Post.objects.get(id=id)
+        post = Post.objects.prefetch_related('rottenpoint_set').prefetch_related("sources").select_related("statistics").select_related("media_link").get(id=id)
 
     serializer = PostSerializer(post)
     return Response(serializer.data)

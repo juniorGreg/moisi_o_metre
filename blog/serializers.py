@@ -16,12 +16,18 @@ class PostStatisticsSerializer(serializers.ModelSerializer):
         model = PostStatistics
         fields = ["avg_reading_time"]
 
+class MediaLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MediaLink
+        fields = "__all__"
+
 
 class PostSerializer(serializers.ModelSerializer):
 
     rottenpoint_set = RottenPointSerializer(many=True, read_only=True)
     sources = ReferenceSerializer(many=True)
     statistics = PostStatisticsSerializer()
+    media_link = MediaLinkSerializer()
 
     class Meta:
         model = Post
