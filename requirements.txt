@@ -14,5 +14,5 @@ requests== 2.24.0
 langdetect == 1.0.8
 django-extensions==3.0.8
 youtube_transcript_api==0.3.1
-lxml==4.5.1
+lxml==4.6.2
 markdown==3.3.3
