@@ -1,5 +1,12 @@
-{% extends 'blog/main.html' %}
+{% extends 'main.html' %}
 
+
+{% load meta_tag %}
+{% block meta_tag %}
+  {% meta_tag  request.path "La Boutique" "Voici la boutique du MoisiOMètre ! Venez voir les magnifiques produits originals !" %}
+{% endblock %}
+
+{% block main_title %}Boutique{% endblock %}
 {% load static %}
 
 {% block content %}

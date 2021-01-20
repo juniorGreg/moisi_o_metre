@@ -13,7 +13,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-from blog.views import get_main_context
+#from blog.views import get_main_context
 
 import json
 import requests
@@ -34,7 +34,7 @@ from time import sleep
 
 def index(request):
 
-    context = get_main_context("Boutique", "La boutique du MoisiOMètre", "/store")
+    context = {}
 
     products_count = Product.objects.count()
     context["products_count"] = products_count

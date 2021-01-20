@@ -1,5 +1,12 @@
-{% extends 'blog/main.html' %}
+{% extends 'main.html' %}
 
+{% load meta_tag %}
+{% block meta_tag %}
+  {% meta_tag  request.path "Test" "Test" %}
+{% endblock %}
+
+
+{% block main_title %}Tests{% endblock %}
 {% block content %}
 <h1>TESTS</h1>
 <hidden-image image_src="/static/images/legumes.png" hidden_image_src="/static/images/legumes_malin.png">

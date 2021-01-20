@@ -1,6 +1,6 @@
 #!/bin/bash
 export DEBUG="FALSE"
-python3 manage.py collectstatic
+python3.8 manage.py collectstatic
 
 git checkout prod
 git merge master

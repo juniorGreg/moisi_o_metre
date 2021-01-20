@@ -80,7 +80,7 @@ SITE_ID = 1
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,10 +88,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'moisi_o_metre.context_processors.debug_processor'
             ],
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'moisi_o_metre.wsgi.application'
 if not DEBUG:

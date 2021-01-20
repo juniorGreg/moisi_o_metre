@@ -1,0 +1,11 @@
+{% load static %}
+<title>Moisi O Mètre - {{ tag.title }}</title>
+<link rel="canonical" href="{{ tag.url }}">
+<meta property="og:title" content="{{ tag.title }}" />
+<meta property="og:url" content="{{ tag.url }}" />
+{% if tag.image %}
+  <meta property="og:image" content="{% static tag.image %}" />
+{% else %}
+  <meta property="og:image" content="{% static '/images/moisiometre.png' %}" />
+{% endif %}
+<meta name="description" property="og:description" content="{{ tag.description }}"/>

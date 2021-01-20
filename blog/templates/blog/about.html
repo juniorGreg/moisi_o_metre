@@ -1,6 +1,12 @@
-{% extends 'blog/main.html' %}
+{% extends 'main.html' %}
+
+{% load meta_tag %}
+{% block meta_tag %}
+  {% meta_tag  request.path "À propos" about.text %}
+{% endblock %}
 
 {% load static %}
+{% block main_title %}À propos{% endblock %}
 
 {% block content %}
 <div class="container">

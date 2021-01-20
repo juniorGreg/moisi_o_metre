@@ -1,6 +1,14 @@
-{% extends 'blog/main.html' %}
+{% extends 'main.html' %}
 
 {% load static %}
+
+{% load meta_tag %}
+{% block meta_tag %}
+  {% meta_tag  request.path "Jeux et Quiz" 'Les quiz du MoisiOMètre' %}
+{% endblock %}
+
+
+{% block main_title %}Jeux et Quiz{% endblock %}
 
 {% block content %}
 

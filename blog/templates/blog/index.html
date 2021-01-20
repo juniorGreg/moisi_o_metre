@@ -1,10 +1,17 @@
 
-{% extends 'blog/main.html' %}
+{% extends 'main.html' %}
 
 {% load static %}
 
 {% load markdown_extras %}
 
+{% load meta_tag %}
+
+{% block meta_tag %}
+  {% meta_tag post.get_absolute_url post.title post_description  post.image %}
+{% endblock %}
+
+{% block main_title %}Blog{% endblock %}
 
 {% block content %}
         {{ post_ids|json_script:"post-ids" }}

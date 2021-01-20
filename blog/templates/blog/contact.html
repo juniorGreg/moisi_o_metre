@@ -1,5 +1,13 @@
 
-{% extends 'blog/main.html' %}
+{% extends 'main.html' %}
+
+{% load meta_tag %}
+{% block meta_tag %}
+  {% meta_tag  request.path "Contact" "Si vous voulez me contacter. C'est ici !" %}
+{% endblock %}
+
+
+{% block main_title %}Contact{% endblock %}
 
 {% block content %}
 <div class="container">

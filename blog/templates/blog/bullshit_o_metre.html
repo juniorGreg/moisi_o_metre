@@ -1,5 +1,13 @@
-{% extends 'blog/main.html' %}
+{% extends 'main.html' %}
 {% load static %}
+
+{% load meta_tag %}
+{% block meta_tag %}
+  {% meta_tag  request.path "B*llshit O Mètre" "Évaluateur expérimental de b*llshit" %}
+{% endblock %}
+
+{% block main_title %}B*llshit O Mètre{% endblock %}
+
 {% block content %}
 
 <div class="container">

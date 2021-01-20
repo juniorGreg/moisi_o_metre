@@ -16,28 +16,6 @@ from rest_framework.response import Response
 from .serializers import PostSerializer, SearchedPostSerializer
 
 
-
-def get_main_context(tag_title, tag_desc, tag_url, tag_image="/images/moisiometre.png", main_title=None):
-    if "http" not in tag_image:
-        tag_image = static(tag_image)
-
-    tag = {
-        'title': tag_title,
-        'description': tag_desc,
-        'image': tag_image,
-        'url': 'https://%s%s' % (Site.objects.get_current().domain, tag_url)
-    }
-
-    if main_title is None:
-        main_title = tag_title
-
-    context = {'debug': settings.DEBUG, 'tag': tag, 'main_title': main_title}
-
-    return context
-
-
-
-
 # Create your views here.
 def index(request, id=-1):
     if request.user.is_authenticated:
@@ -56,52 +34,42 @@ def index(request, id=-1):
     post = Post.objects.get(id=post_ids[0])
 
     def get_post_description(post):
-        content = post.content[:160]
+        content = post.content
         if len(content) == 0:
-            content = post.rottenpoint_set.order_by("order")[0].description[:160]
+            content = post.rottenpoint_set.order_by("order")[0].description
         return content
 
     post_description = get_post_description(post)
 
-
-    if post.image:
-        context = get_main_context(post.title[0:70], post_description, post.get_absolute_url(),  post.image.url, main_title="Blog")
-    else:
-        context = get_main_context(post.title[0:70], post_description, post.get_absolute_url(), main_title="Blog")
-
+    context = {}
     context["post_ids"] = post_ids
     context["post"] = post
+    context["post_description"] = post_description
     next_post_noscript = list(filter(lambda post_id: post_id < post.id, post_ids))
     if next_post_noscript:
         context["next_post_noscript"] = next_post_noscript[0]
-
-    print(context)
-
     return render(request, "blog/index.html", context)
 
 def support(request):
-    context = get_main_context("Supportez le blog", "C'est la page pour suppportez le blob MoisiOMètre.", "/support")
-
-    return render(request, "blog/support.html", context)
+    return render(request, "blog/support.html")
 
 def tests(request):
     if not settings.DEBUG:
         raise Http404
 
-    context = get_main_context("test", "test", "/test")
-    return render(request, "blog/tests.html", context)
+    return render(request, "blog/tests.html")
 
 def about(request):
     about = About.objects.all()[0]
 
-    context = get_main_context("À propos", about.text[:200] , "/about")
+    context = {}
 
     context['about'] = about
     return render(request, "blog/about.html", context)
 
 def references(request):
     references = Reference.objects.filter(is_global=True)
-    context = get_main_context("Les références", "Voici mes références." , "/references")
+    context = {}
     context['references'] = references
     return render(request,"blog/references.html", context)
 
@@ -118,19 +86,15 @@ def contact(request):
             )
             return redirect('index')
 
-    context = get_main_context("Contact", "Si vous voulez me contacter. C'est ici!" , "/contact")
+    context = {}
 
     return render(request, "blog/contact.html", context)
 
 def bullshit_o_metre(request):
-
-    context = get_main_context("B*llshit O Mètre", "Évaluateur expérimental de bullshit", "/bullshit")
-
-    return render(request, "blog/bullshit_o_metre.html", context)
+    return render(request, "blog/bullshit_o_metre.html")
 
 def quiz(request):
-    context = get_main_context("Quiz", 'Les quiz du MoisiOMètre', "/quiz")
-    return render(request, "blog/quiz.html", context)
+    return render(request, "blog/quiz.html")
 
 
 
