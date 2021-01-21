@@ -24,11 +24,11 @@
       </div>
 
       <div v-if="post.image && post.hidden_image">
-          <HiddenImage :image_src="post.image" :hidden_image_src="post.hidden_image" />
+          <HiddenImage :image_src="post.image" :hidden_image_src="post.hidden_image"></HiddenImage>
       </div>
 
       <div v-if="post.content">
-        <vue-showdown :markdown="post.content" :extensions="['targetlink']">
+        <vue-showdown :markdown="post.content" :extensions="['targetlink']"></vue-showdown>
       </div>
 
       <div v-if="post.rottenpoint_set.length > 0 ">
@@ -36,21 +36,23 @@
           <h2 class="subtitle is-size-6-mobile has-text-weight-bold">{{point.title}}</h2>
 
           <div>
-            <vue-showdown :markdown="point.description">
+            <vue-showdown :markdown="point.description"></vue-showdown>
           </div>
         </div>
       </div>
 
       <div v-if="post.media_link">
         <MediaLink :mediaLink="post.media_link" :spotify_img="spotify_img" :itunes_img="itunes_img"
-          :soundcloud_img="soundcloud_img" :google_podcast_img="google_podcast_img" />
+          :soundcloud_img="soundcloud_img" :google_podcast_img="google_podcast_img"></MediaLink>
+          <br>
       </div>
 
       <div v-if="post.post_type == 'CRITIC'">
-        <CustomProgress :count="post.rotten_score" :image_src="cursor_img"/>
+        <CustomProgress :count="post.rotten_score" :image_src="cursor_img"></CustomProgress>
+        <br>
       </div>
 
-      <br>
+
 
       <div v-if="post.pub && country_code" >
         <h2 class="subtitle is-size-6-mobile">Le lien affiliate du post</h2>
@@ -59,7 +61,7 @@
             <div class="content">
               <figure v-if="post.image_pub" style="float: left; margin-top: 0; margin: 0.5rem;">
                 <a :href="getPubLink(post)" target="_blank" class="image is-128x128">
-                  <img ref="image_pub" :src="post.image_pub" alt="image publicitaire" width="128" height="128">
+                  <img ref="image_pub" class="no-dark-mode" :src="post.image_pub" alt="image publicitaire" width="128" height="128">
                 </a>
               </figure>
 
