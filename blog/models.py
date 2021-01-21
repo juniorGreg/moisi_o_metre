@@ -49,6 +49,10 @@ class Post(models.Model):
     rotten_score = models.PositiveSmallIntegerField(default=4)
 
     pub = models.TextField(max_length=8000, null=True, blank=True)
+    image_pub = models.ImageField(null=True, blank=True)
+    link_ca = models.URLField(null=True)
+    link_fr = models.URLField(null=True)
+    link_title = models.CharField(max_length=400, null=True)
 
     admin_only = models.BooleanField(default=False)
 

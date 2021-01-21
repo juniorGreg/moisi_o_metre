@@ -15,6 +15,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import PostSerializer, SearchedPostSerializer
 
+import requests
+
 
 # Create your views here.
 def index(request, id=-1):
@@ -119,3 +121,16 @@ def search(request, word):
         posts = Post.objects.filter(admin_only=False).filter(Q(content__icontains=word) | Q(title__icontains=word))
     serializer = SearchedPostSerializer(posts[:5], many=True)
     return Response(serializer.data)
+
+@api_view(["GET"])
+def location(request):
+    ip_address = request.META.get("HTTP_X_FORWARDED_FOR") or request.META.get("REMOTE_ADDR")
+    print(ip_address)
+    if ip_address == '127.0.0.1' or ip_address == '192.168.1.1':
+        ip_address =  "173.176.163.196"
+
+    req_location = requests.get("https://freegeoip.app/json/%s" % ip_address)
+    if req_location.status_code == 200:
+        return Response(req_location.json())
+    else:
+        return Response({}, status=status.HTTP_500_INTERNAL_SERVER_ERROR )

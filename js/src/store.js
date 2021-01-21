@@ -22,6 +22,7 @@ export default new Vuex.Store({
     new_searched_post_active: false,
     dark_mode: false,
     is_snowing: false,
+    country_code: "",
     //store states
     is_store: false,
     is_variant_visible: false,
@@ -90,6 +91,10 @@ export default new Vuex.Store({
 
 
       state.posts.push(formatPost(post))
+    },
+
+    SET_COUNTRY_CODE: (state, value) => {
+      state.country_code = value;
     },
 
     SET_POST_IDS: (state, post_ids) => {
@@ -289,6 +294,13 @@ export default new Vuex.Store({
       }else{
         context.commit("SET_SEARCHED_POSTS", []);
       }
+    },
+
+    getCountryCode: (context) => {
+      axios.get("/location").then(response => {
+          context.commit("SET_COUNTRY_CODE", response.data.country_code);
+      })
+
     },
 
     showSearchBar: (context) => {
