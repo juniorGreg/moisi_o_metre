@@ -89,9 +89,7 @@ export default {
     if(this.new_searched_post_active){
         this.scrollToPost();
         this.SET_NEW_SEARCHED_POST_ACTIVE(false);
-    }
-    //this.scrollToPost()
-    //this.searched_post_id = -1;
+    } 
 
   },
 
@@ -105,6 +103,7 @@ export default {
       this.SET_POST_IDS(post_ids);
       this.getNextPost();
       this.getCountryCode();
+      //this.checkEndPost();
     } catch(error){
       //this.post_ids = []
     }

@@ -240,7 +240,7 @@ export default new Vuex.Store({
         var id = context.state.post_ids[context.state.post_index]
         return context.dispatch('getPost', id).then(() => {
           var newIndex = context.state.post_index + 1;
-          context.commit("SET_POST_INDEX", newIndex);
+          context.commit("SET_POST_INDEX", newIndex);          
 
         }).finally(() => {
           setTimeout(() => {

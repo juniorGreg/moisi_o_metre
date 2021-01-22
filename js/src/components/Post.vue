@@ -204,11 +204,15 @@ export default {
   },
   computed: {
     ...mapState([
-      "country_code"
+      "country_code",
+      "posts"
     ])
   },
 
   methods: {
+    ...mapActions([
+      "getNextPost"
+    ]),
     showSources: function(el){
       el.style.maxHeight = el.scrollHeight + "px";
       //console.log(this.$refs.image_pub);
@@ -229,7 +233,7 @@ export default {
     },
 
     loadImagePubAnimation: function(){
-      console.log("mounted")
+      //console.log("mounted")
       anime({
         targets: this.$refs.image_pub,
         direction: "alternate",
@@ -248,6 +252,10 @@ export default {
   mounted: function() {
 
     setTimeout(this.loadImagePubAnimation, 2000);
+    if(this.posts.length == 1){
+      //console.log("ok")
+      setTimeout(this.getNextPost, 1000);
+    }
 
   },
 
