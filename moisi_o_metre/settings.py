@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     "store.apps.StoreConfig",
     "storages",
     'django.contrib.sites',
-    'django.contrib.sitemaps'    
+    'django.contrib.sitemaps'
 ]
 
 MIDDLEWARE = [
@@ -187,6 +187,8 @@ EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_ADMIN = os.environ['EMAIL_ADMIN']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+ADMINS = [('JGregoire', EMAIL_ADMIN)]
 
 #config aws bucket
 
