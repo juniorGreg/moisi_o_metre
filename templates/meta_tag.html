@@ -4,7 +4,7 @@
 <meta property="og:title" content="{{ tag.title }}" />
 <meta property="og:url" content="{{ tag.url }}" />
 {% if tag.image %}
-  <meta property="og:image" content="{% static tag.image %}" />
+  <meta property="og:image" content="{{ tag.image }}" />
 {% else %}
   <meta property="og:image" content="{% static '/images/moisiometre.png' %}" />
 {% endif %}
