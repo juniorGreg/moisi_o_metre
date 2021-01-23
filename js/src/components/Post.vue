@@ -76,7 +76,7 @@
 
         </article>
       </div>
-      <br>
+
       <div v-if="post.sources.length > 0">
           <transition
             @enter="showSources"
@@ -99,9 +99,9 @@
 
 
 
-
-    </div>
     <br>
+    </div>
+
 
     <div class="is-size-7">Créer le {{post.date_created}}</div>
     <div v-if="post.show_modified_date">
@@ -241,6 +241,18 @@ export default {
         scale: 1.2,
         loop: true
       })
+    },
+
+    setImagePostMaxHeight: function(){
+      const height = this.$el.clientHeight;
+      const imagePost = this.$el.getElementsByClassName("image-post")[0];
+      console.log(imagePost);
+      if(height < 450 ){
+        console.log("mini")
+        imagePost.style.maxHeight= (height-140) +"px";
+      }else{
+        imagePost.style.maxHeigth= "380px";
+      }
     }
 
   },
@@ -252,6 +264,7 @@ export default {
   mounted: function() {
 
     setTimeout(this.loadImagePubAnimation, 2000);
+    this.setImagePostMaxHeight()
     if(this.posts.length == 1){
       //console.log("ok")
       setTimeout(this.getNextPost, 1000);
@@ -263,4 +276,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
+ .image-post {
+   max-height: 380px;
+ }
 </style>

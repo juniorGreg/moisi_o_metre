@@ -37,7 +37,7 @@
             <a class="navbar-item" :href="about_href">À propos</a>
             <a class="navbar-item" :href="contact_href">Contact</a>
             <a class="navbar-item" :href="support_href">Supportez le blog</a>
-            <a class="navbar-item" :href="store_index_href" >Boutique</a>
+            <a  class="navbar-item" :href="store_index_href" ><span ref="storeButton" style="display: inline-block;">Boutique</span></a>
             <a class="navbar-item" role="button" @click="toggleDarkMode">
               <img :src="dark_mode_icon_src" alt="icon mode sombre">
             </a>
@@ -57,6 +57,8 @@ import { mapState , mapMutations , mapActions, mapGetters } from 'vuex';
 
 import SearchBar from "./components/SearchBar.vue";
 import Snows from './components/Snows.vue';
+
+import anime from 'animejs/lib/anime.es.js';
 
 export default {
 
@@ -105,7 +107,7 @@ export default {
       "showSearchBar",
       "getDarkMode",
       "isSnowing",
-      'showBasketModal'    
+      'showBasketModal'
     ]),
     ...mapMutations([
       "SET_DARK_MODE",
@@ -113,23 +115,48 @@ export default {
     ]),
     toggleMenu: function(){
       this.isActive = !this.isActive
+      if(this.isActive && !this.is_store){
+        setTimeout(this.initAnimStoreButton, 500)
+      }
     },
     toggleDarkMode: function(){
       var mode = !this.dark_mode;
       this.SET_DARK_MODE(mode);
       this.isActive = false;
+    },
+
+    initAnimStoreButton: function(){
+      console.log("ok")
+      anime({
+        targets: this.$refs.storeButton,
+        loop: 2,
+        direction: "alternate",
+        easing: "linear",
+        color: "rgb(255,100,100)",
+        scale: [1.0, 2.3],
+        //'text-shadow': ["0 0 0 #000","0 0 300px #FFF"],
+        duration: 1000
+
+      })
     }
 
   },
 
   created: function(){
       this.getDarkMode();
+
   },
 
   mounted: function(){
 
     this.isSnowing();
     setTimeout(() => {this.SET_IS_LOADING(false)}, 1000)
+    setTimeout(() => {
+      if(!this.is_store){
+        setTimeout(this.initAnimStoreButton, 2000)
+        setTimeout(this.initAnimStoreButton, 30000)
+      }
+    }, 1000)
   },
 
   watch: {
