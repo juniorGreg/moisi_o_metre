@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="modal" :class="{'is-active': is_basket_visible}">
+  <section class="modal" :class="{'is-active': is_basket_visible}">
     <div class="modal-background"></div>
     <div class="modal-content">
         <!-- Any other Bulma elements you want -->
@@ -107,7 +107,7 @@
 
 
     <button class="modal-close is-large" aria-label="close" @click="hideBasket"></button>
-  </div>
+  </section>
 
 
 
@@ -261,7 +261,7 @@ export default {
 
               return this.createOrder(order).then(() => {
                 return actions.order.capture().then((details) => {
-                  
+
                   this.order_success = true;
                   this.CLEAR_BASKET();
                 })

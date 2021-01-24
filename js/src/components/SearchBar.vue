@@ -1,6 +1,6 @@
 <template lang="html">
 
-    <div class="modal is-active" :style="{ 'opacity': opacity , 'pointer-events': pointer_events }" >
+    <section class="modal is-active" :style="{ 'opacity': opacity , 'pointer-events': pointer_events }" >
         <div class="modal-background" @click="hideSearchBar"></div>
         <div class="modal-content">
           <article class="panel is-dark" :class="{'dark-mode': dark_mode}">
@@ -25,7 +25,7 @@
         </div>
 
         <button :style="{'pointer-events': pointer_events}" class="modal-close is-large" aria-label="close"  @click="hideSearchBar"></button>
-    </div>
+    </section>
 
 </template>
 

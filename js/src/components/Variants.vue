@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="modal" :class="{'is-active': is_variant_visible}">
+  <section class="modal" :class="{'is-active': is_variant_visible}">
     <div class="modal-background"></div>
       <div class="modal-content">
 
@@ -45,7 +45,7 @@
 
       </div>
     <button class="modal-close is-large" aria-label="close" @click="hideVariantModal"></button>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -147,7 +147,7 @@ export default {
     .box-variant {
       max-width: 500px;
     }
-  
+
   .button-color {
     height: 25px;
     width: 25px;

@@ -18,14 +18,14 @@
     </div>
 
     <div class="post-content" v-else>
-      <div v-if="post.image && !post.hidden_image" class="no-dark-mode">
+      <figure v-if="post.image && !post.hidden_image" class="no-dark-mode">
         <img class="image-post is-hidden-mobile no-dark-mode" :src="post.image" alt="imâge">
         <img class="image-post-mobile is-hidden-tablet no-dark-mode" :src="post.image" alt="imâge">
-      </div>
+      </figure>
 
-      <div v-if="post.image && post.hidden_image">
+      <figure v-if="post.image && post.hidden_image">
           <HiddenImage :image_src="post.image" :hidden_image_src="post.hidden_image"></HiddenImage>
-      </div>
+      </figure>
 
       <div v-if="post.content">
         <vue-showdown :markdown="post.content" :extensions="['targetlink']"></vue-showdown>
@@ -103,9 +103,9 @@
     </div>
 
 
-    <div class="is-size-7">Créer le {{post.date_created}}</div>
+    <div class="is-size-7">Créer le <time>{{post.date_created}}</time></div>
     <div v-if="post.show_modified_date">
-      <div class="is-size-7">Modifier le {{post.date_modified}}</div>
+      <div class="is-size-7">Modifier le <time>{{post.date_modified}}</time></div>
     </div>
 
     <div class="buttons has-addons">
@@ -239,17 +239,20 @@ export default {
         direction: "alternate",
         easing: "linear",
         scale: 1.2,
-        loop: true
+        loop: true,
+        duration: 2500
       })
     },
 
     setImagePostMaxHeight: function(){
-      const height = this.$el.clientHeight;
+      const height = this.$el.getElementsByClassName("post-content")[0].offsetHeight;
       const imagePost = this.$el.getElementsByClassName("image-post")[0];
-      console.log(imagePost);
-      if(height < 450 ){
-        console.log("mini")
-        imagePost.style.maxHeight= (height-140) +"px";
+      //console.log(height);
+
+      //const imageAvailableHeight = height - 140;
+      if(height < 380 ){
+        //console.log("mini")
+        imagePost.style.maxHeight= (height) +"px";
       }else{
         imagePost.style.maxHeigth= "380px";
       }

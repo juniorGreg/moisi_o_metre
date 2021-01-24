@@ -1,12 +1,12 @@
 <template lang="html">
-  <article class="media">
+  <div class="media">
     <div class="media-content">
       <div class="content">
         <figure class="image is-16by9">
           <iframe class="has-ratio" :src="mediaLink.video_link" width="640" height="360" frameborder="0" allowfullscreen></iframe>
         </figure>
       </div>
-      <nav v-if="isAudioLinked" class="level is-mobile">
+      <div v-if="isAudioLinked" class="level is-mobile">
         <div class="level-left">
           <span class="level-item is-size-7 has-text-centered">Liens audios: </span>
           <a class="level-item has-text-centered" v-if="mediaLink.spotify_link" :href="mediaLink.spotify_link" target="_blank">
@@ -31,9 +31,9 @@
           </a>
 
         </div>
-      </nav>
+      </div>
     </div>
-  </article>
+  </div>
 </template>
 
 <script>

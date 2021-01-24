@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="modal" :class="{'is-active': is_size_table_visible}">>
+  <section class="modal" :class="{'is-active': is_size_table_visible}">>
     <div class="modal-background"></div>
       <div class="modal-content">
           <div class="box">
@@ -34,7 +34,7 @@
 
       </div>
       <button class="modal-close is-large" aria-label="close" @click="hideSizeTableModal"></button>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -104,7 +104,7 @@ export default {
 
         return key
       })
-  
+
       return sizes;
     },
 
