@@ -86,7 +86,7 @@ def contact(request):
                 email = form.cleaned_data["email"]
 
                 if email:
-                    new_message = "{base}\n\n Email pour répondre: {email}".format(base=base_message, email=email)
+                    new_message = "{base}\n\nEmail pour répondre: {email}".format(base=base_message, email=email)
                     return new_message
 
                 else:

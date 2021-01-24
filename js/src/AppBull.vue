@@ -1,6 +1,6 @@
 <template lang="html">
 <div>
-  <h1 class="title is-size-6-mobile">Évaluer un site</h1>
+  <h2 class="title is-size-6-mobile">Évaluer un site</h2>
 
   <form id="website_form" @submit.prevent="evaluateWebsite">
 
@@ -32,7 +32,7 @@
   <br>
   <div v-if="website" class="notification is-success">
 
-    <h2 class="subtitle">{{website.title}}</h2>
+    <h3 class="subtitle">{{website.title}}</h3>
 
     <p>Il y a environ {{website.score}} % de b*llshit selon le B*llshit-O-Mètre</p>
   </div>

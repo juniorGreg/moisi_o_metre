@@ -1,12 +1,12 @@
 <template lang="html">
-  <div :id="post.id" class="box">
-    <h1 class="title is-size-6-mobile">{{post.title}} </h1>
-    <h2 class="subtitle is-size-7 is-italic">
+  <article :id="post.id" class="box">
+    <h2 class="title is-size-6-mobile">{{post.title}} </h2>
+    <h3 class="subtitle is-size-7 is-italic">
       Temps de lecture: <span v-if="post.statistics.avg_reading_time > 1"> environ {{post.statistics.avg_reading_time}} minutes </span>
                         <span v-if="post.statistics.avg_reading_time == 1">environ une minute</span>
                         <span v-if="post.statistics.avg_reading_time == 0">moins qu'une minute</span>
                         <span class="has-text-danger" v-if="post.admin_only">ADMIN SEULEMENT</span>
-    </h2>
+    </h3>
 
     <div v-if="post.post_type == 'BD'">
         <p class="has-text-justified">{{post.content}}</p>
@@ -33,7 +33,7 @@
 
       <div v-if="post.rottenpoint_set.length > 0 ">
         <div v-for="point in post.rottenpoint_set">
-          <h2 class="subtitle is-size-6-mobile has-text-weight-bold">{{point.title}}</h2>
+          <h3 class="subtitle is-size-6-mobile has-text-weight-bold">{{point.title}}</h3>
 
           <div>
             <vue-showdown :markdown="point.description"></vue-showdown>
@@ -55,8 +55,8 @@
 
 
       <div v-if="post.pub && country_code" >
-        <h2 class="subtitle is-size-6-mobile">Le lien affiliate du post</h2>
-        <article class="media">
+        <h3 class="subtitle is-size-6-mobile">Le lien affiliate du post</h3>
+        <div class="media">
           <div class="media-content">
             <div class="content">
               <figure v-if="post.image_pub" style="float: left; margin-top: 0; margin: 0.5rem;">
@@ -74,7 +74,7 @@
 
           </div>
 
-        </article>
+        </div>
       </div>
 
       <div v-if="post.sources.length > 0">
@@ -131,7 +131,7 @@
 
     </div>
 
-  </div>
+  </article>
 
 
 </template>

@@ -8,7 +8,7 @@
 
         <div v-for="product in getSliceProducts(index)" class="tile is-parent">
           <div class="tile is-child box" @click="showVariants(product)">
-            <p class="title is-size-6">{{product.name}}</p>
+            <h3 class="title is-size-6">{{product.name}}</h3>
 
             <figure class="image ">
               <img class="no-dark-mode" :src="product.variant_set[0].variant_image.resized_preview" alt="product image">

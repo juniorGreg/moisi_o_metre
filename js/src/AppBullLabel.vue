@@ -3,7 +3,7 @@
   <section class="section">
 
     <div class="container">
-        <h1 class="title">Ajouter un site web labellé</h1>
+        <h2 class="title">Ajouter un site web labellé</h2>
         <form name="labeled_website_form" @submit.prevent="add_labeled_website">
           <div class="field">
             <label for="website_url">Url: </label>
@@ -33,7 +33,7 @@
   <div v-if="labeled_website">
     <section class="section">
       <div class="container">
-        <h1 class="title">{{labeled_website.title}}</h1>
+        <h2 class="title">{{labeled_website.title}}</h2>
         <p>Langue: {{labeled_website.lang}}</p>
         <p>{{labeled_website.texts}}</p>
 
