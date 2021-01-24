@@ -7,7 +7,7 @@
 
           <div v-show="order_process">
 
-            <h1 class="subtitle">Votre panier</h1>
+            <h2 class="subtitle">Votre panier</h2>
             <article v-for="item in basket" class="media">
 
               <figure class="media-left">
