@@ -79,10 +79,25 @@ def contact(request):
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
+            #print(form.cleaned_data)
+
+            def get_message():
+                base_message = form.cleaned_data["message"]
+                email = form.cleaned_data["email"]
+
+                if email:
+                    new_message = "{base}\n\n Email pour répondre: {email}".format(base=base_message, email=email)
+                    return new_message
+
+                else:
+                    return base_message
+
+            message = get_message()
+            #print(message)
+
             send_mail(
                 form.cleaned_data['subject'],
-                form.cleaned_data['message'],
+                message,
                 settings.DEFAULT_FROM_EMAIL,
                 [settings.EMAIL_ADMIN]
             )
