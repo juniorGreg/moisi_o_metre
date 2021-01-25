@@ -13,6 +13,7 @@ from django.conf import settings
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from .serializers import PostSerializer, SearchedPostSerializer
 
 import requests
@@ -143,6 +144,9 @@ def location(request):
     print(ip_address)
     if ip_address == '127.0.0.1' or ip_address == '192.168.1.1':
         ip_address =  "173.176.163.196"
+
+    if ',' in ip_address:
+        ip_address = ip_address.split(',')[0]
 
     req_location = requests.get("https://freegeoip.app/json/%s" % ip_address)
     if req_location.status_code == 200:
