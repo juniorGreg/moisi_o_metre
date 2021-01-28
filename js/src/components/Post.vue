@@ -36,7 +36,7 @@
           <h3 class="subtitle is-size-6-mobile has-text-weight-bold">{{point.title}}</h3>
 
           <div>
-            <vue-showdown :markdown="point.description"></vue-showdown>
+            <vue-showdown :markdown="point.description" :extensions="['targetlink']"></vue-showdown>
           </div>
         </div>
       </div>
@@ -154,11 +154,13 @@ showdown.extension('targetlink', function() {
     regex: /\[([^\[\]]+)\]\(([^\(\)]+)\)\{:target="([^\{\}]+)"\}/g,
     replace: function(wholematch, linkText, url, target) {
 
+      console.log(target);
+
       var result = '<a href="' + url + '"';
 
       if (typeof title != 'undefined' && title !== '' && title !== null) {
-        title = title.replace(/"/g, '&quot;');
-        title = showdown.helper.escapeCharacters(title, '*_', false);
+        //title = title.replace(/"/g, '&quot;');
+        //title = showdown.helper.escapeCharacters(title, '*_', false);
         result += ' title="' + title + '"';
       }
 
@@ -247,14 +249,15 @@ export default {
     setImagePostMaxHeight: function(){
       const height = this.$el.getElementsByClassName("post-content")[0].offsetHeight;
       const imagePost = this.$el.getElementsByClassName("image-post")[0];
-      //console.log(height);
+      if(imagePost){
 
-      //const imageAvailableHeight = height - 140;
-      if(height < 380 ){
-        //console.log("mini")
-        imagePost.style.maxHeight= (height) +"px";
-      }else{
-        imagePost.style.maxHeigth= "380px";
+        //const imageAvailableHeight = height - 140;
+        if(height < 380 ){
+          //console.log("mini")
+          imagePost.style.maxHeight= (height) +"px";
+        }else{
+          imagePost.style.maxHeigth= "380px";
+        }
       }
     }
 
