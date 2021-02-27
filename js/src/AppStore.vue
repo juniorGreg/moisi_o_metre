@@ -10,7 +10,7 @@
           <div class="tile is-child box" @click="showVariants(product)">
             <h3 class="title is-size-6">{{product.name}}</h3>
 
-            <figure class="image ">
+            <figure class="image " v-if="product.variant_set[0].variant_image">
               <img class="no-dark-mode" :src="product.variant_set[0].variant_image.resized_preview" alt="product image">
             </figure>
             <br>

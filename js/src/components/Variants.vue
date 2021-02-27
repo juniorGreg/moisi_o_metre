@@ -5,7 +5,7 @@
 
         <div class="box box-variant" v-if="selected_variant">
             <p>{{ selected_product.name }}</p>
-            <figure class="image is-square">
+            <figure class="image is-square" v-if="selected_variant.variant_image">
                 <img class="no-dark-mode" height="450" width="450" :src="selected_variant.variant_image.resized_preview" alt="product image">
             </figure>
             <br>
@@ -112,7 +112,11 @@ export default {
         "heather grey": "#a6a5a0",
         "spruce": "#263d2d",
         "royal blue": "#004074",
-        "asphalt": "#353146"
+        "asphalt": "#353146",
+        "navy blazer": "#292d3b",
+        'maroon': "#7d263a",
+        "charcoal heather": "#463e3d",
+        "carbon grey": "#c7c3be"
       }
 
       return colormap[color];
