@@ -106,6 +106,8 @@ export default {
         "dark navy": "#0a1b2b",
         "dark heather": "#37363b",
         "dark grey": "#666b64",
+        "dark grey heather": "#3c302e",
+        "military green": "#68664d",
         "red": "#a2312b",
         "sport grey": "#9b969c",
         "white": "#f1f0f5",
